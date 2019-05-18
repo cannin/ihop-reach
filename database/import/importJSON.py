@@ -56,7 +56,7 @@ except:
 
 #set default source path as the present directory
 if len(sourcePath) == 0:
-    sourcePath = "./"
+    sourcePath = os.path.dirname(os.path.realpath(__file__))
 
 #Check if valid path given
 if os.path.exists(sourcePath)==False:
