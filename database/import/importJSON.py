@@ -8,7 +8,7 @@ from pymongo import MongoClient
 
 #check database connection
 try: 
-    mongoConnection = MongoClient('mongodb://root:password@localhost:27017/')  #Edit MongoDB username and password in this line, MogoClient() if no authorization
+    mongoConnection = MongoClient()  #Edit MongoDB username and password in this line, MogoClient() if no authorization
 except:
     #on mongodb connection fail, this indicates that either mongodb is not started or installed in the device
     print("Could not connect to MongoDB") 
