@@ -1,7 +1,7 @@
 ## Script to import JSON files to MongoDB
 Requirements:
 	
-	Python
+	Python (3 preferred)
 	pymongo
 
 Usage Instructions

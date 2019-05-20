@@ -3,11 +3,12 @@
 
 import os
 import json
+import time
 from pymongo import MongoClient
 
 #check database connection
 try: 
-    mongoConnection = MongoClient('mongodb://root:password@localhost:27017/')  #Edit MongoDB username and password in this line, MogoClient() if no authorization
+    mongoConnection = MongoClient()  #Edit MongoDB username and password in this line, MogoClient() if no authorization
 except:
     #on mongodb connection fail, this indicates that either mongodb is not started or installed in the device
     print("Could not connect to MongoDB") 
@@ -20,7 +21,7 @@ def verifyJSON( jsonPath ):
     #returns JSON content if proper file else None is returned
     with open(jsonPath) as jsonFile:
         try:
-            jsonData = json.load(jsonFile)
+            jsonData = json.load(jsonFile)            
             return jsonData
         except json.decoder.JSONDecodeError as e:
             #if the file is not a proper json file
@@ -34,16 +35,12 @@ def addToDatabase(data):
     #returns number of inserted documents in the collection
     mongoDatabase = mongoConnection["iHOP"]     #Database name
     mongoCollection = mongoDatabase["articles"] #Collection name
-    prevCount = mongoCollection.count()         #Getting number of documents in the collection
-
-    #split data in chunks and insert in mongoDB
-    chunkBegin = 0     #Iterator
-    chunkSize = 10     #Size of Chunk
-    while chunkBegin<len(data):
-        chunkSlice = slice(chunkBegin,chunkBegin+chunkSize)    #Creating a slice for the chunk
-        mongoCollection.insert_many(data[chunkSlice])           #Command to insert documents
-        chunkBegin += chunkSize                                #Increment iterator by chunk size
-        print("Inserted {} document{}".format(chunkBegin if chunkBegin<len(data) else len(data),"s" if len(data)>1 else ""))           
+    try:
+        prevCount = mongoCollection.count()         #Getting number of documents in the collection    
+        mongoCollection.insert_many(data)           #Command to insert documents
+    except:
+        print("Documents insertion failed")         #Incase of any error from mongodb
+        quit()
     return (mongoCollection.count()-prevCount)
     
 #taking input of source directory/file
@@ -57,7 +54,7 @@ except:
 #set default source path as the present directory
 if len(sourcePath) == 0:
     sourcePath = os.path.dirname(os.path.realpath(__file__))
-
+print("Starting import script")
 #Check if valid path given
 if os.path.exists(sourcePath)==False:
     #Invalid path given
@@ -66,6 +63,7 @@ if os.path.exists(sourcePath)==False:
 else:
     #Given path is valid
     #Check if provided path is a file or directory
+    startTime = time.time()                 # Saving current time in a variable
     if os.path.isdir(sourcePath)==False:
         #given path is a file
         data = verifyJSON(sourcePath)
@@ -82,23 +80,33 @@ else:
         fileData = []
         fileCount = 0
         
+        resultCount = 0        
+        chunkSize = 10000 # Size of smaller parts of the payload 
+        
         # r=root, d=directories, f = files
         for r, d, f in os.walk(sourcePath):
             for file in f:
                 if ('.json' or '.JSON') in file:
                     fileCount += 1                              #keeping count of json files
-                    data = verifyJSON(os.path.join(r, file))    #function call for checking validity of the file
+                    fromPath = os.path.join(r, file)
+                    data = verifyJSON(fromPath)                 #function call for checking validity of the json file
                     if data != None:
                         fileData.append(data)                   #append proper JSON data to array
-        
-        print("{} json files found, out of which {} json file(s) are invalid".format(fileCount,(fileCount-len(fileData))))        
-        
-        resultCount = 0
-        if len(fileData)>0:
-            #Call for insertion in database
-            print("Importing {} valid json files to MongoDB".format(len(fileData)))
-            resultCount = addToDatabase(fileData)               #function call for insertion of array of JSON data
-        
+                        if(fileCount%chunkSize==0):
+                            #Call for insertion in database
+                            resultCount += addToDatabase(fileData)              #function call for insertion of array of JSON data
+                            print("Inserted {} documents".format(resultCount))	#print info message
+                            print("Uploaded till "+fromPath)
+                            fileData.clear()                                    #clear list for next set of documents
+	
+        if(len(fileData)>0):
+             #Call for insertion in database
+             resultCount += addToDatabase(fileData)               #function call for insertion of array of JSON data
+             print("Inserted {} documents".format(resultCount))	 
+             print("Uploaded till "+ fromPath)        
+        print("{} json files found, out of which {} json file(s) are invalid".format(fileCount,(fileCount-resultCount)))        
+        endTime = time.time()           # Saving current time in a variable
+        print("Time taken {} seconds".format((endTime-startTime)))  # Printing time required for importing the files
         #execution result display
         if fileCount == 0:
             #No valid JSON file to insert
