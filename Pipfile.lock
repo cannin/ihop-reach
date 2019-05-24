@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "10d3ee6523d9cba990d082a0dacce957281a4cd67a748d571af5c0e33f24475b"
+            "sha256": "d0519f542ac1c03cfb8dde58ea0fe74d7715dcee05fc85a799abca93f94ddbac"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,11 +31,17 @@
         },
         "eve": {
             "hashes": [
-                "sha256:12bf028f97a61cf8b1084c3c21830d1453ced1a5b0f957f0b91edc3551904872",
-                "sha256:61914cc69955d28bbeeaad8e1b574cbf7311b3c672741cbd851aefa0ba7250a3"
+                "sha256:5e79a3121a79438268fc36d83850113e4c7d2521d4e1d64437439fdc08ba9362"
             ],
             "index": "pypi",
-            "version": "==0.9"
+            "version": "==0.9.1"
+        },
+        "eve-swagger": {
+            "hashes": [
+                "sha256:dc6a94cc82aa6a3277cda9efc95820e2335eae7dadb506e52180caf40c03ea9f"
+            ],
+            "index": "pypi",
+            "version": "==0.0.11"
         },
         "events": {
             "hashes": [
@@ -222,7 +228,7 @@
                 "sha256:9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a",
                 "sha256:f0b0e4eba956de51238e17573b7087e852dfe9854afd2e9c873f73fc0ca0a6dd"
             ],
-            "markers": "python_version < '3.2'",
+            "markers": "python_version == '2.7'",
             "version": "==1.5"
         },
         "configparser": {
