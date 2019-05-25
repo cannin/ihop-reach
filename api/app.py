@@ -58,5 +58,5 @@ if __name__ == '__main__':
     # Debug/Development
     # app.run(port=PORT)
     # Production
-    HTTP_SERVER = WSGIServer(('', PORT), app)
+    HTTP_SERVER = WSGIServer(('0.0.0.0', PORT), app)
     HTTP_SERVER.serve_forever()

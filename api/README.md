@@ -22,4 +22,4 @@ Returns all the articles matching the identifier at participant_a or participant
 
 	Path Variable
 
-		key : Identifier of the extracted biological data
+		key : Identifier of the extracted biomedical literature

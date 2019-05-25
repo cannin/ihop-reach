@@ -1,7 +1,7 @@
 import os
 
 #Setting up MongoDB URI
-MONGO_URI = os.environ.get('MONGODB_URI', 'mongodb://root:password@localhost:27017/iHOP')
+MONGO_URI = os.environ.get('MONGODB_URI', 'mongodb://db:27017/iHOP')
 #Edit your MongoDB username and password in above line or use Environment variables
 
 # pyeve settings
