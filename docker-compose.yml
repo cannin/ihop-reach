@@ -6,3 +6,4 @@ api:
     - db
 db:
   image: mongo:4.0.9
+  restart: always
