@@ -8,7 +8,7 @@ MONGO_URI = os.environ.get('MONGODB_URI', 'mongodb://db:27017/iHOP')
 ALLOW_UNKNOWN = True
 OPTIMIZE_PAGINATION_FOR_SPEED = True
 IF_MATCH = False # disable etag
-
+HATEOAS = False
 # Set API Settings
 RENDERERS = [
     'eve.render.JSONRenderer', #for JSON output

@@ -11,12 +11,9 @@ from eve_swagger import swagger # Swagger for API
 def on_fetched_resource(resource,response):
     response['items'] = response.pop('_items')
     for doc in response['items']:
-        for field in doc.keys():
-            if field.startswith('_'):
-                if field != '_id':
-                    del doc[field]
-                else:
-                    doc['id'] = doc.pop(field) #Change name of id key in response
+        doc['id'] = doc.pop('_id') #Change name of id key in response
+        del doc['_created']
+        del doc['_updated']
 
 #function to delete _created and _updated from item dictionary
 def on_fetched_item(response):
