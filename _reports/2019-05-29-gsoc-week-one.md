@@ -18,7 +18,7 @@ The aim of the project is to make a web app which will be an interface to intera
 
 Stack to be used:
 * **GatsbyJS** for frontend
-* **Python** for development of the API
+* **Python** for development of the API and database automation pipeline
 * **MongoDB** as database
 * **GraphQL** as the query language for the database
 
@@ -89,7 +89,7 @@ During the community bonding period, I was assigned the following work:
 4. **Frontend Development**
     
     Status: **At Early stage**<br>
-    This is my highest priority when the coding period begins. Till now only wireframes have been confirmed, and basic work of the GatsbyJS setup has been done.
+    This will be my highest priority when the coding period begins. Till now only wireframes have been confirmed, and basic work of the GatsbyJS setup has been done.
     
     Related Issues:
     
@@ -98,7 +98,7 @@ During the community bonding period, I was assigned the following work:
 
 ## Conclusion
 
-It has been a great learning experience till now. I had very less experience in working with python for web services, but I am using it now since the first day of Google Summer of Code 2019. I am enjoying the journey and I hope that with time and experience my work efficiency and quality will increase.<br>
+It has been a great learning experience so far. I had very less experience in working with python for web services, but I am using it now since the first day of Google Summer of Code 2019. I am enjoying the journey and I hope that with time and experience my work efficiency and quality will increase.<br>
 My mentor, Augustin has constantly helped me by providing materials. He is just a message away, whenever I require his guidance. I am indebted to him, for the patience he shows.
 > In real open source, you have the right to control your own destiny.<br>
 > ~*Linus Torvalds*
