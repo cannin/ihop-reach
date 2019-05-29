@@ -5,7 +5,7 @@ An application for users to access biological data extracted from biomedical lit
   {% for post in site.reports %}
     {% if post.tags contains "gsoc" %}
       <li>
-        <small>{{post.date | date: "%b %d, %y"}}</small> <a href="{{ post.url }}">{{ post.title }}</a>
+        <small>{{post.date | date: "%b %d, %y"}}</small> <a href="{{ post.url | remove_first:'/' }}">{{ post.title }}</a>
       </li>
     {% endif %}
   {% endfor %}
