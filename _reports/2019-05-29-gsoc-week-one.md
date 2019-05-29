@@ -56,9 +56,9 @@ During the community bonding period, I was assigned the following work:
     The REST API is made using the [python-Eve framework](https://github.com/pyeve/eve).
     Following three endpoints have been set up:
     
-    1. `/articles` to retrieve all articles
-    2. `/articles/{articleId}` to retrieve an articles by Document ID
-    3. `/articles/identifier/{identifierKey}` to retrieve one or more articles by identifier
+    1. `/articles`<br> to retrieve all articles
+    2. `/articles/{articleId}`<br> to retrieve an articles by Document ID
+    3. `/articles/identifier/{identifierKey}`<br> to retrieve one or more articles by identifier
 
     For the identifier endpoint, a 301 redirection is set up to endpoint `/articles` with suitable filters.
     Swagger is used for documenting the REST API. [Link to Swagger documentation](https://app.swaggerhub.com/apis-docs/RohitChattopadhyay/i-hop_reach_api/).
