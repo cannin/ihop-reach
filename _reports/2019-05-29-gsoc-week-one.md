@@ -6,7 +6,7 @@ author: Rohit R Chattopadhyay
 ---
 ## About Me
 I am an undergraduate student, pursuing Computer Science and Engineering at [Jadavpur University](http://jaduniv.edu.in), Kolkata, India.
-My interests lie in application development, alongside which I am interested in exploring the computer science world of machine learning and image processing
+My interests lie in application development, alongside which I am interested in exploring the computer science world of machine learning and image processing.
 
 ## GSoC Project
 
