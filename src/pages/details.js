@@ -4,8 +4,21 @@ import 'font-awesome/css/font-awesome.min.css';
 
 import style from '../assets/styles/details.module.scss'
 import Layout from '../components/layout'
+import Links from '../components/identifierDetails'
 
 const SearchPage = () => {
+    const data = {
+        "article": {
+          "extracted_information": {
+            "participant_a": {
+              "identifier": "uniprot:Q12794"
+            },
+            "participant_b": {
+              "identifier": "uniprot:Q9NZC7"
+            }
+          }
+        }
+      }
     return (
         <Layout>
             <div className="container my-4">
@@ -34,11 +47,7 @@ const SearchPage = () => {
                             </table>
                         </div>
                         <p>
-                            <ul className={style.detailsLinks}>
-                                <li><a href="">Link 1</a></li>
-                                <li><a href="">Link 2</a></li>
-                                <li><a href="">Link 3</a> Details if any</li>
-                            </ul>                     
+                            <Links className={style.detailsLinks} data = {data}/>
                         </p>
                     </div>
                 </div>
