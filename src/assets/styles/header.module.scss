@@ -1,0 +1,28 @@
+.logo-img {
+    // max-height: 50px
+}
+.brand {
+    text-align: center;
+}
+.adv-opt-link{
+    width: 100%;
+    text-align: right;
+    span {
+        color: #18BC9C !important;
+        padding: 0;
+        i {
+            width: 1em
+        }
+    }
+    span:hover {
+        color: #0f7864 !important;
+    }
+    cursor: pointer;
+}
+
+.adv-opt-div{
+    border-top: 1px solid #999999;
+    position: absolute;
+    transition: all 1s;
+    width: 100%;
+}
