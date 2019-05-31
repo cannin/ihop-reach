@@ -1,9 +1,8 @@
 {
-  "name": "gatsby-starter-hello-world",
-  "private": true,
-  "description": "A simplified bare-bones starter for Gatsby",
+  "name": "ihop-reach",
+  "description": "An application for users to access biological data extracted from biomedical literature.",
   "version": "0.1.0",
-  "license": "MIT",
+  "license": "LGPL-3.0-or-later",
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
@@ -13,9 +12,11 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
   },
   "dependencies": {
+    "bootstrap": "^4.3.1",
     "bootswatch": "^4.3.1",
     "font-awesome": "^4.7.0",
     "gatsby": "^2.7.3",
+    "gatsby-plugin-google-analytics": "^2.0.20",
     "gatsby-plugin-react-helmet": "^3.0.12",
     "gatsby-plugin-sass": "^2.0.11",
     "node-sass": "^4.12.0",
@@ -28,9 +29,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-hello-world"
+    "url": "https://github.com/cannin/ihop-reach"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/cannin/ihop-reach/issues"
   }
 }

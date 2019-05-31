@@ -1,14 +1,19 @@
 .details-links {
     list-style-type: none;
     padding-left: 1em;
-    li {
-        text-decoration: none;
+    
+    span {
+        a {
+            text-decoration: none;
+        }
     }
+
 }
 .sentence-container {
     table {
+        margin-left: 0.5em;
         div {
-            margin-bottom: 1em;
+            margin-bottom: 0.5em;
         }
     }
 }

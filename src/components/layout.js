@@ -1,9 +1,8 @@
 import React from "react"
-import 'bootswatch/dist/flatly/bootstrap.min.css'
-
 import Header from "./header"
 import Footer from "./footer"
 import Head from "./head"
+import "../assets/styles/customization.scss"
 
 import LayoutStyles from "../assets/styles/layout.module.scss"
 

@@ -99,8 +99,11 @@ class Header extends React.Component{
                                 <button className="input-group-text" type="button" id="searchBtn"><i className="fa fa-search"></i></button>
                             </div>
                             {/* Advanced option button */}
-                            <small className={style.advOptLink} onClick={this.advOptionController}>
-                                <span className={"nav-link"}>Advanced Options 
+                            <small className={[style.advOptLink,"row"].join(" ")} onClick={this.advOptionController}>
+                                <span className={["col-sm-8","nav-text",style.egText].join(" ")}>
+                                    e.g. SNF1, Taxonomy:9606, UniProt:Q12794
+                                </span>
+                                <span className={["col-sm-4","nav-link",style.advText].join(" ")}>Advanced Options 
                                     {
                                         this.state.showAdvOption==true
                                         ? <i className="fa fa-times"></i>

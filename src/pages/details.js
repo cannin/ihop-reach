@@ -5,30 +5,54 @@ import 'font-awesome/css/font-awesome.min.css';
 import style from '../assets/styles/details.module.scss'
 import Layout from '../components/layout'
 import Links from '../components/identifierDetails'
-
-const SearchPage = () => {
+import SentenceView from '../components/sentenceView'
+const DetailsPage = () => {
     const data = {
         "article": {
-          "extracted_information": {
-            "participant_a": {
-              "identifier": "uniprot:Q12794"
+            "submitter" : "Reach",
+            "model_relation" : "extension",
+            "extracted_information" : {
+                "interaction_type" : "decreases_activity",
+                "negative_information" : true,
+                "participant_b" : {
+                    "in_model" : true,
+                    "identifier" : "chebi:CHEBI:1327",
+                    "entity_text" : "cGMP",
+                    "entity_type" : "simple_chemical"
+                },
+                "participant_a" : {
+                    "in_model" : true,
+                    "identifier" : "interpro:IPR000818",
+                    "entity_text" : "TEA",
+                    "entity_type" : "family"
+                },
+                "hypothesis_information" : false
             },
-            "participant_b": {
-              "identifier": "uniprot:Q9NZC7"
-            }
-          }
-        }
+            "reading_complete" : "2016-01-08T14:49:54Z",
+            "reader_type" : "machine",
+            "reading_started" : "2016-01-08T14:48:55Z",
+            "trigger" : "inhibit",
+            "evidence" : [ 
+                "TEA does not inhibit the cGMP",
+                "cGMP does not inhibit the TEA"
+            ],
+            "pmc_id" : "100781",
+            "score" : 0
+        }        
       }
     return (
         <Layout>
             <div className="container my-4">
                 {/* Instruction block */}
                 <div>
-                    <h1 className="display-4 w-100">SNF1</h1>
+                    <h1 className="display-4 w-100">
+                        {data.article.extracted_information.participant_b.entity_text} 
+                        <span className="lead"> {data.article.extracted_information.participant_b.entity_type.split("_").join(" ")}</span>
+                    </h1>
                     <div>
-                        <div className="table-responsive">
+                        <div className="table-responsive mb-2">
                             <table className="table ">
-                                <thead class="thead-light">
+                                <thead className="thead-light">
                                     <tr>
                                         <th>Symbol</th>
                                         <th>Name</th>
@@ -46,47 +70,13 @@ const SearchPage = () => {
                                 </tbody>
                             </table>
                         </div>
-                        <p>
-                            <Links className={style.detailsLinks} data = {data}/>
-                        </p>
+                        <Links className={style.detailsLinks} data = {data.article.extracted_information}/>
                     </div>
                 </div>
                 <div className={style.sentenceContainer}>
-                    <p className="lead">Sentences in this view contain interactions of SNF1</p>
+                    <p className="lead">Sentences in this view contain interactions of {data.article.extracted_information.participant_b.entity_text}</p>
                     <table>
-                        <tr>
-                            <div>We show that SNF4 binds to the SNF1 regulatory domain in low glucose [?], whereas in high glucose [?] the regulatory domain binds to the kinase domain of SNF1 itself. [1996]</div>
-                        </tr>
-                        <tr>
-                            <div>We first show that the fraction of cellular Snf4 protein that is complexed with Snf1 is reduced in a sip1delta sip2delta gal83delta triple mutant. [1997]</div>
-                        </tr>
-                        <tr>
-                            <div>This gene activation depended on the previously identified derepression genes CAT1 (SNF1) (encoding a protein kinase) and CAT3 (SNF4) (probably encoding a subunit of Cat1p [Snf1p]). [1995] </div>
-                        </tr>
-                        <tr>
-                            <div>The SNF4-beta-galactosidase protein coimmunoprecipitated with the SNF1 protein kinase, thus providing evidence for the physical association of the two proteins. [1989]</div>
-                        </tr>
-                        <tr>
-                            <div>Increased SNF1 gene dosage partially compensates for a mutation in SNF4, and the SNF4 function is required for maximal SNF1 protein kinase activity in vitro. [1989]</div>
-                        </tr>
-                        <tr>
-                            <div>We have here addressed the role of the Snf4 (gamma) subunit in regulating SNF1 protein kinase in response to glucose [?] availability in Saccharomyces cerevisiae. [2008]</div>
-                        </tr>
-                        <tr>
-                            <div>Finally, cells lacking the gamma subunit of the Snf1 kinase complex encoded by the SNF4 gene exhibited normal regulation of threonine 210 phosphorylation in response to glucose [?] limitation but are unable to phosphorylate Mig1 efficiently. [2001]</div>
-                        </tr>
-                        <tr>
-                            <div>Regulation of Snf1 kinase. Activation requires phosphorylation of threonine 210 by an upstream kinase as well as a distinct step mediated by the Snf4subunit. [2001]</div>
-                        </tr>
-                        <tr>
-                            <div>In two-hybrid assays, one SNF4 mutation enhances the interaction between Snf4 and Snf1. [1999]</div>
-                        </tr>
-                        <tr>
-                            <div>The SNF1 protein kinase and the associated SNF4 protein are required for release of glucose [?] repression in Saccharomyces cerevisiae. [1992]</div>
-                        </tr>
-                        <tr>
-                            <div>The SNF4 protein is physically associated with SNF1 and positively affects the kinase activity. [1992] </div>
-                        </tr>
+                        <SentenceView data= {data.article} />
                     </table>
                     <div className="mt-2 w-100">
                         <ul className="pagination pagination-sm float-right">
@@ -119,4 +109,4 @@ const SearchPage = () => {
     )
 }
 
-export default SearchPage
+export default DetailsPage

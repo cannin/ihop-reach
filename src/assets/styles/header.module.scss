@@ -5,19 +5,24 @@
     text-align: center;
 }
 .adv-opt-link{
-    width: 100%;
-    text-align: right;
-    span {
+    // here style for content under search bar
+    width: 102%;
+    .eg-text{
+        // here style for examples under search bar
+    }
+    .adv-text {
+        // here style for Advanced Options link
+        text-align: right;
         color: #18BC9C !important;
         padding: 0;
+        cursor: pointer;
         i {
             width: 1em
         }
     }
-    span:hover {
+    .adv-text:hover {
         color: #0f7864 !important;
-    }
-    cursor: pointer;
+    }    
 }
 
 .adv-opt-div{

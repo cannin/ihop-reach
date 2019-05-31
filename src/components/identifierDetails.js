@@ -4,44 +4,46 @@ import 'font-awesome/css/font-awesome.min.css';
 
 class Links extends React.Component {
     constructor(props){
-        super(props)        
+        super(props)
     }
     linkParser = (identifier) => {
         // list of baseURLs
         const baseURL = {
-            ['go']          : 'http://identifiers.org/go/',
-            ['uniprot']     : 'http://identifiers.org/uniprot/',
-            ['hmdb']        : 'http://identifiers.org/hmdb/',
-            ['pubchem']     : 'http://identifiers.org/pubchem.compound/',
-            ['pfam']        : 'http://identifiers.org/pfam/',
-            ['interpro']    : 'http://identifiers.org/interpro/',
-            ['be']          : 'https://github.com/sorgerlab/famplex',
-			['taxonomy']    : 'http://identifiers.org/taxonomy/'
+            // [namespace]  : [baseURL, Name of namespaces]
+            ['go']          : ['http://identifiers.org/go/',"GO"],
+            ['uniprot']     : ['http://identifiers.org/uniprot/',"UniProt"],
+            ['hmdb']        : ['http://identifiers.org/hmdb/',"HMDB"],
+            ['pubchem']     : ['http://identifiers.org/pubchem.compound/',"PubChem"],
+            ['pfam']        : ['http://identifiers.org/pfam/',"Pfam"],
+            ['interpro']    : ['http://identifiers.org/interpro/',"InterPro"],
+            ['be']          : ['https://github.com/sorgerlab/famplex',"FamPlex"],
+            ['taxonomy']    : ['http://identifiers.org/taxonomy/',"Taxonomy"],
+            ['chebi']       : ['http://identifiers.org/chebi/CHEBI:',"ChEBI"]
         }        
         var namespace,id
-		var identifierArray = identifier.split(":")
+        var identifierArray = identifier.split(":")
         //splitting the identifier into namespace and if
-        namespace = identifierArray[0]
-		id = identifierArray[identifierArray.length-1] // for identifiers with 3 components
-        var urlID = namespace=='be'?"":id //condition for be namespace
-        var urlNamespace = baseURL[namespace.toLowerCase()] // getting url
-
+        namespace = identifierArray[0].toLowerCase()
+        id = identifierArray[identifierArray.length-1] // for identifiers with 3 components
+        var urlID = namespace==='be'?"":id //condition for be namespace
+        var urlNamespace = baseURL[namespace][0] // getting url
         // checking url validity
-        if(urlNamespace != undefined || id != undefined)
-            return  <a href={urlNamespace + urlID}>{identifier}</a>
+        if(urlNamespace !== undefined || id !== undefined)
+            return  <span>{baseURL[namespace][1]}: <a href={urlNamespace + urlID}>{id}</a></span>
         else
             return null
     }
     identifierToLink = () => {
         //function to traverse the data object
-        return Object.keys(this.props.data.article.extracted_information).map(
-            participant => 
-                <li>
-                    {
-                        // call to function to resolve the URLs
-                        this.linkParser(this.props.data.article.extracted_information[participant].identifier)
-                    }
-                </li>            
+        return Object.keys(this.props.data).map(
+            participant => {
+                return this.props.data[participant].identifier===undefined?"":
+                    <li key={participant}>
+                        {
+                            this.linkParser(this.props.data[participant].identifier)                            
+                        }
+                    </li>       
+            }     
         )
     }
     render() {
