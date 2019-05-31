@@ -15,11 +15,14 @@ class Links extends React.Component {
             ['pubchem']     : 'http://identifiers.org/pubchem.compound/',
             ['pfam']        : 'http://identifiers.org/pfam/',
             ['interpro']    : 'http://identifiers.org/interpro/',
-            ['be']          : 'https://github.com/sorgerlab/bioentities'
+            ['be']          : 'https://github.com/sorgerlab/famplex',
+			['taxonomy']    : 'http://identifiers.org/taxonomy/'
         }        
         var namespace,id
-        //splitting using destructuring
-        [namespace,id] = identifier.split(":")
+		var identifierArray = identifier.split(":")
+        //splitting the identifier into namespace and if
+        namespace = identifierArray[0]
+		id = identifierArray[identifierArray.length-1] // for identifiers with 3 components
         var urlID = namespace=='be'?"":id //condition for be namespace
         var urlNamespace = baseURL[namespace.toLowerCase()] // getting url
 
