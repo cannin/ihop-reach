@@ -1,7 +1,5 @@
 import React from "react"
 
-import 'font-awesome/css/font-awesome.min.css';
-
 class SentenceView extends React.Component {
 
     highlight = (sentence,data) => {
@@ -54,7 +52,10 @@ class SentenceView extends React.Component {
                         sentence => {
                             return  <tr key={sentence}>
                                         <td>
-                                            <div  dangerouslySetInnerHTML={{__html:this.highlightSentence(sentence)}}></div>
+                                            <span dangerouslySetInnerHTML={{__html:this.highlightSentence(sentence)}}></span> 
+                                            &nbsp;  <a href={ "https://www.ncbi.nlm.nih.gov/pmc/articles/" + this.props.data.pmc_id } target="_blank">
+                                                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                                    </a>
                                         </td>
                                     </tr>
                         }

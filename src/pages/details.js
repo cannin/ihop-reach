@@ -33,8 +33,7 @@ const DetailsPage = () => {
             "reading_started" : "2016-01-08T14:48:55Z",
             "trigger" : "inhibit",
             "evidence" : [ 
-                "TEA does not inhibit the cGMP",
-                "cGMP does not inhibit the TEA"
+                "TEA does not inhibit the cGMP"
             ],
             "pmc_id" : "100781",
             "score" : 0

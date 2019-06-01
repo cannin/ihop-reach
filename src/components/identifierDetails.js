@@ -9,7 +9,7 @@ class Links extends React.Component {
     linkParser = (identifier) => {
         // list of baseURLs
         const baseURL = {
-            // [namespace]  : [baseURL, Name of namespaces]
+            // [namespace]  : [baseURL, Name of the namespace]
             ['go']          : ['http://identifiers.org/go/',"GO"],
             ['uniprot']     : ['http://identifiers.org/uniprot/',"UniProt"],
             ['hmdb']        : ['http://identifiers.org/hmdb/',"HMDB"],
@@ -22,7 +22,7 @@ class Links extends React.Component {
         }        
         var namespace,id
         var identifierArray = identifier.split(":")
-        //splitting the identifier into namespace and if
+        //splitting the identifier into namespace and id
         namespace = identifierArray[0].toLowerCase()
         id = identifierArray[identifierArray.length-1] // for identifiers with 3 components
         var urlID = namespace==='be'?"":id //condition for be namespace
