@@ -1,3 +1,5 @@
+// @flow
+
 import React from "react"
 import { Link } from "gatsby"
 import 'font-awesome/css/font-awesome.min.css';
@@ -50,7 +52,7 @@ const DetailsPage = () => {
                     </h1>
                     <div>
                         <div className="table-responsive mb-2">
-                            <table className="table ">
+                            <table className="table">
                                 <thead className="thead-light">
                                     <tr>
                                         <th>Symbol</th>
@@ -74,7 +76,7 @@ const DetailsPage = () => {
                 </div>
                 <div className={style.sentenceContainer}>
                     <p className="lead">Sentences in this view contain interactions of {data.article.extracted_information.participant_b.entity_text}</p>
-                    <table>
+                    <table className="w-100">
                         <SentenceView data= {data.article} />
                     </table>
                     <div className="mt-2 w-100">

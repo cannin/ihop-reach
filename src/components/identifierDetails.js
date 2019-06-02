@@ -1,3 +1,5 @@
+// @flow
+
 import React from "react"
 
 import 'font-awesome/css/font-awesome.min.css';
@@ -5,6 +7,7 @@ import 'font-awesome/css/font-awesome.min.css';
 class Links extends React.Component {
     constructor(props){
         super(props)
+        this.array = []
     }
     linkParser = (identifier) => {
         // list of baseURLs
@@ -21,9 +24,10 @@ class Links extends React.Component {
             ['chebi']       : ['http://identifiers.org/chebi/CHEBI:',"ChEBI"]
         }        
         var namespace,id
-        var identifierArray = identifier.split(":")
+        var identifierArray = identifier.split(":")        
         //splitting the identifier into namespace and id
         namespace = identifierArray[0].toLowerCase()
+        if(namespace==='uazid') return null
         id = identifierArray[identifierArray.length-1] // for identifiers with 3 components
         var urlID = namespace==='be'?"":id //condition for be namespace
         var urlNamespace = baseURL[namespace][0] // getting url
@@ -33,24 +37,42 @@ class Links extends React.Component {
         else
             return null
     }
-    identifierToLink = () => {
+    identifierToLink = (article) => {
         //function to traverse the data object
-        return Object.keys(this.props.data).map(
+        Object.keys(article).map(
             participant => {
-                return this.props.data[participant].identifier===undefined?"":
-                    <li key={participant}>
-                        {
-                            this.linkParser(this.props.data[participant].identifier)                            
-                        }
-                    </li>       
+                if((article[participant]=== null) || (article[participant]=== undefined))
+                    return
+                try{                    
+                    this.array.push(article[participant].identifier)
+                }
+                catch(e){
+                    console.log(article,participant)
+                    console.log(e)
+                }
             }     
         )
     }
-    render() {
+    render() {            
+        try {
+            this.props.data.map((identifier) => {                            
+                       this.identifierToLink(identifier.extracted_information)
+                    }
+                )
+        } catch (error) {
+            console.log(error)
+            return null
+        }
+        var unique = Array.from([...new Set(this.array)][0])
         return (
             <ul className = {this.props.className}>
-                { this.identifierToLink() }
-            </ul>
+            { 
+                unique.map((identifier) => {
+                            return <li key={identifier}>{this.linkParser(identifier)}</li>
+                        }
+                    )
+            }
+            </ul>    
         )
     }
 }
