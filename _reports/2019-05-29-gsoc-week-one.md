@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Week 0 | Welcome GSoC"
+title:  "Week Zero | Welcome GSoC"
 tags: [gsoc, weekly report, community bonding]
 author: Rohit R Chattopadhyay
 ---
