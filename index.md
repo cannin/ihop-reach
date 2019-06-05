@@ -1,15 +1,16 @@
 An application for users to access biological data extracted from biomedical literature
 
 ### GSoC19 Report
-<ul>
+<table>
   {% for post in site.reports %}
     {% if post.tags contains "gsoc" %}
-      <li>
-        <small>{{post.date | date: "%b %d, %y"}}</small> <a href="{{ post.url | remove_first:'/' }}">{{ post.title }}</a>
-      </li>
+      <tr>
+        <td><small style="width:5em">{{post.date | date: "%b %d, %y"}}</small></td>
+        <td><a href="{{ post.url | remove_first:'/' }}">{{ post.title }}</a></td>
+      </tr>
     {% endif %}
   {% endfor %}
-</ul>
+</table>
 
 
 ### Contributers
