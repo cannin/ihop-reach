@@ -23,6 +23,6 @@ module.exports = {
         // URL to query from
         url: `${process.env.GATSBY_GRAPHQL_API_HOST}/graphql`,
       },
-    },
+    },    
   ],
 }
