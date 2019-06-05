@@ -58,6 +58,12 @@ typings/
 .cache/
 public
 
+# jekyll
+_site
+.sass-cache
+Gemfile.lock
+*.gem
+
 # Mac files
 .DS_Store
 
