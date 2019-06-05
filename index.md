@@ -2,7 +2,7 @@ An application for users to access biological data extracted from biomedical lit
 
 ### GSoC19 Report
 <table>
-  {% for post in site.reports %}
+  {% for post in site.reports reversed %}
     {% if post.tags contains "gsoc" %}
       <tr>
         <td><small style="width:5em">{{post.date | date: "%b %d, %y"}}</small></td>
