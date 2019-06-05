@@ -5,7 +5,8 @@
   "license": "LGPL-3.0-or-later",
   "scripts": {
     "build": "gatsby build",
-    "develop": "gatsby develop",
+    "devbuild": "GATSBY_GRAPHQL_API_HOST=http://localhost:4000 npm run build",
+    "develop": "GATSBY_GRAPHQL_API_HOST=http://localhost:4000 gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": "npm run develop",
     "serve": "gatsby serve",
@@ -14,6 +15,7 @@
   "dependencies": {
     "bootstrap": "^4.3.1",
     "bootswatch": "^4.3.1",
+    "flow-bin": "^0.100.0",
     "font-awesome": "^4.7.0",
     "gatsby": "^2.7.3",
     "gatsby-plugin-flow": "^1.0.6",
@@ -28,6 +30,12 @@
     "slug": "^1.1.0"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-gatsby": "^0.1.11",
+    "eslint": "^5.16.0",
+    "eslint-plugin-flowtype": "^3.9.1",
     "flow-bin": "^0.100.0",
     "prettier": "^1.17.1"
   },

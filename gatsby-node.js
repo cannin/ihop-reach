@@ -1,8 +1,8 @@
 // createPages API
 const path = require('path');
 const slug = require('slug')
-exports.createPages = ({boundActionCreators, graphql}) => {
-  const {createPage} = boundActionCreators;
+exports.createPages = ({actions, graphql}) => {
+  const {createPage} = actions;
   
   const detailsTemplate = path.resolve('src/templates/details.js');
 
@@ -17,19 +17,22 @@ exports.createPages = ({boundActionCreators, graphql}) => {
     if(res.errors) {
       return Promise.reject(res.errors);
     }
-	var  pageCount = 0
-    res.data.ihop.unqEntities.forEach((entity) => {
-      if(typeof(entity) != 'string')
+	  var pageCount = 0
+    res.data.ihop.unqEntities.forEach((id) => {
+      if(typeof(id) != 'string')
         return
+      // var idenArr = id.split(":")
+      // var path = `/details/${slug(idenArr[0])}/${slug(idenArr[idenArr.length-1])}`
+      var path = `/details/${id}`
       createPage({
-        path: `/details/${slug(entity)}`,
+        path: path,
         component: detailsTemplate,
         context: {
-          name : entity
+          id : id
         }
       })
       console.log(pageCount)
-	pageCount ++
+	    pageCount ++
     });
   })
 }
