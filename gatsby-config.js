@@ -15,7 +15,16 @@ module.exports = {
     },
     {
       resolve: `gatsby-source-mongodb`,
-      options: { dbName: `iHOP`, collection: `identifier_mapping` },
+      options: {
+          connectionString: "mongodb+srv://user:passkey@ihop-9o63p.mongodb.net/",
+          dbName: `iHOP`,
+          collection: `identifier_mapping`,
+          extraParams: { 
+            replicaSet: "test-shard-0",
+            ssl: true,
+            authSource: "admin" 
+          }
+        },
     },
     {
       resolve: "gatsby-source-graphql",
