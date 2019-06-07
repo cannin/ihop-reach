@@ -39,10 +39,16 @@ class Links extends React.Component {
     else return null
   }
   render() {
+    const syn = Array.from(this.props.synonyms)
     return (
-      <ul className={this.props.className}>
-        <li>{this.linkParser(this.props.identifier)}</li>
-      </ul>
+      <div className={this.props.className}>
+        <p>
+          {this.linkParser(this.props.identifier)} <br />
+          {
+            syn.length>1?{Synonyms: <b>{syn.join(", ")}</b>}:""
+          }
+        </p>
+      </div>
     )
   }
 }

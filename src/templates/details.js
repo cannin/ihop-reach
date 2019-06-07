@@ -35,34 +35,12 @@ export default function DetailsTemplate({ data }) {
             <span className="lead"> {entityType.split("_").join(" ")}</span>
           </h1>
           <div>
-            <div className="table-responsive mb-2">
-              <table className="table">
-                <thead className="thead-light">
-                  <tr>
-                    <th>Symbol</th>
-                    <th>Name</th>
-                    <th>Synonyms</th>
-                    <th>Organism</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th>Under Construction (UC)</th>
-                    <td>UC</td>
-                    <td>{Array.from([...new Set([...synonyms])])}</td>
-                    <td>UC</td>
-                    {/* <td colSpan="4">
-                      <center>This section is Under Construction</center>
-                    </td> */}
-                  </tr>
-                </tbody>
-              </table>
-            </div>
             <Links
               className={style.detailsLinks}
               data={data.articles}
               identifier={searchID}
-            />
+              synonyms = {new Set([...synonyms])}
+            />            
           </div>
         </div>
         <div className={style.sentenceContainer}>

@@ -16,14 +16,15 @@ module.exports = {
     {
       resolve: `gatsby-source-mongodb`,
       options: {
-          connectionString: "mongodb+srv://user:passkey@ihop-9o63p.mongodb.net/",
+          
           dbName: `iHOP`,
           collection: `identifier_mapping`,
-          extraParams: { 
-            replicaSet: "test-shard-0",
-            ssl: true,
-            authSource: "admin" 
-          }
+          // connectionString: "mongodb+srv://user:passkey@ihop-9o63p.mongodb.net/",
+          // extraParams: { 
+          //   replicaSet: "test-shard-0",
+          //   ssl: true,
+          //   authSource: "admin" 
+          // }
         },
     },
     {
@@ -47,10 +48,10 @@ module.exports = {
         ],
         fields: [
           {
-            name : 'identifier', store: true, attributes: { boost: 20 } 
+            name : 'id', store: true
           },
           {
-            name : 'synonyms', store: true
+            name : 'syn', store: true
           },
           // {
           //   name : 'type', store: true
@@ -58,8 +59,8 @@ module.exports = {
         ],
         resolvers: {
           mongodbIHOPIdentifier_mapping: {
-            identifier : node => node.identifier,
-            synonyms : node => node.synonyms,
+            id : node => node.id,
+            syn : node => node.syn,
             // type : node => node.type,
           }
         },

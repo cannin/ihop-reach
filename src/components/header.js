@@ -18,12 +18,15 @@ class Header extends React.Component {
     }
     this.searchInpBox = React.createRef();    
   }
+  searchKeyParser = (key) => {
+    return ("*" + key.split(":").join("*") + "*")
+  }
   searchController = (event) => {
     event.preventDefault()
-    const searchKey = this.searchInpBox.current.value
+    const searchKey = this.searchInpBox.current.value    
     if(window.__LUNR__) {
       window.__LUNR__.__loaded.then(lunr => {
-              const refs = lunr.en.index.search(searchKey);
+              const refs = lunr.en.index.search(this.searchKeyParser(searchKey))
               const pages = refs.map(({ ref }) => lunr.en.store[ref]);
               switch (pages.length) {
                   case 1:
