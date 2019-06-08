@@ -13,19 +13,10 @@ export default function DetailsTemplate({ data }) {
   // data = data.ihop.entities.articles // This contains all the articles
 
   let searchID = data.ihop.entitiesByIdentifier.searchkey
-  let synonyms = data.ihop.entitiesByIdentifier.synonyms
+  let synonyms = data.mongodbIhopIdentifierMapping.syn
   let entityName = synonyms[0]
+  let entityType = data.mongodbIhopIdentifierMapping.typ
   data = data.ihop.entitiesByIdentifier
-  let entityType
-  if (
-    data.articles[0].extracted_information.participant_b.identifier === searchID
-  ) {
-    entityType =
-      data.articles[0].extracted_information.participant_b.entity_type
-  } else {
-    entityType =
-      data.articles[0].extracted_information.participant_a.entity_type
-  }
   return (
     <Layout>
       <div className="container my-4">
@@ -39,8 +30,8 @@ export default function DetailsTemplate({ data }) {
               className={style.detailsLinks}
               data={data.articles}
               identifier={searchID}
-              synonyms = {new Set([...synonyms])}
-            />            
+              synonyms={synonyms}
+            />
           </div>
         </div>
         <div className={style.sentenceContainer}>
@@ -126,6 +117,10 @@ export const detailsQuery = graphql`
           }
         }
       }
+    }
+    mongodbIhopIdentifierMapping(iden: { eq: $id }) {
+      typ
+      syn
     }
   }
 `

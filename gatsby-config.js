@@ -19,12 +19,12 @@ module.exports = {
           
           dbName: `iHOP`,
           collection: `identifier_mapping`,
-          // connectionString: "mongodb+srv://user:passkey@ihop-9o63p.mongodb.net/",
-          // extraParams: { 
-          //   replicaSet: "test-shard-0",
-          //   ssl: true,
-          //   authSource: "admin" 
-          // }
+          connectionString: "mongodb+srv://user:passkey@ihop-9o63p.mongodb.net/",
+          extraParams: { 
+            replicaSet: "test-shard-0",
+            ssl: true,
+            authSource: "admin" 
+          }
         },
     },
     {
@@ -48,20 +48,16 @@ module.exports = {
         ],
         fields: [
           {
-            name : 'id', store: true
+            name : 'ide', store: true
           },
           {
             name : 'syn', store: true
-          },
-          // {
-          //   name : 'type', store: true
-          // }
+          }
         ],
         resolvers: {
           mongodbIHOPIdentifier_mapping: {
-            id : node => node.id,
-            syn : node => node.syn,
-            // type : node => node.type,
+            ide : node => node.iden, //  Identifier
+            syn : node => node.syn,   //  Synonyms
           }
         },
         filename: 'search_index.json'

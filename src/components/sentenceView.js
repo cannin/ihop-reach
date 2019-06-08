@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react"
-import {Cookies} from 'react-cookie'
+import { Cookies } from "react-cookie"
 
 type Props = {
   data: Object,
@@ -9,7 +9,6 @@ type Props = {
 }
 
 class SentenceView extends React.Component<Props> {
-
   highlight = (sentence: string, data: Object) => {
     if (data === null) return sentence
 
@@ -77,20 +76,20 @@ class SentenceView extends React.Component<Props> {
       data.extracted_information.participant_b
     )
   }
-  setCookieOnPmcLinkClick = (id,sentence) => {
+  setCookieOnPmcLinkClick = (id, sentence) => {
     let cookieExpiry = new Date()
-    cookieExpiry.setTime(cookieExpiry.getTime()+(24*60*60*1000))
+    cookieExpiry.setTime(cookieExpiry.getTime() + 24 * 60 * 60 * 1000)
     const cookie = new Cookies()
     cookie.set(
       "ihop-reach", // Cookie name
       JSON.stringify({
-        "pmc_id"  : id,
-        "text"    : sentence
+        pmc_id: id,
+        text: sentence,
       }),
       {
-        path    : "/",
-        expires : cookieExpiry,
-        sameSite: true
+        path: "/",
+        expires: cookieExpiry,
+        sameSite: true,
       }
     )
   }
@@ -100,50 +99,44 @@ class SentenceView extends React.Component<Props> {
     var array = []
     articles.map(article => {
       return article.evidence.map(sentence => {
-            array.push({
-              "sentence" : sentence,
-              "pmcid" : article.pmc_id,
-              "html": this.highlightSentence(sentence, article, entity)
-              }
-            )
-          }
-        )
-      }
-    )
+        array.push({
+          sentence: sentence,
+          pmcid: article.pmc_id,
+          html: this.highlightSentence(sentence, article, entity),
+        })
+      })
+    })
     var unique = Array.from([...new Set(array)][0])
     return (
-      <tbody        
-        className={this.props.className}
-      >
-        {
-          unique.map(obj => {
-            return (
-              <tr key = {obj.html}>
-                <td style={{ width: "1.5em" }}>
-                  <a
-                    title="Link to PMC"
-                    href={
-                      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC" +
-                      obj.pmcid
-                    }
-                    target="_blank"
-                    onClick = {this.setCookieOnPmcLinkClick(obj.pmcid,obj.sentence)}
-                  >
-                    <i className="fa fa-file-text-o" aria-hidden="true" />
-                  </a>
-                </td>
-                <td>
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: obj.html,
-                    }}
-                  />
-                </td>
-              </tr>
-            )
-          }
-        )
-      }
+      <tbody className={this.props.className}>
+        {unique.map(obj => {
+          return (
+            <tr key={obj.html}>
+              <td style={{ width: "1.5em" }}>
+                <a
+                  title="Link to PMC"
+                  href={
+                    "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC" + obj.pmcid
+                  }
+                  target="_blank"
+                  onClick={this.setCookieOnPmcLinkClick(
+                    obj.pmcid,
+                    obj.sentence
+                  )}
+                >
+                  <i className="fa fa-file-text-o" aria-hidden="true" />
+                </a>
+              </td>
+              <td>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: obj.html,
+                  }}
+                />
+              </td>
+            </tr>
+          )
+        })}
       </tbody>
     )
   }

@@ -14,45 +14,120 @@ class Header extends React.Component {
     super(props)
     this.state = {
       showAdvOption: false,
-      noResults: false,
+      showSearchRes: false,
+      searching: false,
+      searchMsg: "",
     }
-    this.searchInpBox = React.createRef();    
+    this.searchInpBox = React.createRef()
   }
-  searchKeyParser = (key) => {
-    return ("*" + key.split(":").join("*") + "*")
+  searchKeyParser = (key, attempt) => {
+    attempt = attempt || 0
+    let keyArr = key
+      .trim()
+      .replace(/[~^*:+-]/g, "\\$&")
+      .split(" ")
+    let parsedArr = []
+    keyArr.forEach(element => {
+      let newKey = element.trim()
+      if (element.length > 2)
+        switch (attempt) {
+          case 0:
+            parsedArr.push(newKey)
+            break
+          default:
+            parsedArr.push(newKey + "~" + (attempt - 3))
+            break
+          case 1:
+            parsedArr.push("*" + newKey)
+            break
+          case 2:
+            parsedArr.push(newKey + "*")
+            break
+          case 3:
+            parsedArr.push("*" + newKey + "*")
+            break
+        }
+    })
+    console.log(parsedArr)
+    return parsedArr.join(" ")
   }
-  searchController = (event) => {
+  searchController = event => {
     event.preventDefault()
-    const searchKey = this.searchInpBox.current.value    
-    if(window.__LUNR__) {
-      window.__LUNR__.__loaded.then(lunr => {
-              const refs = lunr.en.index.search(this.searchKeyParser(searchKey))
-              const pages = refs.map(({ ref }) => lunr.en.store[ref]);
-              switch (pages.length) {
-                  case 1:
-                    navigate("/details/" + pages[0].identifier,
-                      {
-                        state: { 
-                          searchTerm : searchKey
-                         }
-                      }
-                    )
-                    break
-                  case 0:
-                    this.setState({
-                      noResults: true,
-                    })
-                    break
-                      //No results
+    const searchKey = this.searchInpBox.current.value
+    if (searchKey.length === 0) return null
 
-                  default:
-                      break;
-              }
-              // const posts = refs.map(({ ref }) => lunr.en.store[ref]);
-              // setResults(posts)
-          }
-      )
-    } 
+    this.setState(
+      {
+        searchMsg: "Searching...",
+        showSearchRes: true,
+        searching: true,
+      },
+      () => {
+        console.log(this.state)
+
+        if (window.__LUNR__) {
+          window.__LUNR__.__loaded.then(res => {
+            // const refs = res.en.index.query((q) => {return q.term(this.searchKeyParser(searchKey),{
+            //   //Query Options
+            //   // Refer https://lunrjs.com/docs/lunr.Query.html
+            //   // wildcard: 1,
+            //   // editDistance : 1,
+            // })})
+            let attempt = 0
+            let refs = []
+            try {
+              while (refs.length === 0 && attempt <= 5)
+                refs = res.en.index.search(
+                  this.searchKeyParser(searchKey, attempt++)
+                )
+            } catch (err) {
+              this.setState({
+                searchMsg: "Invalid Search",
+              })
+              return
+            }
+            const pages = refs.map(({ ref }) => {
+              return res.en.store[ref]
+            })
+            console.log(pages)
+            switch (pages.length) {
+              case 1:
+                navigate("/details/" + pages[0].ide, {
+                  state: {
+                    searchTerm: searchKey,
+                  },
+                })
+                this.setState({
+                  showSearchRes: false,
+                  searching: false,
+                })
+                break
+              case 0:
+                this.setState({
+                  searchMsg: "No Results Found",
+                  searching: false,
+                })
+                break
+              //No results
+
+              default:
+                //Array of results
+                navigate("/search", {
+                  state: {
+                    searchTerm: searchKey,
+                    results: pages,
+                  },
+                })
+                this.setState({
+                  showSearchRes: false,
+                  searching: false,
+                })
+                break
+            }
+          })
+        }
+      }
+    )
   }
   advOption = () => {
     if (this.state.showAdvOption)
@@ -86,7 +161,7 @@ class Header extends React.Component {
                     className="custom-select custom-select-sm"
                     name="ncbi_tax_id"
                     id="ncbi_tax_id"
-                    defaultValue = "all"
+                    defaultValue="all"
                   >
                     <option value="all" disabled hidden>
                       Specify organism...
@@ -129,22 +204,21 @@ class Header extends React.Component {
       )
   }
   advOptionController = () => {
-    this.setState((state) => ({
+    this.setState(state => ({
       showAdvOption: !state.showAdvOption,
     }))
   }
-  searchInpBoxController = () => {    
+  searchInpBoxController = () => {
     this.setState({
-      noResults: false,
+      showSearchRes: false,
     })
   }
   render() {
     const data = this.props.data
     let searchedTerm
-    try{
+    try {
       searchedTerm = window.history.state.searchTerm
-    }
-    catch(e){
+    } catch (e) {
       searchedTerm = null
     }
     return (
@@ -157,38 +231,44 @@ class Header extends React.Component {
             {/* <img className={style.logoImg} src={logo} alt="iHOP-Reach" /> */}
             <strong className="mx-auto">{data.site.siteMetadata.title}</strong>
           </Link>
-          <form className="form-inline my-0 col-sm-6 pr-0" onSubmit={this.searchController}>
+          <form
+            className="form-inline my-0 col-sm-6 pr-0"
+            onSubmit={this.searchController}
+          >
             <div className="my-1 col px-0">
-              <div className = { "input-group " + style.searchBox }>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search"
-                aria-label="Search"
-                aria-describedby="searchBtn"
-                id = "searchInpBox"
-                defaultValue = {searchedTerm}
-                ref = {this.searchInpBox}
-                onChange = {this.searchInpBoxController}
-              />
-              <div className="input-group-append">
-                <button
-                  className="input-group-text"
-                  id="searchBtn"
+              <div className={"input-group " + style.searchBox}>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search"
+                  aria-label="Search"
+                  aria-describedby="searchBtn"
+                  id="searchInpBox"
+                  defaultValue={searchedTerm}
+                  ref={this.searchInpBox}
+                  onChange={this.searchInpBoxController}
+                />
+                <div className="input-group-append">
+                  <button
+                    disabled={this.state.searching}
+                    className="input-group-text"
+                    id="searchBtn"
+                  >
+                    {this.state.searching == true ? (
+                      <i className="fa fa-circle-o-notch fa-spin" />
+                    ) : (
+                      <i className="fa fa-search" />
+                    )}
+                  </button>
+                </div>
+              </div>
+              {this.state.showSearchRes == true ? (
+                <div
+                  className={["px-0 container", style.noResultsBlock].join(" ")}
                 >
-                  <i className="fa fa-search" />
-                </button>
-              </div>
-              </div>
-              {
-                this.state.noResults==true?(
-                  <div className={["px-0 container",style.noResultsBlock].join(" ")}>
-                    <div className="col py-2">
-                      No Results Found
-                    </div>
-                  </div>
-                ):null
-              }
+                  <div className="col py-2">{this.state.searchMsg}</div>
+                </div>
+              ) : null}
               {/* Advanced option button */}
               <small
                 className={[style.advOptLink, "row"].join(" ")}
@@ -210,13 +290,12 @@ class Header extends React.Component {
                   )}
                 </span>
               </small>
-            </div>            
+            </div>
           </form>
         </nav>
         <div>
           {// Advanced option
-            this.advOption()
-          }
+          this.advOption()}
         </div>
       </header>
     )
