@@ -12,11 +12,11 @@ import SentenceView from "../components/sentenceView"
 export default function DetailsTemplate({ data }) {
   // data = data.ihop.entities.articles // This contains all the articles
 
-  let searchID = data.ihop.entitiesByIdentifier.searchkey
+  let searchID = data.ihop.articlesByIdentifier.searchkey
   let synonyms = data.mongodbIhopIdentifierMapping.syn
   let entityName = synonyms[0]
   let entityType = data.mongodbIhopIdentifierMapping.typ
-  data = data.ihop.entitiesByIdentifier
+  data = data.ihop.articlesByIdentifier
   return (
     <Layout>
       <div className="container my-4">
@@ -25,14 +25,14 @@ export default function DetailsTemplate({ data }) {
             {entityName}
             <span className="lead"> {entityType.split("_").join(" ")}</span>
           </h1>
-          <div>
+          <table className={"table " + style.infoTable}>
             <Links
               className={style.detailsLinks}
               data={data.articles}
               identifier={searchID}
               synonyms={synonyms}
             />
-          </div>
+          </table>
         </div>
         <div className={style.sentenceContainer}>
           <p className="lead">
@@ -96,8 +96,7 @@ export default function DetailsTemplate({ data }) {
 export const detailsQuery = graphql`
   query detailsByID($id: String!) {
     ihop {
-      entitiesByIdentifier(id: $id) {
-        synonyms
+      articlesByIdentifier(id: $id) {
         searchkey
         articles {
           pmc_id

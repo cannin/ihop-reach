@@ -32,25 +32,27 @@ class Links extends React.Component {
     // checking url validity
     if (urlNamespace !== undefined || id !== undefined)
       return (
-        <span>
-          {baseURL[namespace][1]}: <a href={urlNamespace + urlID}>{id}</a>
-        </span>
+        <tr>
+          <td>{baseURL[namespace][1]}</td>
+          <td><a href={urlNamespace + urlID}>{id}</a></td>
+        </tr>
       )
     else return null
   }
   render() {
     const syn = this.props.synonyms.join(", ")
     return (
-      <div className={this.props.className}>
-        {this.linkParser(this.props.identifier)} <br />
+      <tbody className={this.props.className}>
+        {this.linkParser(this.props.identifier)}
         {syn.length > 1 ? (
-          <p>
-            Synonyms: <b>{syn}</b>
-          </p>
+          <tr>
+            <td>Synonyms</td>
+            <td>{syn}</td>
+          </tr>
         ) : (
           ""
         )}
-      </div>
+      </tbody>
     )
   }
 }

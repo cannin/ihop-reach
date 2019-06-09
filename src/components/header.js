@@ -83,6 +83,7 @@ class Header extends React.Component {
             } catch (err) {
               this.setState({
                 searchMsg: "Invalid Search",
+                searching: false
               })
               return
             }

@@ -9,7 +9,7 @@ exports.createPages = ({actions, graphql}) => {
   return graphql(`
     {
       ihop {
-        unqEntities
+        uniqueIdentifiers
       }
     }
   `)
@@ -17,8 +17,7 @@ exports.createPages = ({actions, graphql}) => {
     if(res.errors) {
       return Promise.reject(res.errors);
     }
-	  var pageCount = 0
-    res.data.ihop.unqEntities.forEach((id) => {
+    res.data.ihop.uniqueIdentifiers.forEach((id) => {
       if(typeof(id) != 'string')
         return
       // var idenArr = id.split(":")
@@ -31,8 +30,6 @@ exports.createPages = ({actions, graphql}) => {
           id : id
         }
       })
-      console.log(pageCount)
-	    pageCount ++
     });
   })
 }
