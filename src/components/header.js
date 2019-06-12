@@ -24,7 +24,7 @@ class Header extends React.Component {
     attempt = attempt || 0
     let keyArr = key
       .trim()
-      .replace(/[~^*:+-]/g, "\\$&")
+      .replace(/[~^*:]/g, "\\$&")
       .split(" ")
     let parsedArr = []
     keyArr.forEach(element => {
@@ -54,7 +54,7 @@ class Header extends React.Component {
   searchController = event => {
     event.preventDefault()
     const searchKey = this.searchInpBox.current.value
-    if (searchKey.length === 0) return null
+    if (searchKey.length < 3) return null
 
     this.setState(
       {
@@ -83,7 +83,7 @@ class Header extends React.Component {
             } catch (err) {
               this.setState({
                 searchMsg: "Invalid Search",
-                searching: false
+                searching: false,
               })
               return
             }
@@ -123,6 +123,7 @@ class Header extends React.Component {
                   showSearchRes: false,
                   searching: false,
                 })
+                console.log(this.props)
                 break
             }
           })

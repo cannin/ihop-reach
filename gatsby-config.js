@@ -19,12 +19,12 @@ module.exports = {
           
           dbName: `iHOP`,
           collection: `identifier_mapping`,
-          connectionString: "mongodb+srv://user:passkey@ihop-9o63p.mongodb.net/",
-          extraParams: { 
-            replicaSet: "test-shard-0",
-            ssl: true,
-            authSource: "admin" 
-          }
+          // connectionString: process.env.GATSBY_Mongo_SRV,
+          // extraParams: { 
+          //   replicaSet: "test-shard-0",
+          //   ssl: true,
+          //   authSource: "admin" 
+          // }
         },
     },
     {

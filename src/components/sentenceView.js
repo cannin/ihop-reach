@@ -89,7 +89,7 @@ class SentenceView extends React.Component<Props> {
       {
         path: "/",
         expires: cookieExpiry,
-        sameSite: true,
+        sameSite: "lax",
       }
     )
   }
@@ -119,10 +119,9 @@ class SentenceView extends React.Component<Props> {
                     "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC" + obj.pmcid
                   }
                   target="_blank"
-                  onClick={() => this.setCookieOnPmcLinkClick(
-                    obj.pmcid,
-                    obj.sentence
-                  )}
+                  onClick={() =>
+                    this.setCookieOnPmcLinkClick(obj.pmcid, obj.sentence)
+                  }
                 >
                   <i className="fa fa-file-text-o" aria-hidden="true" />
                 </a>

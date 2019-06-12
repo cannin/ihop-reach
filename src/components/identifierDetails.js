@@ -34,7 +34,9 @@ class Links extends React.Component {
       return (
         <tr>
           <td>{baseURL[namespace][1]}</td>
-          <td><a href={urlNamespace + urlID}>{id}</a></td>
+          <td>
+            <a href={urlNamespace + urlID}>{id}</a>
+          </td>
         </tr>
       )
     else return null
