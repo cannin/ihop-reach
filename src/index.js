@@ -7,7 +7,6 @@ const { MongoClient, ObjectId } = require('mongodb');
 //Connection to MongoDB Database
 const context = () => MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true })
     .then(client => client.db('iHOP'));
-
 // A Schema, using GraphQL schema language
 const schema = buildSchema(`
     "List of GraphQL Queries the API supports"
@@ -154,7 +153,7 @@ const resolvers = {
         }
     ),
    	//	It returns Entity details by identifier
-    identifier: (args, context) => context().then(db => db.collection("identifier_mapping").findOne({"identifier" : args.id})),
+    identifier: (args, context) => context().then(db => db.collection("identifier_mapping").findOne({"iden" : args.id})),
     //	It returns all articles(250 per page) present in the database
     allArticles: (args, context) => context().then(db => db.collection(collection).find().skip(args.page<1?0:(args.page-1)*250 || 1).limit(250).toArray()),
     //	It returns single article matching the document Object ID
