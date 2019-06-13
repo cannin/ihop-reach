@@ -40,7 +40,7 @@ export default function DetailsTemplate({ data }) {
             <b>{entityName}</b>
           </p>
           <table className="w-100">
-            <SentenceView data={data} className={null} entity={entityName} />
+            <SentenceView data={data} identifier={searchID} className={null} />
             <tfoot className="invisible">
               <tr>
                 <td colSpan="2">
@@ -113,6 +113,7 @@ export const detailsQuery = graphql`
               entity_type
               identifier
             }
+            hypothesis_information
           }
         }
       }

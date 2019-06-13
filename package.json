@@ -5,8 +5,8 @@
   "license": "LGPL-3.0-or-later",
   "scripts": {
     "build": "gatsby build",
-    "devbuild": "GATSBY_GRAPHQL_API_HOST=http://localhost:4000 npm run build",
-    "develop": "GATSBY_GRAPHQL_API_HOST=http://localhost:4000 gatsby develop",
+    "devbuild": "GATSBY_GRAPHQL_API_HOST=http://localhost:8080 npm run build",
+    "develop": "GATSBY_GRAPHQL_API_HOST=http://localhost:8080 gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": "npm run develop",
     "serve": "gatsby serve",

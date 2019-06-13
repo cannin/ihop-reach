@@ -9,25 +9,7 @@ type Props = {
 }
 
 class SentenceView extends React.Component<Props> {
-  highlight = (sentence: string, data: Object) => {
-    if (data === null) return sentence
-
-    try {
-      if (data.trigger !== undefined) {
-        data.entity_type = "trigger"
-        data.entity_text = data.trigger
-      }
-    } catch (error) {
-      console.log(error)
-    }
-
-    if (typeof data === "string") {
-      var current = data
-      data = {}
-      data.entity_type = "current"
-      data.entity_text = current
-    }
-
+  highlighter = (sentence: string, data: Object, identifier: string) => {
     const color = {
       celltype: "#e9b54d",
       cellular_component: "#85b6d8",
@@ -40,41 +22,52 @@ class SentenceView extends React.Component<Props> {
       trigger: "inherit",
       current: "red",
     }
-    if (data.entity_text == null) return sentence
-    const regex = new RegExp(
-      data.entity_text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-      "i"
-    )
-    let words = sentence.split(regex)
-    let word
-    let newSentence = []
-    let newWord
-    let count = 0
-    for (let i = 0; i < words.length; i++) {
-      word = words[i]
-      if (word == "") {
-        newWord = `<span style="cursor:default; color:${
-          color[data.entity_type]
-        }" title="${data.entity_type.split("_").join(" ")}"><b>${
-          data.entity_text
-        }</b></span>`
-      } else {
-        count++
-        newWord = word
-      }
-      newSentence.push(newWord)
+    let terms = []
+    let entityText, entityColor, entityType, replacement
+    //trigger
+    if (data.trigger != undefined) {
+      terms.push({
+        text: data.trigger,
+        color: color["trigger"],
+        type: "Trigger",
+      })
     }
-    if (count == words.length) return newSentence.join(data.entity_text)
-    else return newSentence.join(" ")
-  }
-  highlightSentence = (sentence: string, data: Object, current: String) => {
-    return this.highlight(
-      this.highlight(
-        this.highlight(this.highlight(sentence, current), data),
-        data.extracted_information.participant_a
-      ),
-      data.extracted_information.participant_b
+
+    //participants
+    const participantA = data.extracted_information.participant_a
+    const participantB = data.extracted_information.participant_b
+    const participants = Array.from(
+      new Set(participantA.concat(...participantB))
     )
+    if (participants.length == 0) return null
+    participants.forEach(participant => {
+      entityText = participant.entity_text
+      entityType = participant.entity_type.split("_").join(" ")
+      if (participant.identifier == identifier) {
+        entityColor = color["current"]
+        entityType = "Current"
+      } else entityColor = color[participant.entity_type]
+      terms.push({
+        text: entityText,
+        color: entityColor,
+        type: entityType,
+        identifier: participant.identifier,
+      })
+    })
+    terms.forEach(word => {
+      if (word.type != "Current" && word.type != "Trigger")
+        replacement = `<a target="_blank" href="./${
+          word.identifier
+        }" style="color:${word.color}" title="${word.type}"><b>${
+          word.text
+        }</b></a>`
+      else
+        replacement = `<span style="cursor:default; color:${
+          word.color
+        }" title="${word.type}"><b>${word.text}</b></span>`
+      sentence = sentence.replace(word.text, replacement)
+    })
+    return sentence
   }
   setCookieOnPmcLinkClick = (id, sentence) => {
     let cookieExpiry = new Date()
@@ -95,14 +88,17 @@ class SentenceView extends React.Component<Props> {
   }
   render() {
     const articles = this.props.data.articles
-    const entity = this.props.entity
+    const identifier = this.props.identifier
     var array = []
+    let highlightedHTML
     articles.map(article => {
       return article.evidence.map(sentence => {
+        highlightedHTML = this.highlighter(sentence, article, identifier)
+        if (highlightedHTML == null) return
         array.push({
           sentence: sentence,
           pmcid: article.pmc_id,
-          html: this.highlightSentence(sentence, article, entity),
+          html: highlightedHTML,
         })
       })
     })
@@ -115,9 +111,9 @@ class SentenceView extends React.Component<Props> {
               <td style={{ width: "1.5em" }}>
                 <a
                   title="Link to PMC"
-                  href={
-                    "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC" + obj.pmcid
-                  }
+                  href={`https://www.ncbi.nlm.nih.gov/pmc/articles/PMC${
+                    obj.pmcid
+                  }?text=${encodeURIComponent(obj.sentence)}`}
                   target="_blank"
                   onClick={() =>
                     this.setCookieOnPmcLinkClick(obj.pmcid, obj.sentence)

@@ -35,7 +35,9 @@ class Links extends React.Component {
         <tr>
           <td>{baseURL[namespace][1]}</td>
           <td>
-            <a href={urlNamespace + urlID}>{id}</a>
+            <a href={urlNamespace + urlID} target="_blank">
+              {id}
+            </a>
           </td>
         </tr>
       )
@@ -43,6 +45,10 @@ class Links extends React.Component {
   }
   render() {
     const syn = this.props.synonyms.join(", ")
+    let hypothesis = null
+    this.props.data.forEach(element => {
+      hypothesis = element.extracted_information.hypothesis_information
+    })
     return (
       <tbody className={this.props.className}>
         {this.linkParser(this.props.identifier)}
@@ -54,6 +60,12 @@ class Links extends React.Component {
         ) : (
           ""
         )}
+        {
+          // <tr>
+          //   <td>Hypothesis<br/>Information</td>
+          //   <td>{hypothesis?<i className="fa fa-star-half-o" aria-hidden="true" />:<i className="fa fa-star" aria-hidden="true" />}</td>
+          // </tr>
+        }
       </tbody>
     )
   }

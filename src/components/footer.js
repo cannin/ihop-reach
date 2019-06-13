@@ -17,7 +17,10 @@ const Footer = () => {
             </span>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">
+            <a
+              className="nav-link"
+              href="http://reach-api.nrnb-docker.ucsd.edu/"
+            >
               API
             </a>
           </li>
