@@ -1,0 +1,23 @@
+{
+  "name": "ihop-graph-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "develop": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "RohitChattopadhyay",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.0.1",
+    "express": "^4.17.1",
+    "express-graphql": "^0.8.0",
+    "graphql": "^14.3.1",
+    "mongodb": "^3.2.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
