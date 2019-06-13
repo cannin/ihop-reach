@@ -40,7 +40,7 @@ const schema = buildSchema(`
     type IdentifierDetails {
         iden : String
         syn : [String]
-		type: String
+        typ: String
     }
 	"Object type for article and allArticles queries. Returns all Biomedical details from the extracted article details."
     type Article {	
