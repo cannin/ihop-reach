@@ -1,12 +1,19 @@
 const express = require('express');
 const async = require("async");
 const graphqlHTTP = require('express-graphql');
-const { buildSchema } = require('graphql');
-const { MongoClient, ObjectId } = require('mongodb');
+const {
+    buildSchema
+} = require('graphql');
+const {
+    MongoClient,
+    ObjectId
+} = require('mongodb');
 
 //Connection to MongoDB Database
-const context = () => MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true })
-    .then(client => client.db('iHOP'));
+const context = () => MongoClient.connect('mongodb://localhost:27017', {
+        useNewUrlParser: true
+    })
+    .then(client => client);
 // A Schema, using GraphQL schema language
 const schema = buildSchema(`
     "List of GraphQL Queries the API supports"
@@ -108,66 +115,101 @@ const schema = buildSchema(`
 
 // TODO Change function
 async function uniIden(db) {
-    return await new Promise(async (resolve,reject) => {
-        var arrA = await db.collection(collection).distinct("extracted_information.participant_a.identifier",{$and : [{"extracted_information.participant_a.identifier" : { $not : /^uazid/}}]})
-        var arrB = await db.collection(collection).distinct("extracted_information.participant_b.identifier",{$and : [{"extracted_information.participant_b.identifier" : { $not : /^uazid/}}]})
-        var mergedArray = [...new Set([...arrB , ...arrA])].sort()
+    return await new Promise(async (resolve, reject) => {
+        var arrA = await db.collection(collection).distinct("extracted_information.participant_a.identifier", {
+            $and: [{
+                "extracted_information.participant_a.identifier": {
+                    $not: /^uazid/
+                }
+            }]
+        })
+        var arrB = await db.collection(collection).distinct("extracted_information.participant_b.identifier", {
+            $and: [{
+                "extracted_information.participant_b.identifier": {
+                    $not: /^uazid/
+                }
+            }]
+        })
+        var mergedArray = [...new Set([...arrB, ...arrA])].sort()
         var entityArr = []
         var idenArr = []
         var tempArr = []
         console.log("Total Identifiers: ", mergedArray.length)
-	resolve(mergedArray)
-        }
-    )
+        resolve(mergedArray)
+    })
 }
 
 // Provide resolver functions for schema fields
 const collection = "articles" // Set collection name
+const dbName = 'iHOP'
 const resolvers = {
-	//	Returns all the articles of the specified identifier
-    articlesByIdentifier: (args, context) => context().then(db => {
-           const id = args.id.trim()
-           console.log(id)   
-           let nameArr = []
-           return db.collection(collection).find({$and:[{ $or : [{"extracted_information.participant_a.identifier" : id},{"extracted_information.participant_b.identifier" : id}]}]}).collation( { locale: 'en', strength: 2 } ).toArray().then((arr) =>{
-                    
-                    return {
-                        "articles" : arr,
-                        "count" : arr.length,
-                        "searchkey" : id
-                    }
-                }
-            )
-        }
-    ),
-	//	It returns all unique identifiers present in database
+    //	Returns all the articles of the specified identifier
+    articlesByIdentifier: (args, context) => context().then(client => {
+        let db = client.db(dbName)
+        const id = args.id.trim()
+        console.log(id)
+        let nameArr = []
+        return db.collection(collection).find({
+            $and: [{
+                $or: [{
+                    "extracted_information.participant_a.identifier": id
+                }, {
+                    "extracted_information.participant_b.identifier": id
+                }]
+            }]
+        }).collation({
+            locale: 'en',
+            strength: 2
+        }).toArray().then((arr) => {
+            client.close()
+            return {
+                "articles": arr,
+                "count": arr.length,
+                "searchkey": id
+            }
+        })
+    }),
+    //	It returns all unique identifiers present in database
     uniqueIdentifiers: async (args, context) => {
-                return await context().then( async db => {                    
-                    return uniIden(db).then((r) => r)
-                }
-            )
-        },
+        return await context().then(async client => {
+            let db = client.db(dbName)
+            return uniIden(db).then((r) => {
+                client.close();
+                return r
+            })
+        })
+    },
     //	It returns details of all Entities present in database by identifiers.
-    allIdentifiers: (args, context) => context().then(db => {
-            return db.collection("identifier_mapping").find().toArray()
-        }
-    ),
-   	//	It returns Entity details by identifier
-    identifier: (args, context) => context().then(db => db.collection("identifier_mapping").findOne({"iden" : args.id})),
+    allIdentifiers: (args, context) => context().then(client => {
+        let db = client.db(dbName)
+        let res = db.collection("identifier_mapping").find().toArray()
+        client.close()
+        return res
+    }),
+    //	It returns Entity details by identifier
+    identifier: (args, context) => context().then(db => db.collection("identifier_mapping").findOne({
+        "iden": args.id
+    })),
     //	It returns all articles(250 per page) present in the database
-    allArticles: (args, context) => context().then(db => db.collection(collection).find().skip(args.page<1?0:(args.page-1)*250 || 1).limit(250).toArray()),
+    allArticles: (args, context) => context().then(db => db.collection(collection).find().skip(args.page < 1 ? 0 : (args.page - 1) * 250 || 1).limit(250).toArray()),
     //	It returns single article matching the document Object ID
-    article: (args, context) => context().then(db => db.collection(collection).findOne(ObjectId(args.id)))
-  };
+    article: (args, context) => context().then(client => {
+        let db = client.db(dbName)
+        let res = db.collection(collection).findOne(ObjectId(args.id))
+        client.close()
+        return res
+    })
+
+};
 
 // Starting the application
 const app = express();
 const PORT = process.env.PORT || 8080
 app.use('/', graphqlHTTP({
-  schema,
-  rootValue: resolvers,
-  graphiql: true,
-  context
+    schema,
+    rootValue: resolvers,
+    graphiql: true,
+    context
 }));
 app.listen(PORT);
 
