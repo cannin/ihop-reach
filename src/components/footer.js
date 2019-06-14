@@ -20,6 +20,7 @@ const Footer = () => {
             <a
               className="nav-link"
               href="http://reach-api.nrnb-docker.ucsd.edu/"
+              target="_blank"
             >
               API
             </a>

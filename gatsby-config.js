@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata:{
-    title: "iHOP-Reach"
+    title: "Reach"
   },
   plugins: [
     `gatsby-plugin-flow`,
@@ -19,12 +19,12 @@ module.exports = {
           
           dbName: `iHOP`,
           collection: `identifier_mapping`,
-          // connectionString: process.env.GATSBY_Mongo_SRV,
-          // extraParams: { 
-          //   replicaSet: "test-shard-0",
-          //   ssl: true,
-          //   authSource: "admin" 
-          // }
+          connectionString: process.env.GATSBY_Mongo_SRV,
+          extraParams: { 
+            replicaSet: "test-shard-0",
+            ssl: true,
+            authSource: "admin" 
+          }
         },
     },
     {

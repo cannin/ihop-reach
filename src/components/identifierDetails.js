@@ -44,28 +44,16 @@ class Links extends React.Component {
     else return null
   }
   render() {
-    const syn = this.props.synonyms.join(", ")
-    let hypothesis = null
-    this.props.data.forEach(element => {
-      hypothesis = element.extracted_information.hypothesis_information
-    })
+    const syn = this.props.synonyms
     return (
       <tbody className={this.props.className}>
         {this.linkParser(this.props.identifier)}
         {syn.length > 1 ? (
           <tr>
             <td>Synonyms</td>
-            <td>{syn}</td>
+            <td>{syn.join(", ")}</td>
           </tr>
-        ) : (
-          ""
-        )}
-        {
-          // <tr>
-          //   <td>Hypothesis<br/>Information</td>
-          //   <td>{hypothesis?<i className="fa fa-star-half-o" aria-hidden="true" />:<i className="fa fa-star" aria-hidden="true" />}</td>
-          // </tr>
-        }
+        ) : null}
       </tbody>
     )
   }

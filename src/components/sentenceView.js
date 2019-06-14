@@ -94,8 +94,9 @@ class SentenceView extends React.Component<Props> {
     articles.map(article => {
       return article.evidence.map(sentence => {
         highlightedHTML = this.highlighter(sentence, article, identifier)
-        if (highlightedHTML == null) return
+        if (highlightedHTML == null || sentence.length < 50) return
         array.push({
+          hypothesis: article.extracted_information.hypothesis_information,
           sentence: sentence,
           pmcid: article.pmc_id,
           html: highlightedHTML,
@@ -103,12 +104,15 @@ class SentenceView extends React.Component<Props> {
       })
     })
     var unique = Array.from([...new Set(array)][0])
+    if (unique.length === 0) {
+      return <p style={{ textAlign: "center" }}>No Sentence Found</p>
+    }
     return (
       <tbody className={this.props.className}>
         {unique.map(obj => {
           return (
             <tr key={obj.html}>
-              <td style={{ width: "1.5em" }}>
+              <td style={{ maxWidth: "1.5em" }}>
                 <a
                   title="Link to PMC"
                   href={`https://www.ncbi.nlm.nih.gov/pmc/articles/PMC${
@@ -121,6 +125,20 @@ class SentenceView extends React.Component<Props> {
                 >
                   <i className="fa fa-file-text-o" aria-hidden="true" />
                 </a>
+                &nbsp;{" "}
+                {obj.hypothesis ? (
+                  <i
+                    title="True Hypothesis"
+                    className="fa fa-star-half-o"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <i
+                    title="False Hypothesis"
+                    className="fa fa-star"
+                    aria-hidden="true"
+                  />
+                )}
               </td>
               <td>
                 <span
