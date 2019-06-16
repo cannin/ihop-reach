@@ -64,7 +64,7 @@ const schema = buildSchema(`
             entityText: String
             "Participant Entity Type"
             entityType : String
-            "Exact match PMCID of Article"
+            "PMCID of Article"
             pmc : String
             "Triggering phrase"
             trigger : String
@@ -72,7 +72,7 @@ const schema = buildSchema(`
             evidence : String
             "Context Species"
             species : String
-            "Exact match Identifier of participant entity"
+            "Identifier of participant entity"
             iden : String
         ): [Document]
 
@@ -245,7 +245,9 @@ const resolvers = {
         }
         let andArray = []
         let orArray = []
+        let regx
         for ( let arg in args ){
+            regx = new RegExp(args[arg],"i")
             switch (arg) {
                 case "page":                    
                     break
@@ -253,10 +255,10 @@ const resolvers = {
                     orArray = []
                     orArray.push(
                         {
-                            "extracted_information.participant_a.entity_type" : args[arg]
+                            "extracted_information.participant_a.entity_type" : regx
                         },
                         {
-                            "extracted_information.participant_b.entity_type" : args[arg]
+                            "extracted_information.participant_b.entity_type" : regx
                         }
                     )
                     andArray.push({
@@ -267,10 +269,10 @@ const resolvers = {
                     orArray = []
                     orArray.push(
                         {
-                            "extracted_information.participant_a.entity_text" : args[arg]
+                            "extracted_information.participant_a.entity_text" : regx
                         },
                         {
-                            "extracted_information.participant_b.entity_text" : args[arg]
+                            "extracted_information.participant_b.entity_text" : regx
                         }
                     )
                     andArray.push({
@@ -281,10 +283,10 @@ const resolvers = {
                     orArray = []
                     orArray.push(
                         {
-                            "extracted_information.participant_a.identifier" : args[arg]
+                            "extracted_information.participant_a.identifier" : regx
                         },
                         {
-                            "extracted_information.participant_b.identifier" : args[arg]
+                            "extracted_information.participant_b.identifier" : regx
                         }
                     )
                     andArray.push({
@@ -293,7 +295,7 @@ const resolvers = {
                     break
                 default:
                     let fieldObj = {}
-                    fieldObj[fieldArr[arg]] = args[arg]
+                    fieldObj[fieldArr[arg]] = regx
                     andArray.push(fieldObj)
                     break
             }
