@@ -72,7 +72,7 @@ const schema = buildSchema(`
             evidence : String
             "Context Species"
             species : String
-            "Identifier of participant entity"
+            "Exact match identifier of participant entity"
             iden : String
         ): [Document]
 
@@ -283,10 +283,10 @@ const resolvers = {
                     orArray = []
                     orArray.push(
                         {
-                            "extracted_information.participant_a.identifier" : regx
+                            "extracted_information.participant_a.identifier" : args[arg]
                         },
                         {
-                            "extracted_information.participant_b.identifier" : regx
+                            "extracted_information.participant_b.identifier" : args[arg]
                         }
                     )
                     andArray.push({
