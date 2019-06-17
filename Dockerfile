@@ -10,5 +10,4 @@ RUN apk add mongodb
 RUN apk add mongodb-tools
 RUN mkdir /src/log
 WORKDIR /src
-ENV NODE_ENV="production"
 CMD ["sh","setup.sh"]
