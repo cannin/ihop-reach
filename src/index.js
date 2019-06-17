@@ -21,33 +21,20 @@ const schema = buildSchema(`
         """
             It returns all documents( maximum 250 per page) present in the database
 
-            Example:
-            
-            {
-            
-                allDocuments(iden: "uniprot:Q16595") {
-            
-                    pmc_id
-            
-                    extracted_information {
-            
-                        participant_b {
-            
-                            identifier
-            
-                        }
-            
-                        participant_a {
-            
-                            identifier
-            
-                        }
-            
-                    }
-            
-                }
-            
-            }
+            Example:  
+            {\n
+                    allDocuments(identifier: "uniprot:Q16595") {  
+                        pmc_id
+                        extracted_information {  
+                            participant_b {  
+                                identifier  
+                            }  
+                            participant_a {  
+                                identifier  
+                            }  
+                        }  
+                    }  
+            }  
 
             The query will return pmc_id and participant information of documents having identifier uniprot:Q16595
         """
@@ -55,25 +42,25 @@ const schema = buildSchema(`
             "Page Number"
             page: Int = 1
             "Hypothesis Information"
-            hypothesis: Boolean 
+            hypothesis_information: Boolean 
             "Interaction Type"     
-            interactionType : String
+            interaction_type : String
             "Negative Information"
-            negInfo : Boolean
+            negative_information : Boolean
             "Participant Entity Text"
-            entityText: String
+            entity_text: String
             "Participant Entity Type"
-            entityType : String
+            entity_type : String
             "PMCID of Article"
-            pmc : String
+            pmc_id : String
             "Triggering phrase"
             trigger : String
             "Sentence in the article"
             evidence : String
-            "Context Species"
+            "Context Species identifier"
             species : String
             "Exact match identifier of participant entity"
-            iden : String
+            identifier : String
         ): [Document]
 
 		"""
@@ -81,14 +68,10 @@ const schema = buildSchema(`
 
             Example:
 
-            {
-            
-                document(id: "5d00179ce3318daa924be884") {
-                
-                    pmc_id
-                
-                }
-            
+            {\n
+                    document(id: "5d00179ce3318daa924be884") {  
+                        pmc_id  
+                    }  
             }  
 
             The query returns pmc_id of the document specifed as argument
@@ -109,7 +92,7 @@ const schema = buildSchema(`
         ): Entities
 
 		"It returns all unique identifiers present in database"
-        uniqueIdentifiers: [String]
+        uniqueIdentifiers(limit: Int): [String]
 
 		"It returns details of all Entities present in database by identifiers."
         allIdentifiers : [IdentifierDetails]
@@ -232,10 +215,10 @@ const resolvers = {
     allDocuments: (args, context) => context().then(async client => {
         let db = client.db(dbName)
         const fieldArr = {
-            hypothesis : "extracted_information.hypothesis_information",
-            interactionType : "extracted_information.interaction_type",
-            negInfo : "extracted_information.negative_information",
-            pmc : "pmc_id",
+            hypothesis_information : "extracted_information.hypothesis_information",
+            interaction_type : "extracted_information.interaction_type",
+            negative_information : "extracted_information.negative_information",
+            pmc_id : "pmc_id",
             trigger : "trigger",
             evidence : "evidence",
             species : "extracted_information.context.Species",
@@ -251,7 +234,7 @@ const resolvers = {
             switch (arg) {
                 case "page":                    
                     break
-                case "entityType":
+                case "entity_type":
                     orArray = []
                     orArray.push(
                         {
@@ -265,7 +248,7 @@ const resolvers = {
                         "$or" : orArray
                     })
                     break
-                case "entityText":
+                case "entity_text":
                     orArray = []
                     orArray.push(
                         {
@@ -279,7 +262,7 @@ const resolvers = {
                         "$or" : orArray
                     })
                     break
-                case "iden":
+                case "identifier":
                     orArray = []
                     orArray.push(
                         {
@@ -295,7 +278,10 @@ const resolvers = {
                     break
                 default:
                     let fieldObj = {}
-                    fieldObj[fieldArr[arg]] = regx
+                    if(arg == "negative_information" || arg == "hypothesis_information")
+                        fieldObj[fieldArr[arg]] = args[arg]
+                    else 
+                        fieldObj[fieldArr[arg]] = regx
                     andArray.push(fieldObj)
                     break
             }
@@ -322,7 +308,6 @@ const resolvers = {
     articlesByIdentifier: (args, context) => context().then(client => {
         let db = client.db(dbName)
         const id = args.id.trim()
-        console.log(id)
         let nameArr = []
         return db.collection(collection).find({
             $and: [{
@@ -345,12 +330,13 @@ const resolvers = {
         })
     }),
     //	It returns all unique identifiers present in database
-    uniqueIdentifiers: async (args, context) => {
+    uniqueIdentifiers: async (args, context) => {        
         return await context().then(async client => {
             let db = client.db(dbName)
             return uniIden(db).then((r) => {
                 client.close();
-                return r
+                let limit = args["limit"]>0?args["limit"]:r.length
+                return r.slice(0,limit)
             })
         })
     },
