@@ -1,6 +1,8 @@
 // createPages API
 const path = require('path');
 const slug = require('slug')
+
+const limit = process.env.GATSBY_PAGE_LIMIT || 0
 exports.createPages = ({actions, graphql}) => {
   const {createPage} = actions;
   
@@ -9,7 +11,7 @@ exports.createPages = ({actions, graphql}) => {
   return graphql(`
     {
       ihop {
-        uniqueIdentifiers(limit : 200)
+        uniqueIdentifiers(limit : ${limit})
       }
     }
   `)
