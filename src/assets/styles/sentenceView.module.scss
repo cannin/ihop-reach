@@ -1,0 +1,14 @@
+.sentence-table {
+    table-layout: initial;
+    width: 100%;
+    tr {
+        th {
+            white-space: nowrap;
+            display: inline;
+            margin-right: 0.5em;
+        }
+        td  {
+            width: 100%
+        }
+    }
+}

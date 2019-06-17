@@ -2,7 +2,7 @@
 
 import React from "react"
 import { Cookies } from "react-cookie"
-
+import style from "../assets/styles/sentenceView.module.scss"
 type Props = {
   data: Object,
   className: string,
@@ -55,7 +55,11 @@ class SentenceView extends React.Component<Props> {
       })
     })
     terms.forEach(word => {
-      if (word.type != "Current" && word.type != "Trigger")
+      if (
+        word.type != "Current" &&
+        word.type != "Trigger" &&
+        word.identifier.search(new RegExp("uazid", "i")) < 0
+      )
         replacement = `<a target="_blank" href="./${
           word.identifier
         }" style="color:${word.color}" title="${word.type}"><b>${
@@ -108,11 +112,11 @@ class SentenceView extends React.Component<Props> {
       return <p style={{ textAlign: "center" }}>No Sentence Found</p>
     }
     return (
-      <tbody className={this.props.className}>
+      <tbody className={[this.props.className, style.sentenceTable].join(" ")}>
         {unique.map(obj => {
           return (
             <tr key={obj.html}>
-              <td style={{ maxWidth: "1.5em" }}>
+              <th>
                 <a
                   title="Link to PMC"
                   href={`https://www.ncbi.nlm.nih.gov/pmc/articles/PMC${
@@ -125,7 +129,8 @@ class SentenceView extends React.Component<Props> {
                 >
                   <i className="fa fa-file-text-o" aria-hidden="true" />
                 </a>
-                &nbsp;{" "}
+              </th>
+              <th>
                 {obj.hypothesis ? (
                   <i
                     title="True Hypothesis"
@@ -139,7 +144,7 @@ class SentenceView extends React.Component<Props> {
                     aria-hidden="true"
                   />
                 )}
-              </td>
+              </th>
               <td>
                 <span
                   dangerouslySetInnerHTML={{
