@@ -29,7 +29,7 @@ module.exports = {
         // This is the field under which it's accessible
         fieldName: "ihop",
         // URL to query from
-        url: ${process.env.GATSBY_GRAPHQL_API_HOST} || "http://reach-api.nrnb-docker.ucsd.edu"
+        url: process.env.GATSBY_GRAPHQL_API_HOST || "http://reach-api.nrnb-docker.ucsd.edu"
       },
     },
     {
