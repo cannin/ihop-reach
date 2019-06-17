@@ -1,5 +1,7 @@
 const graphQL_API = process.env.GATSBY_GRAPHQL_API_HOST || "http://reach-api.nrnb-docker.ucsd.edu"
-console.log(graphQL_API)
+const mongodbSRV = process.env.GATSBY_MONGO_HOST || "mongodb://localhost:27017"
+console.log("GraphQL",graphQL_API)
+console.log("MongoDB",mongodbSRV)
 module.exports = {
   siteMetadata:{
     title: "Reach"
@@ -18,7 +20,7 @@ module.exports = {
     {
       resolve: `gatsby-source-mongodb`,
       options: {
-          
+          connectionString : mongodbSRV,
           dbName: `iHOP`,
           collection: `identifier_mapping`,
         },

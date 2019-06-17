@@ -9,7 +9,7 @@ exports.createPages = ({actions, graphql}) => {
   return graphql(`
     {
       ihop {
-        uniqueIdentifiers
+        uniqueIdentifiers(limit : 200)
       }
     }
   `)
