@@ -22,6 +22,7 @@ done
 
 # Unzip source
 echo "Unzip the Dataset zip"
+mkdir /src/unzipDestDataset
 unzip /src/dataset.zip -d /src/unzipDestDataset
 
 # Restore from dump
