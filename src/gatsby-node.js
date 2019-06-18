@@ -3,6 +3,7 @@ const path = require('path');
 const slug = require('slug')
 
 const limit = process.env.GATSBY_PAGE_LIMIT || 0
+console.log("Page Limit",limit)
 exports.createPages = ({actions, graphql}) => {
   const {createPage} = actions;
   
