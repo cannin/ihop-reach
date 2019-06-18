@@ -310,16 +310,11 @@ const resolvers = {
         const id = args.id.trim()
         let nameArr = []
         return db.collection(collection).find({
-            $and: [{
-                $or: [{
-                    "extracted_information.participant_a.identifier": id
-                }, {
-                    "extracted_information.participant_b.identifier": id
-                }]
+            $or: [{
+                "extracted_information.participant_a.identifier": id
+            }, {
+                "extracted_information.participant_b.identifier": id
             }]
-        }).collation({
-            locale: 'en',
-            strength: 2
         }).toArray().then((arr) => {
             client.close()
             return {
