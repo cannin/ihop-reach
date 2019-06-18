@@ -5,5 +5,5 @@ COPY ./src/ /src/
 
 WORKDIR /src
 RUN npm install
-RUN gatsby clean
+RUN npm run clean
 CMD ["npm","run","build"]
