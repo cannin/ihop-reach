@@ -41,35 +41,35 @@ const schema = buildSchema(`
         allDocuments(            
             "Page Number"
             page: Int = 1
-            "Hypothesis Information"
-            hypothesis_information: Boolean 
             "Interaction Type"     
             interaction_type : String
             "Negative Information"
             negative_information : Boolean
-            "Participant Entity Text"
-            entity_text: String
-            "Participant Entity Type"
-            entity_type : String
-            "PMCID of Article"
-            pmc_id : String
-            "Triggering phrase"
-            trigger : String
-            "Sentence in the article"
-            evidence : String
+            "Hypothesis Information"
+            hypothesis_information: Boolean 
             "Context Species identifier"
             species : String
             "Exact match identifier of participant entity"
             identifier : String
+            "Participant Entity Text"
+            entity_text: String
+            "Participant Entity Type"
+            entity_type : String
+            "Triggering phrase"
+            trigger : String
+            "Sentence in the article"
+            evidence : String
+            "PMCID of Article"
+            pmc_id : String
         ): [Document]
 
 		"""
-            It returns single document matching the  Object ID
+            It returns single document matching the Object ID
 
             Example:
 
             {\n
-                    document(id: "5d00179ce3318daa924be884") {  
+                    document(_id: "5d00179ce3318daa924be884") {  
                         pmc_id  
                     }  
             }  
@@ -82,7 +82,7 @@ const schema = buildSchema(`
 
             eg *5d00179ce3318daa924be883*
             """
-            id: ID!
+            _id: ID!
         ): Document
 
 		"Returns all the articles of the specified identifier"
@@ -298,7 +298,7 @@ const resolvers = {
     //	It returns single document matching the document Object ID
     document: (args, context) => context().then(async client => {
         let db = client.db(dbName)
-        let res = await db.collection(collection).findOne(ObjectId(args.id))
+        let res = await db.collection(collection).findOne(ObjectId(args._id))
         client.close()
         return res
     }),
