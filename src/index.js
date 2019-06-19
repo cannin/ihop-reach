@@ -1,5 +1,4 @@
 const express = require('express');
-const async = require("async");
 const graphqlHTTP = require('express-graphql');
 const {
     buildSchema
@@ -70,7 +69,7 @@ const schema = buildSchema(`
             "Hypothesis Information"
             hypothesis_information: Boolean 
             "Context Species identifier"
-            species : String
+            Species : String
             "Exact match identifier of participant entity"
             identifier : String
             "Participant Entity Text"
@@ -85,27 +84,27 @@ const schema = buildSchema(`
             pmc_id : String
         ): [Document]
 
-		"""
-            It returns single document matching the Object ID
-
-            Example:
-
-            {\n
-                    document(_id: "5d00179ce3318daa924be884") {  
-                        pmc_id  
-                    }  
-            }  
-
-            The query returns pmc_id of the document specifed as argument
-        """
-        document(
-            """
-            Object ID(_id) of the document
-
-            eg *5d00179ce3318daa924be883*
-            """
-            _id: ID!
-        ): Document
+#		"""
+#            It returns single document matching the Object ID
+#
+#            Example:
+#
+#            {\n
+#                    document(_id: "5d00179ce3318daa924be884") {  
+#                        pmc_id  
+#                    }  
+#            }  
+#
+#            The query returns pmc_id of the document specifed as argument
+#        """
+#        document(
+#            """
+#            Object ID(_id) of the document
+#
+#            eg *5d00179ce3318daa924be883*
+#            """
+#            _id: ID!
+#        ): Document
 
 		"Returns all the articles of the specified identifier"
         articlesByIdentifier(
@@ -244,10 +243,10 @@ const resolvers = {
             pmc_id : "pmc_id",
             trigger : "trigger",
             evidence : "evidence",
-            species : "extracted_information.context.Species",
-            // entityText : "extracted_information.participant_a/b.entity_text",
-            // entityType : "extracted_information.participant_a/b.entity_type",
-            // iden : "extracted_information.participant_a/b.identifier"
+            Species : "extracted_information.context.Species",
+            // entity_text : "extracted_information.participant_a/b.entity_text",
+            // entity_type : "extracted_information.participant_a/b.entity_type",
+            // identifier : "extracted_information.participant_a/b.identifier"
         }
         let andArray = []
         let orArray = []
@@ -304,7 +303,8 @@ const resolvers = {
                     if(arg == "negative_information" || arg == "hypothesis_information")
                         fieldObj[fieldArr[arg]] = args[arg]
                     else if(arg == "_id"){
-                        return await [db.collection(collection).findOne(ObjectId(args._id))]
+                        args.page = 0
+                        fieldObj["_id"] = new ObjectId(args._id)
                     }
                     else
                         fieldObj[fieldArr[arg]] = regx
@@ -316,13 +316,11 @@ const resolvers = {
         if(andArray.length>0)
             filter["$and"] = andArray
         let res
-        // res = await db.collection(collection).find(filter).skip(args.page < 1 ? 0 : (args.page - 1) * 250 || 1).limit(250).toArray()
         res = await db.collection(collection).aggregate(
             [
                 {$match : filter},
-                {$skip : args.page < 1 ? 0 : (args.page - 1) * 250 || 1},
-                {$limit : 250},
-                
+                {$skip : args.page < 1 ? 0 : (args.page - 1) * 250},
+                {$limit : 250}
             ]
         ).toArray()
         client.close()
@@ -331,12 +329,12 @@ const resolvers = {
     ),
 
     //	It returns single document matching the document Object ID
-    document: (args, context) => context().then(async client => {
-        let db = client.db(dbName)
-        let res = await db.collection(collection).findOne(ObjectId(args._id))
-        client.close()
-        return res
-    }),
+    // document: (args, context) => context().then(async client => {
+    //     let db = client.db(dbName)
+    //     let res = await db.collection(collection).findOne(ObjectId(args._id))
+    //     client.close()
+    //     return res
+    // }),
 
     // Returns all the document of the specified identifier
     // TODO change to documentByIdentifier after making necessory changes in GatsbyJS
