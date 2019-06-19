@@ -16,6 +16,26 @@ const context = () => MongoClient.connect('mongodb://localhost:27017', {
     .then(client => client);
 // A Schema, using GraphQL schema language
 const schema = buildSchema(`
+    "Options for entity type."
+    enum entityTypeEnum {
+        celltype
+        cellular_component
+        family
+        organ
+        protein
+        simple_chemical
+        site
+        species
+    }
+    "Options for interaction type."
+    enum interactionTypeEnum {
+        decreases_activity
+        increases_activity
+        inhibits_modification
+        adds_modification
+        binds
+        translocates
+    }
     "List of GraphQL Queries the API supports"
     type Query {
         """
@@ -38,11 +58,12 @@ const schema = buildSchema(`
 
             The query will return pmc_id and participant information of documents having identifier uniprot:Q16595
         """
-        allDocuments(            
+        allDocuments(    
+            _id: ID        
             "Page Number"
             page: Int = 1
             "Interaction Type"     
-            interaction_type : String
+            interaction_type : interactionTypeEnum
             "Negative Information"
             negative_information : Boolean
             "Hypothesis Information"
@@ -54,7 +75,7 @@ const schema = buildSchema(`
             "Participant Entity Text"
             entity_text: String
             "Participant Entity Type"
-            entity_type : String
+            entity_type : entityTypeEnum
             "Triggering phrase"
             trigger : String
             "Sentence in the article"
@@ -137,7 +158,7 @@ const schema = buildSchema(`
     type Extracted_information{
         context: Context
         hypothesis_information: Boolean
-        interaction_type: String
+        interaction_type: interactionTypeEnum
         modifications: [Modification]
         negative_information: Boolean
         "Array containing Details of the relevant Biological entities"
@@ -153,7 +174,7 @@ const schema = buildSchema(`
     "Details of the relevant Biological entities"
     type Participant{
         entity_text: String
-        entity_type: String
+        entity_type: entityTypeEnum
         features: [Feature]
         in_model: Boolean
         "Unique identifier associated with the entity"
@@ -215,6 +236,7 @@ const resolvers = {
     allDocuments: (args, context) => context().then(async client => {
         let db = client.db(dbName)
         const fieldArr = {
+            _id : "_id",
             hypothesis_information : "extracted_information.hypothesis_information",
             interaction_type : "extracted_information.interaction_type",
             negative_information : "extracted_information.negative_information",
@@ -228,7 +250,7 @@ const resolvers = {
         }
         let andArray = []
         let orArray = []
-        let regx
+        let regx,tempRes
         for ( let arg in args ){
             regx = new RegExp(args[arg],"i")
             switch (arg) {
@@ -280,7 +302,10 @@ const resolvers = {
                     let fieldObj = {}
                     if(arg == "negative_information" || arg == "hypothesis_information")
                         fieldObj[fieldArr[arg]] = args[arg]
-                    else 
+                    else if(arg == "_id"){
+                        return await [db.collection(collection).findOne(ObjectId(args._id))]
+                    }
+                    else
                         fieldObj[fieldArr[arg]] = regx
                     andArray.push(fieldObj)
                     break
@@ -289,7 +314,16 @@ const resolvers = {
         let filter = {}
         if(andArray.length>0)
             filter["$and"] = andArray
-        let res = await db.collection(collection).find(filter).skip(args.page < 1 ? 0 : (args.page - 1) * 250 || 1).limit(250).toArray()
+        let res
+        // res = await db.collection(collection).find(filter).skip(args.page < 1 ? 0 : (args.page - 1) * 250 || 1).limit(250).toArray()
+        res = await db.collection(collection).aggregate(
+            [
+                {$match : filter},
+                {$skip : args.page < 1 ? 0 : (args.page - 1) * 250 || 1},
+                {$limit : 250},
+                
+            ]
+        ).toArray()
         client.close()
         return res
         }
