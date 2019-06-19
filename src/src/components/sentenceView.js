@@ -62,9 +62,9 @@ class SentenceView extends React.Component<Props> {
       )
         replacement = `<a target="_blank" href="./${
           word.identifier
-        }" style="color:${word.color}" title="${word.type}"><b>${
+        }" style="color:${word.color}" title="${word.type}"><b><u>${
           word.text
-        }</b></a>`
+        }</u></b></a>`
       else
         replacement = `<span style="cursor:default; color:${
           word.color
@@ -99,15 +99,33 @@ class SentenceView extends React.Component<Props> {
       return article.evidence.map(sentence => {
         highlightedHTML = this.highlighter(sentence, article, identifier)
         if (highlightedHTML == null || sentence.length < 50) return
+        let species
+        try {
+          species = article.extracted_information.context.Species
+        } catch {
+          species = null
+        }
         array.push({
           hypothesis: article.extracted_information.hypothesis_information,
+          negInfo: article.extracted_information.negative_information,
+          species: species,
           sentence: sentence,
           pmcid: article.pmc_id,
           html: highlightedHTML,
         })
       })
     })
-    var unique = Array.from([...new Set(array)][0])
+    let htmlArray = []
+    let unique = array.filter((item, pos) => {
+        if(htmlArray.indexOf(item.html) == -1){
+          htmlArray.push(item.html)
+          return true
+        }
+        else 
+          return false
+      }
+    )
+
     if (unique.length === 0) {
       return <p style={{ textAlign: "center" }}>No Sentence Found</p>
     }
@@ -145,6 +163,8 @@ class SentenceView extends React.Component<Props> {
                   />
                 )}
               </th>
+              <th>{obj.negInfo?<i title="Negative Information" className="fa fa-minus-circle" />:""}</th>
+              <th>{obj.species=="taxonomy:9606"?<i title="Human" className="fa fa-male" />:""}</th>
               <td>
                 <span
                   dangerouslySetInnerHTML={{

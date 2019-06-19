@@ -114,6 +114,10 @@ export const detailsQuery = graphql`
               identifier
             }
             hypothesis_information
+            negative_information
+            context{
+              Species
+            }
           }
         }
       }
