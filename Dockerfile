@@ -1,6 +1,6 @@
-FROM node:8-alpine
+FROM node:8
 
-# Copy script
+# Copy files
 COPY ./src/ /src/
 
 WORKDIR /src
