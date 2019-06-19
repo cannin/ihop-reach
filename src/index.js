@@ -21,6 +21,7 @@ const schema = buildSchema(`
         celltype
         cellular_component
         family
+        gene_or_gene_product
         organ
         protein
         simple_chemical
@@ -29,11 +30,11 @@ const schema = buildSchema(`
     }
     "Options for interaction type."
     enum interactionTypeEnum {
+        adds_modification
+        binds
         decreases_activity
         increases_activity
         inhibits_modification
-        adds_modification
-        binds
         translocates
     }
     "List of GraphQL Queries the API supports"
