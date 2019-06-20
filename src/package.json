@@ -8,7 +8,7 @@
     "devbuild": "GATSBY_GRAPHQL_API_HOST=http://localhost:8080 npm run build",
     "develop": "GATSBY_GRAPHQL_API_HOST=http://localhost:8080 gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
-    "start": "npm run develop",
+    "start": "npm run clean && npm run build",
     "serve": "gatsby serve -p 8080",
     "clean": "node ./node_modules/.bin/gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
