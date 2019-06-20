@@ -7,8 +7,6 @@ import PropTypes from "prop-types"
 import "font-awesome/css/font-awesome.min.css"
 
 import style from "../assets/styles/header.module.scss"
-import logo from "../assets/img/logo.png"
-
 class Header extends React.Component {
   constructor({ props }) {
     super(props)
@@ -229,9 +227,10 @@ class Header extends React.Component {
           <Link
             className={["navbar-brand mx-sm-5", style.brand].join(" ")}
             to="/"
+            className="col-sm-1 col-12 text-center"
           >
             {/* <img className={style.logoImg} src={logo} alt="iHOP-Reach" /> */}
-            <strong className="mx-auto">{data.site.siteMetadata.title}</strong>
+            <h5 className="mx-auto"><b>{data.site.siteMetadata.title}</b></h5>
           </Link>
           <form
             className="form-inline my-0 col-sm-6 pr-0"
@@ -274,15 +273,15 @@ class Header extends React.Component {
               {/* Advanced option button */}
               <small
                 className={[style.advOptLink, "row"].join(" ")}
-                onClick={this.advOptionController}
               >
                 <span
-                  className={["col-sm-8", "nav-text", style.egText].join(" ")}
+                  className={["col", "nav-text", style.egText].join(" ")}
                 >
                   e.g. SNF1, Taxonomy:9606, UniProt:Q12794
                 </span>
-                <span
+                {/* <span
                   className={["col-sm-4", "nav-link", style.advText].join(" ")}
+                  onClick={this.advOptionController}
                 >
                   Advanced Options
                   {this.state.showAdvOption == true ? (
@@ -290,7 +289,7 @@ class Header extends React.Component {
                   ) : (
                     <i className="fa fa-caret-down" />
                   )}
-                </span>
+                </span> */}
               </small>
             </div>
           </form>
