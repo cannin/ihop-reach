@@ -1,0 +1,9 @@
+api:
+  build: .
+  ports:
+    - "4000:4000"
+  links:
+    - db
+
+db:
+  image: mongo:latest
