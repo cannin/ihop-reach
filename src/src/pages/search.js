@@ -14,6 +14,8 @@ export default class Search extends React.Component {
   }
   componentDidMount() {
     if (
+      window.history.state == undefined ||
+      window.history.state.results == undefined ||
       this.props.location.state == undefined ||
       this.props.location.state.results == undefined
     ) {
@@ -21,17 +23,17 @@ export default class Search extends React.Component {
       return
     }
     this.setState({
-      results: this.props.location.state.results,
-      searchKey: this.props.location.state.searchTerm,
+      results: this.props.location.state.results || window.history.state.results,
+      searchKey: this.props.location.state.searchTerm || window.history.state.searchTerm,
     })
     setInterval(() => {
-      if (this.props.location.state.searchTerm != this.state.searchKey) {
+      if (window.history.state.searchTerm != this.state.searchKey) {
         this.setState({
-          results: this.props.location.state.results,
-          searchKey: this.props.location.state.searchTerm,
+          results: window.history.state.results,
+          searchKey: window.history.state.searchTerm,
         })
       }
-    }, 500)
+    }, 100)
   }
   render() {
     return (

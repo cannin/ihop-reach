@@ -18,36 +18,11 @@ class Header extends React.Component {
     }
     this.searchInpBox = React.createRef()
   }
-  searchKeyParser = (key, attempt) => {
-    attempt = attempt || 0
+  searchKeyParser = (key) => {
     let keyArr = key
       .trim()
       .replace(/[~^*:]/g, "\\$&")
-      .split(" ")
-    let parsedArr = []
-    keyArr.forEach(element => {
-      let newKey = element.trim()
-      if (element.length > 2)
-        switch (attempt) {
-          case 0:
-            parsedArr.push(newKey)
-            break
-          default:
-            parsedArr.push(newKey + "~" + (attempt - 3))
-            break
-          case 1:
-            parsedArr.push("*" + newKey)
-            break
-          case 2:
-            parsedArr.push(newKey + "*")
-            break
-          case 3:
-            parsedArr.push("*" + newKey + "*")
-            break
-        }
-    })
-    console.log(parsedArr)
-    return parsedArr.join(" ")
+    return keyArr
   }
   searchController = event => {
     event.preventDefault()
@@ -61,23 +36,28 @@ class Header extends React.Component {
         searching: true,
       },
       () => {
-        console.log(this.state)
 
         if (window.__LUNR__) {
           window.__LUNR__.__loaded.then(res => {
-            // const refs = res.en.index.query((q) => {return q.term(this.searchKeyParser(searchKey),{
-            //   //Query Options
-            //   // Refer https://lunrjs.com/docs/lunr.Query.html
-            //   // wildcard: 1,
-            //   // editDistance : 1,
-            // })})
-            let attempt = 0
             let refs = []
-            try {
-              while (refs.length === 0 && attempt <= 5)
+            try {              
                 refs = res.en.index.search(
-                  this.searchKeyParser(searchKey, attempt++)
+                  this.searchKeyParser(searchKey)
                 )
+                if(refs.length == 0){
+                  refs = res.en.index.query((q) => {
+                      // exact matches should have the highest boost
+                      q.term(searchKey, { boost: 100 })
+
+                      // prefix matches should be boosted slightly
+                      q.term(searchKey, { boost: 50, usePipeline: false, wildcard: 2 })
+                      // wildcard 3 denotes prepend and append wildcard *
+                      q.term(searchKey, { boost: 10, usePipeline: false, wildcard: 3 })
+
+                      // finally, try a fuzzy search, without any boost
+                      q.term(searchKey, { boost: 1, usePipeline: false, editDistance: 1 })
+                  })
+                }
             } catch (err) {
               this.setState({
                 searchMsg: "Invalid Search",
@@ -115,13 +95,12 @@ class Header extends React.Component {
                   state: {
                     searchTerm: searchKey,
                     results: pages,
-                  },
+                  }
                 })
                 this.setState({
                   showSearchRes: false,
-                  searching: false,
+                  searching: false,             
                 })
-                console.log(this.props)
                 break
             }
           })
