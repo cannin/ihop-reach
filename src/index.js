@@ -204,26 +204,17 @@ const schema = buildSchema(`
 // TODO Change function
 async function uniIden(db) {
     return await new Promise(async (resolve, reject) => {
-        var arrA = await db.collection(collection).distinct("extracted_information.participant_a.identifier", {
-            $and: [{
-                "extracted_information.participant_a.identifier": {
-                    $not: /^uazid/
-                }
-            }]
+        var idenArr = await db.collection("identifier_mapping").distinct("iden")
+        var sortedArr = idenArr.sort((x,y) =>{
+            if (x<y)
+                return 1
+            else if(x>y)
+                return -1
+            else
+                return 0
         })
-        var arrB = await db.collection(collection).distinct("extracted_information.participant_b.identifier", {
-            $and: [{
-                "extracted_information.participant_b.identifier": {
-                    $not: /^uazid/
-                }
-            }]
-        })
-        var mergedArray = [...new Set([...arrB, ...arrA])].sort()
-        var entityArr = []
-        var idenArr = []
-        var tempArr = []
-        console.log("Total Identifiers: ", mergedArray.length)
-        resolve(mergedArray)
+        console.log("Total Identifiers: ", sortedArr.length)
+        resolve(sortedArr)
     })
 }
 
