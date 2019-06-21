@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "license": "LGPL-3.0",
   "scripts": {
-    "build": "node --max_old_space_size=10240 ./node_modules/.bin/gatsby build",
+    "build": "node --max_old_space_size=30000 ./node_modules/.bin/gatsby build",
     "devbuild": "GATSBY_GRAPHQL_API_HOST=http://localhost:8080 npm run build",
     "develop": "GATSBY_GRAPHQL_API_HOST=http://localhost:8080 gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
