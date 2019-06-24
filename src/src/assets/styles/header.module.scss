@@ -49,3 +49,15 @@
 .search-box{
     z-index: 3;
 }
+
+.typeahead{
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 1vh;
+    text-align: left;
+    a {
+        display: block;
+        text-decoration: none !important;
+        color: #333333;
+    }
+}

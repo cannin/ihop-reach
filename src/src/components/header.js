@@ -15,22 +15,111 @@ class Header extends React.Component {
       showSearchRes: false,
       searching: false,
       searchMsg: "",
+      showTypeAhead: false,
+      typeahead: []
     }
     this.searchInpBox = React.createRef()
   }
   searchKeyParser = (key) => {
-    let keyArr = key
+    let keyArr = key      
       .trim()
       .replace(/[~^*:]/g, "\\$&")
+      .toLowerCase()
+      .replace(/ /g,"*")
     return keyArr
+  }
+  typeAheadDisplayer = () => {
+    if(this.state.typeahead.length>0){
+      const typeAheadLimit = 6 // Change this to control number of results shown in typeahead
+      let list = this.state.typeahead.slice(0,typeAheadLimit).map((prop)=>{
+        return  <li key = {prop.word + prop.link}>
+                  <Link
+                    to = {"/details/" + prop.link}
+                    >
+                  {prop.word}
+                  </Link>
+                </li>
+      })
+      return <ul className={style.typeahead}>{list}</ul>
+    }
+    else
+      return this.state.searchMsg
+  }
+  typeAheadController = () => {
+    const searchKey = this.searchKeyParser(this.searchInpBox.current.value)
+    if (searchKey.length < 2) {
+      this.setState({typeahead:[],showTypeAhead:false})
+      return
+    }
+      if (window.__LUNR__) {
+        window.__LUNR__.__loaded.then(res => {
+          let refs = []
+          try {              
+              refs = res.en.index.search(searchKey)
+              if(refs.length == 0){
+                refs = res.en.index.query((q) => {
+                    // exact matches should have the highest boost
+                    q.term(searchKey, { boost: 100 })
+
+                    // prefix matches should be boosted slightly
+                    q.term(searchKey, { boost: 50, usePipeline: false, wildcard: 2 })
+
+                    // finally, try a fuzzy search, without any boost
+                    q.term(searchKey, { boost: 1, usePipeline: false, editDistance: 1 })
+                })
+              }
+          } catch (err) {
+            this.setState({
+              searchMsg: "Invalid Search",
+              searching: false,
+              showTypeAhead: true,
+              typeahead : []
+            })
+            return
+          }
+          let tempTypeAhead = []
+          let key,word
+          refs.map(({ ref, matchData }) => {
+            for (let prop in matchData.metadata)
+              word = prop
+            key = res.en.store[ref].ide
+            tempTypeAhead.push({
+              word : word,
+              link : key
+            })
+          })
+          switch (tempTypeAhead.length) {
+            case 0:
+              this.setState({
+                searchMsg: "No Results Found",
+                searching: false,
+                showTypeAhead: true,
+                typeahead :[]
+              })
+              break
+            //No results
+
+            default:
+              //Array of results
+              this.setState({
+                typeahead : tempTypeAhead,
+                showSearchRes: true,
+                showTypeAhead: true,
+                searching: false,             
+              })
+              break
+          }
+        })
+      }
   }
   searchController = event => {
     event.preventDefault()
-    const searchKey = this.searchInpBox.current.value
-    if (searchKey.length < 3) return null
+    const searchKey = this.searchKeyParser(this.searchInpBox.current.value)
+    if (searchKey.length < 2) return null
 
     this.setState(
       {
+        typeahead: [],
         searchMsg: "Searching...",
         showSearchRes: true,
         searching: true,
@@ -41,9 +130,7 @@ class Header extends React.Component {
           window.__LUNR__.__loaded.then(res => {
             let refs = []
             try {              
-                refs = res.en.index.search(
-                  this.searchKeyParser(searchKey)
-                )
+                refs = res.en.index.search(searchKey)
                 if(refs.length == 0){
                   refs = res.en.index.query((q) => {
                       // exact matches should have the highest boost
@@ -61,6 +148,7 @@ class Header extends React.Component {
             } catch (err) {
               this.setState({
                 searchMsg: "Invalid Search",
+                showTypeAhead: true,
                 searching: false,
               })
               return
@@ -84,6 +172,7 @@ class Header extends React.Component {
               case 0:
                 this.setState({
                   searchMsg: "No Results Found",
+                  showTypeAhead: true,
                   searching: false,
                 })
                 break
@@ -108,90 +197,18 @@ class Header extends React.Component {
       }
     )
   }
-  advOption = () => {
-    if (this.state.showAdvOption)
-      return (
-        <div className={style.advOptDiv}>
-          <nav className="navbar py-2 bg-light">
-            <div className="container">
-              <div className="row">
-                <div className="col-sm-4 py-1">Advanced Options</div>
-                {/* Section for Field filter */}
-                <div className="col">
-                  <select
-                    className="custom-select custom-select-sm"
-                    name="field"
-                    id="field"
-                    defaultValue="all"
-                  >
-                    <option value="all" disabled hidden>
-                      Specify fields
-                    </option>
-                    <option value="synonym">synonyms</option>
-                    <option value="dbref">any accession number</option>
-                    <option value="NCBI_LOCUSLINK__ID">NCBI Gene</option>
-                    <option value="UNIPROT__AC">UniProt</option>
-                    <option value="Google">Google</option>
-                  </select>
-                </div>
-                {/* Section for organism filter */}
-                <div className="col">
-                  <select
-                    className="custom-select custom-select-sm"
-                    name="ncbi_tax_id"
-                    id="ncbi_tax_id"
-                    defaultValue="all"
-                  >
-                    <option value="all" disabled hidden>
-                      Specify organism...
-                    </option>
-                    <optgroup>
-                      <option value="9606">Homo sapiens</option>
-                      <option value="9598">Pan troglodytes</option>
-                      <option value="9544">Macaca mulatta</option>
-                      <option value="9615">Canis familiaris</option>
-                      <option value="9913">Bos taurus</option>
-                      <option value="10090">Mus musculus</option>
-                      <option value="10116">Rattus norvegicus</option>
-                    </optgroup>
-                    <optgroup>
-                      <option value="9031">Gallus gallus</option>
-                      <option value="8364">Xenopus tropicalis</option>
-                      <option value="7955">Danio rerio</option>
-                      <option value="31033">Takifugu rubripes</option>
-                    </optgroup>
-                    <optgroup>
-                      <option value="3702">Arabidopsis thaliana</option>
-                      <option value="4530">Oryza sativa</option>
-                    </optgroup>
-                    <optgroup>
-                      <option value="7227">Drosophila melanogaster</option>
-                      <option value="7165">Anopheles gambiae</option>
-                      <option value="6239">Caenorhabditis elegans</option>
-                    </optgroup>
-                    <optgroup>
-                      <option value="4932">Saccharomyces cerevisiae</option>
-                      <option value="4896">Schizosaccharomyces pombe</option>
-                      <option value="562">Escherichia coli</option>
-                    </optgroup>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </nav>
-        </div>
-      )
-  }
-  advOptionController = () => {
-    this.setState(state => ({
-      showAdvOption: !state.showAdvOption,
-    }))
-  }
   searchInpBoxController = () => {
     this.setState({
       showSearchRes: false,
     })
+    this.typeAheadController()
   }
+  focusHandler = () => {
+    this.setState({showTypeAhead : !this.state.showTypeAhead});
+  }
+  typeaheadHandler = () => {
+    this.setState({showTypeAhead : true});
+  }  
   render() {
     const data = this.props.data
     let searchedTerm
@@ -202,7 +219,7 @@ class Header extends React.Component {
     }
     return (
       <header>
-        <nav className={["navbar navbar-expand-lg bg-light"].join()}>
+        <nav className={["navbar navbar-expand-lg bg-light"].join()} >
           <Link
             className={["navbar-brand mx-sm-5", style.brand].join(" ")}
             to="/"
@@ -227,6 +244,7 @@ class Header extends React.Component {
                   defaultValue={searchedTerm}
                   ref={this.searchInpBox}
                   onChange={this.searchInpBoxController}
+                  autoComplete = "off"
                 />
                 <div className="input-group-append">
                   <button
@@ -242,14 +260,13 @@ class Header extends React.Component {
                   </button>
                 </div>
               </div>
-              {this.state.showSearchRes == true ? (
+              {(this.state.showTypeAhead == true)? (
                 <div
                   className={["px-0 container", style.noResultsBlock].join(" ")}
                 >
-                  <div className="col py-2">{this.state.searchMsg}</div>
+                  <div onFocus={this.typeaheadHandler} className="col py-2" style={{border: "1px solid #ecf0f1",boxShadow: "0 4px 6px 0 rgba(32,33,36,0.28)"}}>{this.typeAheadDisplayer()}</div>
                 </div>
               ) : null}
-              {/* Advanced option button */}
               <small
                 className={[style.advOptLink, "row"].join(" ")}
               >
@@ -258,24 +275,11 @@ class Header extends React.Component {
                 >
                   e.g. SNF1, Taxonomy:9606, UniProt:Q12794
                 </span>
-                {/* <span
-                  className={["col-sm-4", "nav-link", style.advText].join(" ")}
-                  onClick={this.advOptionController}
-                >
-                  Advanced Options
-                  {this.state.showAdvOption == true ? (
-                    <i className="fa fa-times" />
-                  ) : (
-                    <i className="fa fa-caret-down" />
-                  )}
-                </span> */}
               </small>
             </div>
           </form>
         </nav>
         <div>
-          {// Advanced option
-          this.advOption()}
         </div>
       </header>
     )

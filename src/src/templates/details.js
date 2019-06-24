@@ -14,7 +14,7 @@ export default function DetailsTemplate({ data }) {
 
   let searchID = data.ihop.articlesByIdentifier.searchkey
   let synonyms = data.mongodbIhopIdentifierMapping.syn
-  let entityName = synonyms[0]
+  let entityName = synonyms.reduce((a, b) => a.length <= b.length ? a : b)
   let entityType = data.mongodbIhopIdentifierMapping.typ
   data = data.ihop.articlesByIdentifier
   return (
@@ -39,54 +39,8 @@ export default function DetailsTemplate({ data }) {
             Sentences in this view contain interactions of&nbsp;
             <b>{entityName}</b>
           </p>
-          <table className="w-100">
-            <SentenceView data={data} identifier={searchID} className={null} />
-            <tfoot className="invisible">
-              <tr>
-                <td colSpan="2">
-                  <div className="mt-2 w-100">
-                    <ul className="pagination pagination-sm float-right">
-                      <li className="page-item disabled">
-                        <span className="page-link">
-                          <i className="fa fa-chevron-left" />
-                        </span>
-                      </li>
-                      <li className="page-item active">
-                        <span className="page-link" href="#">
-                          1
-                        </span>
-                      </li>
-                      <li className="page-item">
-                        <span className="page-link" href="#">
-                          2
-                        </span>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link" href="#">
-                          3
-                        </a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link" href="#">
-                          4
-                        </a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link" href="#">
-                          5
-                        </a>
-                      </li>
-                      <li className="page-item">
-                        <span className="page-link">
-                          <i className="fa fa-chevron-right" />
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+          <hr />
+          <SentenceView data={data} identifier={searchID} className={null} />
         </div>
       </div>
     </Layout>
