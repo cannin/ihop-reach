@@ -161,7 +161,7 @@ class Header extends React.Component {
               case 1:
                 navigate("/details/" + pages[0].ide, {
                   state: {
-                    searchTerm: searchKey,
+                    searchTerm: this.searchInpBox.current.value,
                   },
                 })
                 this.setState({
@@ -182,7 +182,7 @@ class Header extends React.Component {
                 //Array of results
                 navigate("/search", {
                   state: {
-                    searchTerm: searchKey,
+                    searchTerm: this.searchInpBox.current.value,
                     results: pages,
                   }
                 })
