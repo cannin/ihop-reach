@@ -37,7 +37,7 @@ First Evaluation marks the end of one-third of the program. I hope I have perfor
 
 ## Conclusion
 
-Any project is incomplete without great guidance. I am thankful to my mentor, [Augustin Luna](mailto:cannin@gmail.com) for keeping faith in me and constantly supporting me. He has made the journey, simple. 
+Any project is incomplete without great guidance. I am thankful to my mentor, [Augustin Luna](mailto:cannin@gmail.com) for keeping faith in me and constantly supporting me. He has made the journey, simple.  
 I am grateful to [William Markuske](mailto:wmarkuske@ucsd.edu), Systems Administrator, UCSD for the constant support.  
 We will start work on the Data Generation pipeline in the coming week, the scale of data is huge thus it will be a challenge to handle it in an efficient manner.
 
