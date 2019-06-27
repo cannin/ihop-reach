@@ -12,7 +12,9 @@ exports.createPages = ({actions, graphql}) => {
   return graphql(`
     {
       ihop {
-        uniqueIdentifiers(limit : ${limit})
+        allIdentifiers(limit : ${limit}){
+          iden
+        }
       }
     }
   `)
@@ -20,7 +22,8 @@ exports.createPages = ({actions, graphql}) => {
     if(res.errors) {
       return Promise.reject(res.errors);
     }
-    res.data.ihop.uniqueIdentifiers.forEach((id) => {
+    res.data.ihop.allIdentifiers.forEach((identifier) => {
+      id = identifier.iden
       if(typeof(id) != 'string')
         return
       // var idenArr = id.split(":")

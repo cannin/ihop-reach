@@ -12,11 +12,11 @@ import SentenceView from "../components/sentenceView"
 export default function DetailsTemplate({ data }) {
   // data = data.ihop.entities.articles // This contains all the articles
 
-  let searchID = data.ihop.articlesByIdentifier.searchkey
+  let searchID = data.ihop.documentsByIdentifier.searchkey
   let synonyms = data.mongodbIhopIdentifierMapping.syn
   let entityName = synonyms.reduce((a, b) => a.length <= b.length ? a : b)
   let entityType = data.mongodbIhopIdentifierMapping.typ
-  data = data.ihop.articlesByIdentifier
+  data = data.ihop.documentsByIdentifier
   return (
     <Layout>
       <div className="container my-4">
@@ -28,7 +28,7 @@ export default function DetailsTemplate({ data }) {
           <table className={"table " + style.infoTable}>
             <Links
               className={style.detailsLinks}
-              data={data.articles}
+              data={data.documents}
               identifier={searchID}
               synonyms={synonyms}
             />
@@ -50,9 +50,9 @@ export default function DetailsTemplate({ data }) {
 export const detailsQuery = graphql`
   query detailsByID($id: String!) {
     ihop {
-      articlesByIdentifier(id: $id) {
+      documentsByIdentifier(identifier: $id) {
         searchkey
-        articles {
+        documents {
           pmc_id
           evidence
           trigger

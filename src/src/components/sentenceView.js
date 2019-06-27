@@ -129,26 +129,26 @@ class SentenceView extends React.Component<Props> {
     )
   }
   render() {
-    const articles = this.props.data.articles
+    const documents = this.props.data.documents
     const identifier = this.props.identifier
     var array = []
     let highlightedHTML
-    articles.map(article => {
-      return article.evidence.map(sentence => {
-        highlightedHTML = this.highlighter(sentence, article, identifier)
+    documents.map(document => {
+      return document.evidence.map(sentence => {
+        highlightedHTML = this.highlighter(sentence, document, identifier)
         if (highlightedHTML == null || sentence.length < 50) return
         let species
         try {
-          species = article.extracted_information.context.Species
+          species = document.extracted_information.context.Species
         } catch {
           species = null
         }
         array.push({
-          hypothesis: article.extracted_information.hypothesis_information,
-          negInfo: article.extracted_information.negative_information,
+          hypothesis: document.extracted_information.hypothesis_information,
+          negInfo: document.extracted_information.negative_information,
           species: species,
           sentence: sentence,
-          pmcid: article.pmc_id,
+          pmcid: document.pmc_id,
           html: highlightedHTML,
         })
       })
