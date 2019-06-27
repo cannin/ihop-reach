@@ -5,3 +5,9 @@ public/
 *.lock
 
 *.log
+
+\.vscode/
+
+convert/
+
+extraction/
