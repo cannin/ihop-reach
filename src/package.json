@@ -11,6 +11,7 @@
   "author": "RohitChattopadhyay",
   "license": "ISC",
   "dependencies": {
+    "compression": "^1.7.4",
     "express": "^4.17.1",
     "express-graphql": "^0.8.0",
     "graphql": "^14.3.1",
