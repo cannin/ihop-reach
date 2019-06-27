@@ -4,6 +4,6 @@ FROM node:8
 COPY ./src/ /src/
 
 WORKDIR /src
-ENV NODE_ENV = "production"
+ENV NODE_ENV production
 RUN npm install
 CMD ["npm","start"]
