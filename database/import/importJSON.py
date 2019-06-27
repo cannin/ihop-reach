@@ -5,7 +5,6 @@ import os
 import json
 import time
 from pymongo import MongoClient
-
 #check database connection
 try: 
     mongoConnection = MongoClient()  #Edit MongoDB username and password in this line, MogoClient() if no authorization
@@ -21,7 +20,23 @@ def verifyJSON( jsonPath ):
     #returns JSON content if proper file else None is returned
     with open(jsonPath) as jsonFile:
         try:
-            jsonData = json.load(jsonFile)            
+            jsonData = json.load(jsonFile)
+
+            #convert participant b
+            participant_b = jsonData["extracted_information"]["participant_b"]
+            del jsonData["extracted_information"]["participant_b"]
+            jsonData["extracted_information"]["participant_b"] = [participant_b]
+            temp = []
+            if "participant_a" in jsonData["extracted_information"]:
+                participant_a = jsonData["extracted_information"]["participant_a"]
+                partA_type = type(participant_a)
+                if(partA_type is dict):
+                    del jsonData["extracted_information"]["participant_a"]
+                    temp = [participant_a]
+                elif(partA_type is list):
+                    del jsonData["extracted_information"]["participant_a"]
+                    temp.extend(participant_a)
+            jsonData["extracted_information"]["participant_a"] = temp
             return jsonData
         except json.decoder.JSONDecodeError as e:
             #if the file is not a proper json file
@@ -63,7 +78,6 @@ if os.path.exists(sourcePath)==False:
 else:
     #Given path is valid
     #Check if provided path is a file or directory
-    startTime = time.time()                 # Saving current time in a variable
     if os.path.isdir(sourcePath)==False:
         #given path is a file
         data = verifyJSON(sourcePath)
@@ -91,6 +105,10 @@ else:
                     fromPath = os.path.join(r, file)
                     data = verifyJSON(fromPath)                 #function call for checking validity of the json file
                     if data != None:
+                        directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),"processed",fromPath.split("/")[-2])
+                        if not os.path.exists(directory):
+                            os.makedirs(directory)
+                        os.rename(fromPath,os.path.join(directory,file))
                         fileData.append(data)                   #append proper JSON data to array
                         if(fileCount%chunkSize==0):
                             #Call for insertion in database
@@ -105,8 +123,6 @@ else:
              print("Inserted {} documents".format(resultCount))	 
              print("Uploaded till "+ fromPath)        
         print("{} json files found, out of which {} json file(s) are invalid".format(fileCount,(fileCount-resultCount)))        
-        endTime = time.time()           # Saving current time in a variable
-        print("Time taken {} seconds".format((endTime-startTime)))  # Printing time required for importing the files
         #execution result display
         if fileCount == 0:
             #No valid JSON file to insert
@@ -122,5 +138,6 @@ else:
             print("Successfully inserted {} json files to database".format(resultCount))
 
 #Script termination message
-print("Closing import script")
+print("Starting mapping script")
+os.system("python mapping.py")
 exit()
