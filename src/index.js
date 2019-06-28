@@ -299,10 +299,10 @@ const resolvers = {
                     orArray = []
                     orArray.push(
                         {
-                            "extracted_information.participant_a.identifier" : args[arg]
+                            "extracted_information.participant_a.identifier" : regx
                         },
                         {
-                            "extracted_information.participant_b.identifier" : args[arg]
+                            "extracted_information.participant_b.identifier" : regx
                         }
                     )
                     andArray.push({
@@ -347,8 +347,7 @@ const resolvers = {
     //     return res
     // }),
 
-    // Returns all the document of the specified identifier
-    // TODO change to documentByIdentifier after making necessory changes in GatsbyJS
+    // Returns all the document of the specified identifier    
     documentsByIdentifier: (args, context) => context().then(client => {
         let db = client.db(dbName)
         const id = args.identifier.trim()
