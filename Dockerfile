@@ -12,5 +12,8 @@ RUN apt-get install unzip -y
 RUN apt-get install curl -y
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
 RUN apt-get install nodejs -y
+
+# Set Environment Variable
+ENV NODE_ENV production
 # Command to start the image
 CMD /src/setup.sh
