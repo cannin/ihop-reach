@@ -34,6 +34,8 @@ mongo <<EOF
 use iHOP
 db.getCollection("articles").createIndex({"extracted_information.participant_b.identifier" : 1},{name: "idenB"})
 db.getCollection("articles").createIndex({"extracted_information.participant_a.identifier" : 1},{name: "idenA"})
+db.getCollection("articles").createIndex({"extracted_information.participant_b.entity_text" : 1},{name: "entityNameB"})
+db.getCollection("articles").createIndex({"extracted_information.participant_a.entity_text" : 1},{name: "entityNameA"})
 db.getCollection("identifier_mapping").createIndex({"iden" : 1},{name: "identifier"})
 db.getCollection("identifier_mapping").reIndex()
 db.getCollection("articles").reIndex()
