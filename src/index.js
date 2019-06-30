@@ -139,6 +139,24 @@ const schema = buildSchema(`
             identifier: String!
         ): IdentifierDetails
 
+        """
+        Returns details of the articles from PubMed using PMCID
+
+        Example:  
+        {\n  
+                getPubMedDetails(pmcid : "4321218"){  
+                     year  
+                     pmid  
+                }  
+        }  
+
+        The query will return PubMed details of given PMCID
+        """
+        getPubMedDetails(
+            "PubMedCentral id, eg: 4321218, PMC4321218"
+            pmcid: String!
+        ) : pubMedDetails
+
 #        "It returns all unique identifiers present in database"
 #        uniqueIdentifiers(limit: Int): [String]
     }
@@ -219,7 +237,19 @@ const schema = buildSchema(`
         CellType: [String]
         Organ: [String]
         Species: [String]
-    }    
+    }
+    type pubMedDetails{
+        "Title of the journal"
+        journal_title : String
+        "Publication Year of the jounal"
+        year : String
+        "Digital Object Identifier"
+        doi : String
+        "PubMed Central id of the jounal"
+        pmcid : String
+        "PubMed id of the jounal"
+        pmid : String
+    }
 `);
 
 // async function uniIden(db) {
@@ -347,6 +377,15 @@ const resolvers = {
     //     return res
     // }),
 
+	// It returns PubMed details by PMCID
+    getPubMedDetails: (args, context) => context().then(async client => {
+        let db = client.db(dbName)
+        let query = args.pmcid.toUpperCase()
+        // let res = await db.collection("pubmed").find({"pmcid" : query}).limit(1)
+        let res = await db.collection("pubmed").findOne({"$or" : [{"pmcid" : query},{"pmcid" : "PMC" + query}]})
+        client.close()
+        return res
+    }),
     // Returns all the document of the specified identifier    
     documentsByIdentifier: (args, context) => context().then(client => {
         let db = client.db(dbName)
