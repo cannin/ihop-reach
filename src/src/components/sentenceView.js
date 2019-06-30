@@ -149,6 +149,7 @@ class SentenceView extends React.Component<Props> {
           species: species,
           sentence: sentence,
           pmcid: document.pmc_id,
+          year: document.publication_year,
           html: highlightedHTML,
         })
       })
@@ -218,6 +219,7 @@ class SentenceView extends React.Component<Props> {
                               </th>
                             </tr>
           :dispArr.map(obj => {
+            console.log(obj)
             return (
               <tr key={obj.html}>
                 <th>
@@ -251,6 +253,7 @@ class SentenceView extends React.Component<Props> {
                 </th>
                 <th>{obj.negInfo?<i title="Negative Information" className="fa fa-minus-circle" />:<i className="fa fa-minus-circle invisible" />}</th>
                 <th>{obj.species=="taxonomy:9606"?<i title="Human" className="fa fa-male" />:<i className="fa fa-male invisible" />}</th>
+                <th>{obj.year}</th>
                 <td>
                   <span
                     dangerouslySetInnerHTML={{

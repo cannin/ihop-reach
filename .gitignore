@@ -81,3 +81,5 @@ Gemfile\.lock
 convert/
 
 extraction/
+
+*.csv

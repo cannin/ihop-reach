@@ -53,6 +53,7 @@ export const detailsQuery = graphql`
       documentsByIdentifier(identifier: $id) {
         searchkey
         documents {
+          publication_year
           pmc_id
           evidence
           trigger
