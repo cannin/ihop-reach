@@ -11,3 +11,5 @@ public/
 convert/
 
 extraction/
+
+*.csv
