@@ -37,8 +37,7 @@ db.getCollection("articles").createIndex({"extracted_information.participant_a.i
 db.getCollection("articles").createIndex({"extracted_information.participant_b.entity_text" : 1},{name: "entityNameB"})
 db.getCollection("articles").createIndex({"extracted_information.participant_a.entity_text" : 1},{name: "entityNameA"})
 db.getCollection("identifier_mapping").createIndex({"iden" : 1},{name: "identifier"})
-db.getCollection("identifier_mapping").reIndex()
-db.getCollection("articles").reIndex()
+db.getCollection("pubmed").createIndex({"pmcid" : -1},{name: "pmcid_index"})
 EOF
 
 # Delete  source files bash file
