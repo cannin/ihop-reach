@@ -14,6 +14,9 @@ const context = () => MongoClient.connect('mongodb://localhost:27017', {
         useNewUrlParser: true
     })
     .then(client => client);
+const collection = "articles" // Set collection name
+const dbName = 'iHOP'
+
 // A Schema, using GraphQL schema language
 const schema = buildSchema(`
     "Options for entity type."
@@ -192,6 +195,7 @@ const schema = buildSchema(`
         score: Int
         submitter: String
         trigger: String
+        publication_year: String
     }
     "Contains the extracted information from the evidence text"
     type Extracted_information{
@@ -252,25 +256,7 @@ const schema = buildSchema(`
     }
 `);
 
-// async function uniIden(db) {
-//     return await new Promise(async (resolve, reject) => {
-//         var idenArr = await db.collection("identifier_mapping").distinct("iden")
-//         var sortedArr = idenArr.sort((x,y) =>{
-//             if (x<y)
-//                 return 1
-//             else if(x>y)
-//                 return -1
-//             else
-//                 return 0
-//         })
-//         console.log("Total Identifiers: ", sortedArr.length)
-//         resolve(sortedArr)
-//     })
-// }
-
 // Provide resolver functions for schema fields
-const collection = "articles" // Set collection name
-const dbName = 'iHOP'
 const resolvers = {
 
     //	It returns all Document(250 per page) present in the database
@@ -390,20 +376,61 @@ const resolvers = {
     documentsByIdentifier: (args, context) => context().then(client => {
         let db = client.db(dbName)
         const id = args.identifier.trim()
+        const regx = id
         let nameArr = []
-        return db.collection(collection).find({
-            $or: [{
-                "extracted_information.participant_a.identifier": id
+        return db.collection(collection).aggregate([
+            {
+                '$match': {
+                '$or': [
+                    {
+                    'extracted_information.participant_a.identifier': regx
+                    }, {
+                    'extracted_information.participant_b.identifier': regx
+                    }
+                ]
+                }
             }, {
-                "extracted_information.participant_b.identifier": id
-            }]
-        }).toArray().then((arr) => {
-            client.close()
-            return {
-                "documents": arr,
-                "count": arr.length,
-                "searchkey": id
+                '$lookup': {
+                'from': 'pubmed', 
+                'let': {
+                    'pmc': '$pmc_id'
+                }, 
+                'pipeline': [
+                    {
+                    '$match': {
+                        '$expr': {
+                            '$or' : [
+                                {'$eq': ['$pmcid', {'$concat' : ["PMC",'$$pmc']}]},
+                                {'$eq': ['$pmcid', '$$pmc']}             
+                            ]
+                        }
+                    }
+                    }
+                ], 
+                'as': 'pubmed'
+                }
+            }, {
+                '$addFields': {
+                'publication_year': {
+                    '$ifNull': [
+                    {
+                        '$arrayElemAt': ['$pubmed.year', 0]
+                    },  ''
+                    ]
+                }
+                }
+            }, {
+                '$sort': {
+                    'publication_year': -1
+                }
             }
+            ]).toArray().then((arr) => {
+                client.close()
+                return {
+                    "documents": arr,
+                    "count": arr.length,
+                    "searchkey": id
+                }
         })
     }),
     //	It returns all unique identifiers present in database
