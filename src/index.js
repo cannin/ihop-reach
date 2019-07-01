@@ -424,7 +424,11 @@ const resolvers = {
                     'publication_year': -1
                 }
             }
-            ]).toArray().then((arr) => {
+            ],
+           {
+             allowDiskUse: true
+           }
+	).toArray().then((arr) => {
                 client.close()
                 return {
                     "documents": arr,
