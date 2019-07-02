@@ -117,7 +117,6 @@ class SentenceView extends React.Component<Props> {
   }  
   handleFilter = () => {
     const {pmc,hypo,negInfo,human,search} = this.refs
-    console.log(this.refs)
     this.setState(
       {
         pmc: pmc.value.length>1?pmc.value:null,
@@ -219,7 +218,6 @@ class SentenceView extends React.Component<Props> {
                               </th>
                             </tr>
           :dispArr.map(obj => {
-            console.log(obj)
             return (
               <tr key={obj.html}>
                 <th>
