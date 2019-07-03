@@ -565,6 +565,8 @@ app.use('/', graphqlHTTP({
     },
     context
 }));
-app.listen(PORT);
-
-console.log(`Server ready at http://localhost:${PORT}/`);
+app.listen(PORT, err => {
+    if (err)
+        throw err
+    console.log(`Server ready at http://localhost:${PORT}/`);    
+});
