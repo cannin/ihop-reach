@@ -23,8 +23,10 @@ export default class Search extends React.Component {
       return
     }
     this.setState({
-      results: this.props.location.state.results || window.history.state.results,
-      searchKey: this.props.location.state.searchTerm || window.history.state.searchTerm,
+      results:
+        this.props.location.state.results || window.history.state.results,
+      searchKey:
+        this.props.location.state.searchTerm || window.history.state.searchTerm,
     })
     setInterval(() => {
       if (window.history.state.searchTerm != this.state.searchKey) {

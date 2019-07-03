@@ -12,13 +12,13 @@ class SentenceView extends React.Component<Props> {
   constructor() {
     super()
     this.state = {
-      allSentences : [],
-      displayRes : [],
-      pmc : null,
-      hypo : null,
+      allSentences: [],
+      displayRes: [],
+      pmc: null,
+      hypo: null,
       negInfo: null,
-      human : false,
-      search: null
+      human: false,
+      search: null,
     }
   }
   highlighter = (sentence: string, data: Object, identifier: string) => {
@@ -73,15 +73,9 @@ class SentenceView extends React.Component<Props> {
         word.type != "Trigger" &&
         word.identifier.search(new RegExp("uazid", "i")) < 0
       )
-        replacement = `<a target="_blank" href="./${
-          word.identifier
-        }" style="color:${word.color}" title="${word.type}"><b><u>${
-          word.text
-        }</u></b></a>`
+        replacement = `<a target="_blank" href="./${word.identifier}" style="color:${word.color}" title="${word.type}"><b><u>${word.text}</u></b></a>`
       else
-        replacement = `<span style="cursor:default; color:${
-          word.color
-        }" title="${word.type}"><b>${word.text}</b></span>`
+        replacement = `<span style="cursor:default; color:${word.color}" title="${word.type}"><b>${word.text}</b></span>`
       sentence = sentence.replace(word.text, replacement)
     })
     return sentence
@@ -103,29 +97,79 @@ class SentenceView extends React.Component<Props> {
       }
     )
   }
-  filterFunction = (obj) => {
-    const {pmc,hypo,negInfo,human,search} = this.state
-    let regx_pmc = new RegExp(pmc,"i")
-    let regx_search = new RegExp(search,"i")
+  filterFunction = obj => {
+    const { pmc, hypo, negInfo, speciesInfo, search } = this.state
+    let regx_pmc = new RegExp(pmc, "i")
+    let regx_search = new RegExp(search, "i")
     return (
-      (pmc!= null?(obj.pmcid.search(regx_pmc) > -1 ):true) &&
-      (human!=false?(obj.species == "taxonomy:9606"):true) &&
-      (search!= null?(obj.sentence.search(regx_search) > -1 ):true) &&
-      (hypo!=null?(obj.hypothesis === hypo):true) &&
-      (negInfo!=null?(obj.negInfo === negInfo):true)
+      (pmc != null ? obj.pmcid.search(regx_pmc) > -1 : true) &&
+      (speciesInfo != null ? obj.species == speciesInfo : true) &&
+      (search != null ? obj.sentence.search(regx_search) > -1 : true) &&
+      (hypo != null ? obj.hypothesis === hypo : true) &&
+      (negInfo != null ? obj.negInfo === negInfo : true)
     )
-  }  
+  }
   handleFilter = () => {
-    const {pmc,hypo,negInfo,human,search} = this.refs
-    this.setState(
-      {
-        pmc: pmc.value.length>1?pmc.value:null,
-        human: human.checked,
-        search: search.value.length>2?search.value:null,
-        hypo: hypo.value=="0"?null:(hypo.value=="2"?true:false),
-        negInfo: negInfo.value=="0"?null:(negInfo.value=="2"?true:false)
+    const { pmc, hypo, negInfo, speciesInfo, search } = this.refs
+    this.setState({
+      pmc: pmc.value.length > 1 ? pmc.value : null,
+      speciesInfo: speciesInfo.value == "0" ? null : speciesInfo.value,
+      search: search.value.length > 2 ? search.value : null,
+      hypo: hypo.value == "0" ? null : hypo.value == "2" ? true : false,
+      negInfo:
+        negInfo.value == "0" ? null : negInfo.value == "2" ? true : false,
+    })
+  }
+  getOrgFromTaxonomy = identifier => {
+    let name = "",
+      abb = " "
+    let blank = true
+    if (identifier != null && identifier.length > 0) {
+      switch (identifier[0]) {
+        case "taxonomy:9606":
+          // Human
+          abb = "Hs\u00A0\u00A0"
+          name = "Human"
+          blank = false
+          break
+        case "taxonomy:10090":
+          // Mouse
+          abb = "Mm"
+          name = "Mouse"
+          blank = false
+          break
+        case "taxonomy:4932":
+          // Yeast
+          abb = "Sc\u00A0\u00A0"
+          name = "Yeast"
+          blank = false
+          break
+        case "taxonomy:10116":
+          // Rat
+          abb = "Rn\u00A0\u00A0"
+          name = "Rat"
+          blank = false
+          break
+        default:
+          abb = " "
+          name = ""
+          break
       }
-    )
+    }
+    if (blank)
+      return (
+        <th>
+          <small className="invisible">{"Mm"}</small>
+        </th>
+      )
+    else
+      return (
+        <th>
+          <small style={{ cursor: "default" }} title={name}>
+            {abb}
+          </small>
+        </th>
+      )
   }
   render() {
     const documents = this.props.data.documents
@@ -155,14 +199,11 @@ class SentenceView extends React.Component<Props> {
     })
     let htmlArray = []
     let unique = array.filter((item, pos) => {
-        if(htmlArray.indexOf(item.html) == -1){
-          htmlArray.push(item.html)
-          return true
-        }
-        else 
-          return false
-      }
-    )
+      if (htmlArray.indexOf(item.html) == -1) {
+        htmlArray.push(item.html)
+        return true
+      } else return false
+    })
 
     if (unique.length === 0) {
       return <p style={{ textAlign: "center" }}>No Sentence Found</p>
@@ -174,12 +215,24 @@ class SentenceView extends React.Component<Props> {
           <tr>
             <td colSpan="5">
               <div className="form-row my-auto">
-                <div className="col-2 col-sm-2 mt-2">
-                  <input className="form-control form-control-sm" type="text" placeholder="PMC ID" ref="pmc" onChange = {this.handleFilter} />
+                <div className="col-2 col-sm-2">
+                  <input
+                    className="form-control form-control-sm"
+                    type="text"
+                    placeholder="PMC ID"
+                    ref="pmc"
+                    onChange={this.handleFilter}
+                  />
                 </div>
-                <div className="col-sm-2 col-3 mt-2">
-                  <select className="form-control form-control-sm" ref="hypo" onChange = {this.handleFilter} >                    
-                    <option hidden value="0">Hypothesis Information</option>
+                <div className="col-sm-2 col-3">
+                  <select
+                    className="form-control form-control-sm"
+                    ref="hypo"
+                    onChange={this.handleFilter}
+                  >
+                    <option hidden value="0">
+                      Hypothesis Information
+                    </option>
                     <optgroup label="Hypothesis Information">
                       <option value="2">True</option>
                       <option value="1">False</option>
@@ -187,9 +240,15 @@ class SentenceView extends React.Component<Props> {
                     </optgroup>
                   </select>
                 </div>
-                <div className="col-sm-2 col-3 mt-2">
-                  <select className="form-control form-control-sm" ref="negInfo" onChange = {this.handleFilter} >
-                    <option hidden value="0">Negative Information</option>
+                <div className="col-sm-2 col-4">
+                  <select
+                    className="form-control form-control-sm"
+                    ref="negInfo"
+                    onChange={this.handleFilter}
+                  >
+                    <option hidden value="0">
+                      Negative Information
+                    </option>
                     <optgroup label="Negative Information">
                       <option value="2">True</option>
                       <option value="1">False</option>
@@ -197,71 +256,100 @@ class SentenceView extends React.Component<Props> {
                     </optgroup>
                   </select>
                 </div>
-                <div className="col-sm-1 col-4">
-                  <div className="form-check form-check-inline">
-                    <label className="form-check-label col-form-label-sm py-0" htmlFor="human">Human only</label> &emsp;
-                    <input className="form-check-input form-control-sm" type="checkbox" id="human" ref="human" onChange = {this.handleFilter} />                  
-                  </div>
+                <div className="col-sm-1 col-3">
+                  <select
+                    className="form-control form-control-sm"
+                    ref="speciesInfo"
+                    onChange={this.handleFilter}
+                  >
+                    <option hidden value="0">
+                      Species
+                    </option>
+                    <optgroup label="Species">
+                      <option value="taxonomy:9606">Human</option>
+                      <option value="taxonomy:10090">Mouse</option>
+                      <option value="taxonomy:4932">Yeast</option>
+                      <option value="taxonomy:10116">Rat</option>
+                      <option value="0">All</option>
+                    </optgroup>
+                  </select>
                 </div>
-                <div className="col mt-2">
-                  <input className="form-control form-control-sm" type="text" placeholder="Search by keyword" ref="search" onChange = {this.handleFilter} />
+                <div className="col">
+                  <input
+                    className="form-control form-control-sm"
+                    type="text"
+                    placeholder="Search by keyword"
+                    ref="search"
+                    onChange={this.handleFilter}
+                  />
                 </div>
               </div>
             </td>
           </tr>
         </thead>
-        <tbody className={[this.props.className, style.sentenceTable].join(" ")}>
-          {
-          dispArr.length==0?<tr>
-                              <th>
-                                No Results Found, please refine your filter.
-                              </th>
-                            </tr>
-          :dispArr.map(obj => {
-            return (
-              <tr key={obj.html}>
-                <th>
-                  <a
-                    title="Link to PMC"
-                    href={`https://www.ncbi.nlm.nih.gov/pmc/articles/PMC${
-                      obj.pmcid
-                    }?text=${encodeURIComponent(obj.sentence)}`}
-                    target="_blank"
-                    onClick={() =>
-                      this.setCookieOnPmcLinkClick(obj.pmcid, obj.sentence)
-                    }
-                  >
-                    <i className="fa fa-file-text-o" aria-hidden="true" />
-                  </a>
-                </th>
-                <th>
-                  {obj.hypothesis ? (
-                    <i
-                      title="True Hypothesis"
-                      className="fa fa-star-half-o"
-                      aria-hidden="true"
+        <tbody
+          className={[this.props.className, style.sentenceTable].join(" ")}
+        >
+          {dispArr.length == 0 ? (
+            <tr>
+              <th>No Results Found, please refine your filter.</th>
+            </tr>
+          ) : (
+            dispArr.map(obj => {
+              return (
+                <tr key={obj.html}>
+                  <th>
+                    <a
+                      title="Link to PMC"
+                      href={`https://www.ncbi.nlm.nih.gov/pmc/articles/PMC${
+                        obj.pmcid
+                      }?text=${encodeURIComponent(obj.sentence)}`}
+                      target="_blank"
+                      onClick={() =>
+                        this.setCookieOnPmcLinkClick(obj.pmcid, obj.sentence)
+                      }
+                    >
+                      <i className="fa fa-file-text-o" aria-hidden="true" />
+                    </a>
+                  </th>
+                  <th>
+                    {obj.hypothesis ? (
+                      <i
+                        title="True Hypothesis"
+                        className="fa fa-star-half-o"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <i
+                        title="False Hypothesis"
+                        className="fa fa-star invisible"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </th>
+                  <th>
+                    {obj.negInfo ? (
+                      <i
+                        title="Negative Information"
+                        className="fa fa-minus-circle"
+                      />
+                    ) : (
+                      <i className="fa fa-minus-circle invisible" />
+                    )}
+                  </th>
+                  {this.getOrgFromTaxonomy(obj.species)}
+                  <th>{obj.year}</th>
+                  <td>
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: obj.html,
+                      }}
                     />
-                  ) : (
-                    <i
-                      title="False Hypothesis"
-                      className="fa fa-star"
-                      aria-hidden="true"
-                    />
-                  )}
-                </th>
-                <th>{obj.negInfo?<i title="Negative Information" className="fa fa-minus-circle" />:<i className="fa fa-minus-circle invisible" />}</th>
-                <th>{obj.species=="taxonomy:9606"?<i title="Human" className="fa fa-male" />:<i className="fa fa-male invisible" />}</th>
-                <th>{obj.year}</th>
-                <td>
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: obj.html,
-                    }}
-                  />
-                </td>
-              </tr>
-            )
-          })}
+                  </td>
+                </tr>
+              )
+            })
+          )}
         </tbody>
         <tfoot className="invisible">
           <tr>

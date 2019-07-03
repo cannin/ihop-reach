@@ -14,7 +14,7 @@ export default function DetailsTemplate({ data }) {
 
   let searchID = data.ihop.documentsByIdentifier.searchkey
   let synonyms = data.mongodbIhopIdentifierMapping.syn
-  let entityName = synonyms.reduce((a, b) => a.length <= b.length ? a : b)
+  let entityName = synonyms.reduce((a, b) => (a.length <= b.length ? a : b))
   let entityType = data.mongodbIhopIdentifierMapping.typ
   data = data.ihop.documentsByIdentifier
   return (
@@ -70,7 +70,7 @@ export const detailsQuery = graphql`
             }
             hypothesis_information
             negative_information
-            context{
+            context {
               Species
             }
           }
