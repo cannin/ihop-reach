@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test POST allIdentifiers Query 1`] = `
+Object {
+  "data": Object {
+    "allIdentifiers": Array [
+      Object {
+        "iden": "chebi:CHEBI:1",
+        "typ": "simple_chemical",
+      },
+      Object {
+        "iden": "chebi:CHEBI:10006",
+        "typ": "simple_chemical",
+      },
+      Object {
+        "iden": "chebi:CHEBI:10007",
+        "typ": "simple_chemical",
+      },
+      Object {
+        "iden": "chebi:CHEBI:10008",
+        "typ": "simple_chemical",
+      },
+      Object {
+        "iden": "chebi:CHEBI:10009",
+        "typ": "simple_chemical",
+      },
+      Object {
+        "iden": "chebi:CHEBI:10012",
+        "typ": "protein",
+      },
+      Object {
+        "iden": "chebi:CHEBI:100147",
+        "typ": "simple_chemical",
+      },
+      Object {
+        "iden": "chebi:CHEBI:10023",
+        "typ": "simple_chemical",
+      },
+      Object {
+        "iden": "chebi:CHEBI:10031",
+        "typ": "simple_chemical",
+      },
+      Object {
+        "iden": "chebi:CHEBI:10033",
+        "typ": "simple_chemical",
+      },
+    ],
+  },
+}
+`;

@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test POST allDocuments Query 1`] = `
+Object {
+  "data": Object {
+    "allDocuments": Array [
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10006",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:18421",
+            },
+          ],
+        },
+        "pmc_id": "3727330",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10006",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:3786",
+            },
+          ],
+        },
+        "pmc_id": "3727330",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10006",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:3784",
+            },
+          ],
+        },
+        "pmc_id": "3727330",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10006",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:18421",
+            },
+          ],
+        },
+        "pmc_id": "3727330",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10006",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:18421",
+            },
+          ],
+        },
+        "pmc_id": "3727330",
+      },
+    ],
+  },
+}
+`;

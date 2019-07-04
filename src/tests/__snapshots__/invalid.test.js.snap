@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test POST Invalid Query 1`] = `
+Object {
+  "errors": Array [
+    Object {
+      "locations": Array [
+        Object {
+          "column": 2,
+          "line": 1,
+        },
+      ],
+      "message": "Syntax Error: Expected Name, found }",
+      "path": undefined,
+    },
+  ],
+}
+`;

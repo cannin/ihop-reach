@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test GET identifier Query 1`] = `
+Object {
+  "data": Object {
+    "identifier": Object {
+      "iden": "chebi:CHEBI:10007",
+      "syn": Array [
+        "ergocalciferol",
+      ],
+      "typ": "simple_chemical",
+    },
+  },
+}
+`;

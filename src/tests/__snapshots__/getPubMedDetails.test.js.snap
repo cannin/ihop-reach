@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test GET getPubMedDetails Query 1`] = `
+Object {
+  "data": Object {
+    "getPubMedDetails": Object {
+      "pmid": "25786220",
+      "year": "2015",
+    },
+  },
+}
+`;
