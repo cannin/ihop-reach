@@ -25,11 +25,11 @@ const Footer = () => {
               API
             </a>
           </li>
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <a className="nav-link" href="#">
               Tutorial
             </a>
-          </li>
+          </li> */}
         </ul>
         <ul className="navbar-nav justify-content-end">
           <li className="nav-item align-top">
