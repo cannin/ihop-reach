@@ -1,11 +1,11 @@
 import express from 'express'
-import {resolvers,context} from './resolvers'
+import { resolvers, context } from './resolvers'
 import compression from 'compression'
 import graphqlHTTP from 'express-graphql'
 import graphQL_Schema from './schema.graphql'
-import {buildSchema} from 'graphql'
+import { buildSchema } from 'graphql'
 
-const schema =  buildSchema(graphQL_Schema)
+const schema = buildSchema(graphQL_Schema)
 const app = express()
 app.use(compression())
 
@@ -91,14 +91,17 @@ const welcomeMsg = `
 `
 
 const PORT = process.env.PORT || 8080
-app.use('/', graphqlHTTP({
+app.use(
+  '/',
+  graphqlHTTP({
     schema,
     rootValue: resolvers,
     graphiql: {
-        defaultQuery: welcomeMsg
+      defaultQuery: welcomeMsg,
     },
-    context
-}));
-app.listen(PORT);
+    context,
+  })
+)
+app.listen(PORT)
 
-console.log(`Server ready at http://localhost:${PORT}/`);
+console.log(`Server ready at http://localhost:${PORT}/`)

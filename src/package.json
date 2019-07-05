@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=production node --max_old_space_size=50000 -r @babel/register index.js",
     "develop": "nodemon -r @babel/register  index.js",
-    "test": "./node_modules/.bin/jest"
+    "test": "jest"
   },
   "license": "ISC",
   "dependencies": {
