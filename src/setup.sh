@@ -39,7 +39,7 @@ cd graphiql
 npm install
 # Starting application
 npm run build
-
+rm -r node_modules
 echo "STEP 6/6 Starting API Server"
 cd ../server
 # Install Node Modules

@@ -1,6 +1,5 @@
 schema {
   query: Query
-  # mutation: Mutation
 }
 "Options for entity type."
 enum entityTypeEnum {
@@ -30,17 +29,17 @@ type Query {
 
         Example:  
         {  
-        &nbsp;  allDocuments(identifier: "uniprot:Q16595") {  
-        &emsp;    pmc_id  
-        &emsp;    extracted_information {  
-        &emsp;&emsp;                   participant_b {  
-        &emsp;&emsp;&emsp;                       identifier  
-        &emsp;&emsp;                    }  
-        &emsp;&emsp;                    participant_a {  
-        &emsp;&emsp;&emsp;                        identifier  
-        &emsp;&emsp;                    }  
-        &emsp;                }  
-        &nbsp;  }  
+           allDocuments(identifier: "uniprot:Q16595") {  
+        \t    pmc_id  
+        \t    extracted_information {  
+        \t\t                   participant_b {  
+        \t\t\t                       identifier  
+        \t\t                    }  
+        \t\t                    participant_a {  
+        \t\t\t                        identifier  
+        \t\t                    }  
+        \t                }  
+           }  
         }  
 
         The query will return pmc_id and participant information of documents having identifier uniprot:Q16595
@@ -98,15 +97,15 @@ type Query {
 
     Example:  
     {  
-    &nbsp;documentsByIdentifier(identifier : "chebi:CHEBI:1"){  
-    &emsp;documents{  
-    &emsp;&emsp;extracted_information{  
-    &emsp;&emsp;&emsp;participant_b{  
-    &emsp;&emsp;&emsp;&emsp;identifier  
-    &emsp;&emsp;&emsp;}  
-    &emsp;&emsp;}  
-    &emsp;}  
-    &nbsp;}  
+     documentsByIdentifier(identifier : "chebi:CHEBI:1"){  
+    \tdocuments{  
+    \t\textracted_information{  
+    \t\t\tparticipant_b{  
+    \t\t\t\tidentifier  
+    \t\t\t}  
+    \t\t}  
+    \t}  
+     }  
     }  
 
     The query will return all documents having participant_a/b.identifier as chebi:CHEBI:1
@@ -130,10 +129,10 @@ type Query {
 
     Example:  
     {  
-    &nbsp;getPubMedDetails(pmcid : "4321218"){  
-    &emsp;year  
-    &emsp;pmid  
-    &nbsp;}  
+     getPubMedDetails(pmcid : "4321218"){  
+    \tyear  
+    \tpmid  
+     }  
     }  
 
     The query will return PubMed details of given PMCID
