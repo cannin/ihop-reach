@@ -22,8 +22,10 @@ zipFile.zip
 ##### Run the image container
 Docker Hub: [`rchattopadhyay/reach-api`](https://hub.docker.com/r/rchattopadhyay/reach-api)
 ```
-docker run --restart=always --name reach-api --expose 8080 \
--e VIRTUAL_HOST=subdomain.domain.com -e VIRTUAL_PORT=8080 \
+docker run --name reach-api --expose 8080 \
+-e "VIRTUAL_HOST=subdomain.domain.com" \
+-e "LETSENCRYPT_HOST=subdomain.domain.com" \
+-e "VIRTUAL_PORT=8080" \
 -v /PATH/TO/mongo/dump.zip:/src/dataset.zip \
 -d -t rchattopadhyay/reach-api:latest
 ```
