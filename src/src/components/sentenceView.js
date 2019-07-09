@@ -104,7 +104,9 @@ class SentenceView extends React.Component<Props> {
     return (
       (pmc != null ? obj.pmcid.search(regx_pmc) > -1 : true) &&
       (speciesInfo != null ? obj.species == speciesInfo : true) &&
-      (search != null ? obj.sentence.search(regx_search) > -1 : true) &&
+      (search != null
+        ? `${obj.year} ${obj.sentence} ${obj.title}`.search(regx_search) > -1
+        : true) &&
       (hypo != null ? obj.hypothesis === hypo : true) &&
       (negInfo != null ? obj.negInfo === negInfo : true)
     )
@@ -193,6 +195,7 @@ class SentenceView extends React.Component<Props> {
           sentence: sentence,
           pmcid: document.pmc_id,
           year: document.publication_year,
+          title: document.journal_title,
           html: highlightedHTML,
         })
       })
@@ -278,7 +281,7 @@ class SentenceView extends React.Component<Props> {
                   <input
                     className="form-control form-control-sm"
                     type="text"
-                    placeholder="Search by keyword"
+                    placeholder="Search by keyword in Sentence, Title or Year"
                     ref="search"
                     onChange={this.handleFilter}
                   />
@@ -338,14 +341,18 @@ class SentenceView extends React.Component<Props> {
                     )}
                   </th>
                   {this.getOrgFromTaxonomy(obj.species)}
-                  <th>{obj.year}</th>
                   <td>
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: obj.html,
-                      }}
-                    />
+                    <div className="row">
+                      <div
+                        className="col-sm-9"
+                        dangerouslySetInnerHTML={{
+                          __html: obj.html,
+                        }}
+                      />
+                      <div className="col-sm-3">{obj.title}</div>
+                    </div>
                   </td>
+                  <th>{obj.year}</th>
                 </tr>
               )
             })

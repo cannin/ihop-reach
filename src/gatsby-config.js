@@ -1,4 +1,4 @@
-const graphQL_API = process.env.GATSBY_GRAPHQL_API_HOST || "http://reach-api.nrnb-docker.ucsd.edu"
+const graphQL_API = process.env.GATSBY_GRAPHQL_API_HOST || "https://reach-api.nrnb-docker.ucsd.edu"
 const mongodbSRV = process.env.GATSBY_MONGO_HOST || "mongodb://localhost:27017"
 console.log("GraphQL",graphQL_API)
 console.log("MongoDB",mongodbSRV)
