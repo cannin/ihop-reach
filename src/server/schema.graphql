@@ -28,19 +28,21 @@ type Query {
         It returns all documents( maximum 250 per page) present in the database
 
         Example:  
+        ```
         {  
            allDocuments(identifier: "uniprot:Q16595") {  
-        \t    pmc_id  
-        \t    extracted_information {  
-        \t\t                   participant_b {  
-        \t\t\t                       identifier  
-        \t\t                    }  
-        \t\t                    participant_a {  
-        \t\t\t                        identifier  
-        \t\t                    }  
-        \t                }  
+            pmc_id  
+            extracted_information {  
+                           participant_b {  
+                               identifier  
+                            }  
+                            participant_a {  
+                                identifier  
+                            }  
+                        }  
            }  
         }  
+        ```
 
         The query will return pmc_id and participant information of documents having identifier uniprot:Q16595
     """
@@ -96,17 +98,19 @@ type Query {
     Returns all the documents of the specified identifier  
 
     Example:  
+    ```
     {  
      documentsByIdentifier(identifier : "chebi:CHEBI:1"){  
-    \tdocuments{  
-    \t\textracted_information{  
-    \t\t\tparticipant_b{  
-    \t\t\t\tidentifier  
-    \t\t\t}  
-    \t\t}  
-    \t}  
-     }  
+        documents{  
+            extracted_information{  
+                participant_b{  
+                    identifier  
+                }  
+            }  
+        }  
+      }  
     }  
+    ```
 
     The query will return all documents having participant_a/b.identifier as chebi:CHEBI:1
     """
@@ -128,12 +132,14 @@ type Query {
     Returns details of the articles from PubMed using PMCID
 
     Example:  
+    ```
     {  
      getPubMedDetails(pmcid : "4321218"){  
-    \tyear  
-    \tpmid  
+        year  
+        pmid  
      }  
     }  
+    ```
 
     The query will return PubMed details of given PMCID
     """
@@ -178,6 +184,7 @@ type Document {
     submitter: String
     trigger: String
     publication_year: String
+    journal_title: String
 }
 "Contains the extracted information from the evidence text"
 type Extracted_information{

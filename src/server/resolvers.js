@@ -218,6 +218,14 @@ const resolvers = {
                     '',
                   ],
                 },
+                journal_title: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ['$pubmed.journal_title', 0],
+                    },
+                    '',
+                  ],
+                },
               },
             },
             {
