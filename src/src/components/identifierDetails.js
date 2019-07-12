@@ -50,7 +50,7 @@ class Links extends React.Component {
         {this.linkParser(this.props.identifier)}
         {syn.length > 1 ? (
           <tr>
-            <td>Synonyms</td>
+            <td>Matches</td>
             <td>{syn.join(", ")}</td>
           </tr>
         ) : null}
