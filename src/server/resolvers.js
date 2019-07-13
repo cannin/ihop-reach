@@ -143,15 +143,6 @@ const resolvers = {
       client.close()
       return res
     }),
-
-  //	It returns single document matching the document Object ID
-  // document: (args, context) => context().then(async client => {
-  //     let db = client.db(dbName)
-  //     let res = await db.collection(collection).findOne(ObjectId(args._id))
-  //     client.close()
-  //     return res
-  // }),
-
   // It returns PubMed details by PMCID
   getPubMedDetails: (args, context) =>
     context().then(async client => {
@@ -248,16 +239,6 @@ const resolvers = {
           }
         })
     }),
-  //	It returns all unique identifiers present in database
-  // uniqueIdentifiers: async (args, context) => {
-  //     return await context().then(async client => {
-  //         let db = client.db(dbName)
-  //         return uniIden(db).then((r) => {
-  //             client.close();
-
-  //         })
-  //     })
-  // },
   //	It returns details of all Entities present in database by identifiers.
   allIdentifiers: (args, context) =>
     context().then(async client => {

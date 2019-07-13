@@ -1,5 +1,5 @@
 schema {
-  query: Query
+    query: Query
 }
 "Options for entity type."
 enum entityTypeEnum {
@@ -22,77 +22,94 @@ enum interactionTypeEnum {
     inhibits_modification
     translocates
 }
-"List of GraphQL Queries the API supports"
+"""
+    This page consists the list of GraphQL Queries the API supports.
+    You can perform multiple GraphQL queries in one request, for example
+    ```
+    query myQuery($species: String = "4932", $pmc_id: String = "101406") {
+        allDocuments(Species: $species, pmc_id: $pmc_id) {
+            pmc_id
+            extracted_information {
+                participant_a {
+                    entity_text
+                    identifier
+                }
+                participant_b {
+                    entity_text
+                    identifier
+                }
+            }
+            evidence
+        }
+        getPubMedDetails(pmcid: $pmc_id) {
+            year
+            journal_title
+        }
+    }
+    ```
+    Here pmc_id and species are being sent as variables.
+"""
 type Query {
     """
-        It returns all documents( maximum 250 per page) present in the database
+        It returns all documents( maximum 250 per page) present in the database.
+        Some of the argument fields support REGEX
 
-        Example:  
+        Example 1:  
         ```
         {  
            allDocuments(identifier: "uniprot:Q16595") {  
             pmc_id  
             extracted_information {  
-                           participant_b {  
-                               identifier  
-                            }  
-                            participant_a {  
-                                identifier  
-                            }  
-                        }  
+                    participant_b {  
+                        identifier  
+                    }  
+                    participant_a {  
+                        identifier  
+                    }  
+                }  
            }  
         }  
+        ```  
+        The query will return pmc_id and participant information of
+        documents having identifier uniprot:Q16595.  
+        
+        ------
+        Example 2: Quering with REGEX  
         ```
-
-        The query will return pmc_id and participant information of documents having identifier uniprot:Q16595
+        {
+            allDocuments(evidence: "DNA.*[mediated|damage]") {
+                evidence
+            }
+        }
+        ```  
+        The query will return evidences from all documents matching
+        the REGEX.  
     """
     allDocuments(    
         _id: ID        
         "Page Number"
         page: Int = 1
-        "Interaction Type"     
+        "Type of Interaction"     
         interaction_type : interactionTypeEnum
         "Negative Information"
         negative_information : Boolean
         "Hypothesis Information"
         hypothesis_information: Boolean 
-        "Context Species identifier"
+        "Identifier of Context Species, REGEX supported"
         Species : String
-        "Exact match identifier of participant entity"
+        "Exact match identifier of participant entity, REGEX supported"
         identifier : String
-        "Participant Entity Text"
+        "Participant Entity Text, REGEX supported"
         entity_text: String
         "Participant Entity Type"
         entity_type : entityTypeEnum
-        "Triggering phrase"
+        "Triggering phrase, REGEX supported"
         trigger : String
-        "Sentence in the article"
+        "Sentence in the article, REGEX supported"
         evidence : String
-        "PMCID of Article"
+        "PMCID of Article, REGEX supported"
         pmc_id : String
     ): [Document]
-
-#		"""
-#            It returns single document matching the Object ID
-#
-#            Example:
-#
-#            {\n
-#                    document(_id: "5d00179ce3318daa924be884") {  
-#                        pmc_id  
-#                    }  
-#            }  
-#
-#            The query returns pmc_id of the document specifed as argument
-#        """
-#        document(
-#            """
-#            Object ID(_id) of the document
-#
-#            eg *5d00179ce3318daa924be883*
-#            """
-#            _id: ID!
-#        ): Document
 
 """
     Returns all the documents of the specified identifier  
@@ -119,10 +136,10 @@ type Query {
         identifier: String!
     ): Entities
 
-"It returns details of all Identifiers details present in database."
+    "It returns details of all Identifiers details present in database."
     allIdentifiers(limit: Int) : [IdentifierDetails]
 
-"It returns Identifier details by identifier"
+    "It returns Identifier details by identifier"
     identifier(
         "Identifier of the Entity (Case sensitive)"
         identifier: String!
@@ -131,25 +148,21 @@ type Query {
     """
     Returns details of the articles from PubMed using PMCID
 
-    Example:  
+    Example
     ```
     {  
-     getPubMedDetails(pmcid : "4321218"){  
-        year  
-        pmid  
-     }  
-    }  
-    ```
-
+        getPubMedDetails(pmcid : "4321218"){  
+            year  
+            pmid  
+        }
+    }
+    ```  
     The query will return PubMed details of given PMCID
     """
     getPubMedDetails(
         "PubMedCentral id, eg: 4321218, PMC4321218"
         pmcid: String!
     ) : pubMedDetails
-
-#        "It returns all unique identifiers present in database"
-#        uniqueIdentifiers(limit: Int): [String]
 }
 
 "Object type for documentByIdentifier query. Returns all articles consisting the searched identifier."    
@@ -183,7 +196,9 @@ type Document {
     score: Int
     submitter: String
     trigger: String
+    "Only available in documentsByIdentifier query"
     publication_year: String
+    "Only available in documentsByIdentifier query"
     journal_title: String
 }
 "Contains the extracted information from the evidence text"
@@ -231,6 +246,7 @@ type Context{
     Organ: [String]
     Species: [String]
 }
+"Get details from PubMed using PMC ID"
 type pubMedDetails{
     "Title of the journal"
     journal_title : String
