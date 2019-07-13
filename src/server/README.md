@@ -20,7 +20,7 @@ REACH GraphQL API Instructions
 
 2. ### CURL Instruction
     
-    The GraphQL API can be accessed by sending POST or GET requests to the API URL
+    The GraphQL API can be accessed by sending POST requests to the API URL
     For example
       ```
         curl \
@@ -31,7 +31,7 @@ REACH GraphQL API Instructions
       ```
     It specifies four things about the request.
     
-    1. The `POST` HTTP verb, defines the type of the request. `GET` is also supported, but mutation cannot be done using a `GET` request.
+    1. The `POST` HTTP verb, defines the type of the request. `GET` request will return GraphiQL IDE instead of JSON output.
     2. The *content type* of `application/json`, the query is being sent as a part of a JSON object.
     3. The *data sent*, is a JSON document. In this above example: 
     ```
