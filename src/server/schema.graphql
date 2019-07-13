@@ -258,4 +258,8 @@ type pubMedDetails{
     pmcid : String
     "PubMed id of the jounal"
     pmid : String
+    "Article Type"
+    article_type : String
+    "MeSH Headings in the journal"
+    mesh_headings : [String]
 }
