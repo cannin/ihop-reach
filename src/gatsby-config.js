@@ -13,8 +13,8 @@ module.exports = {
     {
       resolve : `gatsby-plugin-google-analytics`,
       options: {
-        trackingId : "GA000000",
-        head: false // True to write Google Analytics details in head tag
+        trackingId : "UA-57486113-10",
+        head: true // True to write Google Analytics details in head tag
       }
     },
     {
