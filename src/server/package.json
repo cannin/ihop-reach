@@ -18,7 +18,9 @@
     "graphiql-explorer": "^0.4.3",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
-    "mongodb": "^3.2.7"
+    "mongodb": "^3.2.7",
+    "request": "^2.88.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",

@@ -1,12 +1,14 @@
 import express from 'express'
-import { resolvers, context } from './resolvers'
 import compression from 'compression'
 import graphqlHTTP from 'express-graphql'
-import graphQL_Schema from './schema.graphql'
 import { buildSchema } from 'graphql'
 import cors from 'cors'
 import path from 'path'
 import useragent from 'express-useragent'
+import uuidv3 from 'uuid/v3'
+import { ApolloEngine } from 'apollo-engine'
+import { resolvers, context } from './resolvers'
+import graphQL_Schema from './schema.graphql'
 
 const schema = buildSchema(graphQL_Schema)
 const app = express()
@@ -21,6 +23,7 @@ app.use('/favicon.ico',(req,res)=>res.sendFile(react_build_dir + req.originalUrl
 app.use(
   '*',
   (req,res)=>{
+    let uuid = uuidv3(JSON.stringify(req.useragent),'042ffd34-d989-321c-ad06-f60826172424')    
     // respond with html page
     if (req.useragent.browser != 'node-fetch' && req.accepts('html') && req.method == 'GET') {
       res.status(200).sendFile(react_build_dir + req.originalUrl, (err) =>{
@@ -36,7 +39,10 @@ app.use(
           schema,
           rootValue: resolvers,
           graphiql: false,
-          context
+          context : {
+            db : context,
+            uuid : uuid
+          }
         }  
       )
       return graphqlFunc(req,res)
@@ -44,6 +50,13 @@ app.use(
   }
 )
 
-app.listen(PORT)
+const engine = new ApolloEngine({
+  apiKey: 'service:REACH:IFvX9jccc4VTgrHwNN8t7g'
+});
+
+engine.listen({
+  port: PORT,
+  expressApp: app
+});
 
 console.log(`Server ready at http://localhost:${PORT}/`)

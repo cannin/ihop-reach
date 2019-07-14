@@ -1,16 +1,29 @@
 import { MongoClient } from 'mongodb'
+import request from 'request'
+
 //Connection to MongoDB Database
 const context = () =>
   MongoClient.connect('mongodb://localhost:27017', {
     useNewUrlParser: true,
   }).then(client => client)
+
 const collection = 'articles' // Set collection name
 const dbName = 'iHOP'
+
+const analytics = (uuid,query) => {
+	const GA_ID = 'UA-57486113-9'
+  	request.post({url:'https://www.google-analytics.com/collect', body: `v=1&t=pageview&tid=${GA_ID}&cid=${uuid}&dp=api/${query}`}, function callback(err) {
+    if (err) {
+      return console.error('Analytics failed:', err);
+    }
+  });
+}
 
 const resolvers = {
   //	It returns all Document(250 per page) present in the database
   allDocuments: (args, context) =>
-    context().then(async client => {
+    context.db().then(async client => {
+      analytics(context.uuid,"allDocuments")
       let db = client.db(dbName)
       const fieldArr = {
         _id: '_id',
@@ -145,7 +158,8 @@ const resolvers = {
     }),
   // It returns PubMed details by PMCID
   getPubMedDetails: (args, context) =>
-    context().then(async client => {
+    context.db().then(async client => {
+      analytics(context.uuid,"getPubMedDetails")
       let db = client.db(dbName)
       let query = args.pmcid.toUpperCase()
       // let res = await db.collection("pubmed").find({"pmcid" : query}).limit(1)
@@ -157,7 +171,8 @@ const resolvers = {
     }),
   // Returns all the document of the specified identifier
   documentsByIdentifier: (args, context) =>
-    context().then(client => {
+    context.db().then(client => {
+      analytics(context.uuid,"documentsByIdentifier")
       let db = client.db(dbName)
       const id = args.identifier.trim()
       const regx = id
@@ -241,7 +256,8 @@ const resolvers = {
     }),
   //	It returns details of all Entities present in database by identifiers.
   allIdentifiers: (args, context) =>
-    context().then(async client => {
+    context.db().then(async client => {
+      analytics(context.uuid,"allIdentifiers")
       let db = client.db(dbName)
       let res = await db
         .collection('identifier_mapping')
@@ -262,7 +278,8 @@ const resolvers = {
     }),
   //	It returns Entity details by identifier
   identifier: (args, context) =>
-    context().then(async client => {
+    context.db().then(async client => {
+      analytics(context.uuid,"identifier")
       let db = client.db(dbName)
       let res = await db
         .collection('identifier_mapping')
