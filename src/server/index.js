@@ -6,7 +6,6 @@ import cors from 'cors'
 import path from 'path'
 import useragent from 'express-useragent'
 import uuidv3 from 'uuid/v3'
-import { ApolloEngine } from 'apollo-engine'
 import { resolvers, context } from './resolvers'
 import graphQL_Schema from './schema.graphql'
 
@@ -50,13 +49,6 @@ app.use(
   }
 )
 
-const engine = new ApolloEngine({
-  apiKey: 'service:REACH:IFvX9jccc4VTgrHwNN8t7g'
-});
-
-engine.listen({
-  port: PORT,
-  expressApp: app
-});
+app.listen(PORT)
 
 console.log(`Server ready at http://localhost:${PORT}/`)
