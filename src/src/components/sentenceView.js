@@ -19,6 +19,9 @@ class SentenceView extends React.Component<Props> {
       negInfo: null,
       human: false,
       search: null,
+      year: null,
+      title: null,
+      sentence: null
     }
   }
   highlighter = (sentence: string, data: Object, identifier: string) => {
@@ -98,25 +101,44 @@ class SentenceView extends React.Component<Props> {
     )
   }
   filterFunction = obj => {
-    const { pmc, hypo, negInfo, speciesInfo, search } = this.state
+    const { pmc, hypo, negInfo, speciesInfo, search, year, title, sentence } = this.state
     let regx_pmc = new RegExp(pmc, "i")
-    let regx_search = new RegExp(search, "i")
+    let regx_year = new RegExp(year, "i")
+    let regx_title = new RegExp(title, "i")
+    let regx_sentence = new RegExp(sentence, "i")      
     return (
       (pmc != null ? obj.pmcid.search(regx_pmc) > -1 : true) &&
       (speciesInfo != null ? obj.species == speciesInfo : true) &&
-      (search != null
-        ? `${obj.year} ${obj.sentence} ${obj.title}`.search(regx_search) > -1
+      (year != null
+        ? obj.year.search(regx_year) > -1
+        : true) &&
+      (title != null
+        ? obj.title.search(regx_title) > -1
+        : true) &&
+      (sentence != null
+        ? obj.sentence.search(regx_sentence) > -1
         : true) &&
       (hypo != null ? obj.hypothesis === hypo : true) &&
       (negInfo != null ? obj.negInfo === negInfo : true)
     )
   }
   handleFilter = () => {
-    const { pmc, hypo, negInfo, speciesInfo, search } = this.refs
+    const { pmc, hypo, negInfo, speciesInfo, title, sentence, year } = this.refs
+    try {
+      let regx_pmc = new RegExp(pmc.value, "i")
+      let regx_year = new RegExp(year.value, "i")
+      let regx_title = new RegExp(title.value, "i")
+      let regx_sentence = new RegExp(sentence.value, "i")
+    } catch (e) {
+      window.alert(`${e.name}\n${e.message}`)
+      return
+    }
     this.setState({
       pmc: pmc.value.length > 1 ? pmc.value : null,
       speciesInfo: speciesInfo.value == "0" ? null : speciesInfo.value,
-      search: search.value.length > 2 ? search.value : null,
+      title: title.value.length > 2 ? title.value : null,
+      sentence: sentence.value.length > 2 ? sentence.value : null,
+      year: year.value.length > 1 ? year.value : null,
       hypo: hypo.value == "0" ? null : hypo.value == "2" ? true : false,
       negInfo:
         negInfo.value == "0" ? null : negInfo.value == "2" ? true : false,
@@ -160,17 +182,13 @@ class SentenceView extends React.Component<Props> {
     }
     if (blank)
       return (
-        <th>
-          <small className="invisible">{"Mm"}</small>
-        </th>
+        <small className="invisible">{"Mm"}</small>
       )
     else
       return (
-        <th>
-          <small style={{ cursor: "default" }} title={name}>
-            {abb}
-          </small>
-        </th>
+        <small style={{ cursor: "default" }} title={name}>
+          {abb}
+        </small>
       )
   }
   render() {
@@ -277,21 +295,41 @@ class SentenceView extends React.Component<Props> {
                     </optgroup>
                   </select>
                 </div>
-                <div className="col">
-                  <input
-                    className="form-control form-control-sm"
-                    type="text"
-                    placeholder="Search by keyword in Sentence, Title or Year"
-                    ref="search"
-                    onChange={this.handleFilter}
-                  />
+                <div className="col form-row">
+                  <div className="col-4">
+                    <input
+                      className="form-control form-control-sm"
+                      type="text"
+                      placeholder="Sentence Search"
+                      ref="sentence"
+                      onChange={this.handleFilter}
+                    />
+                  </div>
+                  <div className="col-4">
+                    <input
+                      className="form-control form-control-sm"
+                      type="text"
+                      placeholder="Title Search"
+                      ref="title"
+                      onChange={this.handleFilter}
+                    />
+                  </div>
+                  <div className="col-4">
+                    <input
+                      className="form-control form-control-sm"
+                      type="number"
+                      placeholder="Year search"
+                      ref="year"
+                      onChange={this.handleFilter}
+                    />
+                  </div>
                 </div>
               </div>
             </td>
           </tr>
         </thead>
         <tbody
-          className={[this.props.className, style.sentenceTable].join(" ")}
+          className={[this.props.className, style.sentenceTable,"w-100"].join(" ")}
         >
           {dispArr.length == 0 ? (
             <tr>
@@ -301,7 +339,7 @@ class SentenceView extends React.Component<Props> {
             dispArr.map(obj => {
               return (
                 <tr key={obj.html}>
-                  <th>
+                  <th className="d-none d-sm-inline">
                     <a
                       title="Link to PMC"
                       href={`https://www.ncbi.nlm.nih.gov/pmc/articles/PMC${
@@ -315,7 +353,7 @@ class SentenceView extends React.Component<Props> {
                       <i className="fa fa-file-text-o" aria-hidden="true" />
                     </a>
                   </th>
-                  <th>
+                  <th className="d-none d-sm-inline">
                     {obj.hypothesis ? (
                       <i
                         title="True Hypothesis"
@@ -330,7 +368,7 @@ class SentenceView extends React.Component<Props> {
                       />
                     )}
                   </th>
-                  <th>
+                  <th className="d-none d-sm-inline">
                     {obj.negInfo ? (
                       <i
                         title="Negative Information"
@@ -340,19 +378,58 @@ class SentenceView extends React.Component<Props> {
                       <i className="fa fa-minus-circle invisible" />
                     )}
                   </th>
-                  {this.getOrgFromTaxonomy(obj.species)}
+                  <th className="d-none d-sm-inline">
+                    {this.getOrgFromTaxonomy(obj.species)}
+                  </th>
                   <td>
                     <div className="row">
+                      <div className={"d-sm-none col-12 " + style.mobileSentenceView} >
+                        <span>
+                          <a
+                            title="Link to PMC"
+                            href={`https://www.ncbi.nlm.nih.gov/pmc/articles/PMC${
+                              obj.pmcid
+                            }?text=${encodeURIComponent(obj.sentence)}`}
+                            target="_blank"
+                            onClick={() =>
+                              this.setCookieOnPmcLinkClick(obj.pmcid, obj.sentence)
+                            }
+                          >
+                            <i className="fa fa-file-text-o" aria-hidden="true" />
+                          </a>
+                        </span>
+                        {obj.hypothesis ? (                            
+                        <span>
+                          <i
+                            title="True Hypothesis"
+                            className="fa fa-star-half-o"
+                            aria-hidden="true"
+                          />
+                        </span>
+                        ) : ""}
+                        {obj.negInfo ? (
+                          <span>
+                            <i
+                              title="Negative Information"
+                              className="fa fa-minus-circle"
+                            />
+                          </span>
+                        ) : ""}
+                        <span>
+                          {this.getOrgFromTaxonomy(obj.species)}
+                        </span>
+                      </div>
                       <div
                         className="col-sm-9"
                         dangerouslySetInnerHTML={{
                           __html: obj.html,
                         }}
                       />
-                      <div className="col-sm-3">{obj.title}</div>
+                      <div className="col-sm-3"><em>{obj.title}</em><small className="d-sm-none">{obj.year.length>0?(", "+obj.year):""}<hr /></small></div>
+                      
                     </div>
                   </td>
-                  <th>{obj.year}</th>
+                  <th className="d-none d-sm-inline ">{obj.year}</th>
                 </tr>
               )
             })
