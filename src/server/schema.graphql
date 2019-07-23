@@ -196,9 +196,9 @@ type Document {
     score: Int
     submitter: String
     trigger: String
-    "Only available in documentsByIdentifier query"
+    "Publication year of the article fetched from PubMed"
     publication_year: String
-    "Only available in documentsByIdentifier query"
+    "Journal Title of the article fetched from PubMed"
     journal_title: String
 }
 "Contains the extracted information from the evidence text"

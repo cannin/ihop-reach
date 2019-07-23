@@ -120,41 +120,53 @@ const resolvers = {
           [
             { $match: filter },
             { $skip: args.page < 1 ? 0 : (args.page - 1) * 250 },
-            { $limit: 250 }
-            //   {$lookup: {
-            //     'from': 'pubmed',
-            //     'let': {
-            //         'pmc': '$pmc_id'
-            //     },
-            //     'pipeline': [
-            //         {
-            //         '$match': {
-            //             '$expr': {
-            //                 '$or' : [
-            //                     {'$eq': ['$pmcid', {'$concat' : ["PMC",'$$pmc']}]},
-            //                     {'$eq': ['$pmcid', '$$pmc']}
-            //                 ]
-            //             }
-            //         }
-            //         }
-            //     ],
-            //     'as': 'pubmed'
-            //     }
-            // }, {
-            //     '$addFields': {
-            //     'publication_year': {
-            //         '$ifNull': [
-            //         {
-            //             '$arrayElemAt': ['$pubmed.year', 0]
-            //         },  ''
-            //         ]
-            //     }
-            //     }
-            // }, {
+            { $limit: 250 },
+            {
+              $lookup: {
+                from: "pubmed",
+                let: {
+                  pmc: "$pmc_id"
+                },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $or: [
+                          { $eq: ["$pmcid", { $concat: ["PMC", "$$pmc"] }] },
+                          { $eq: ["$pmcid", "$$pmc"] }
+                        ]
+                      }
+                    }
+                  }
+                ],
+                as: "pubmed"
+              }
+            },
+            {
+              $addFields: {
+                publication_year: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ["$pubmed.year", 0]
+                    },
+                    ""
+                  ]
+                },
+                journal_title: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ["$pubmed.journal_title", 0]
+                    },
+                    ""
+                  ]
+                }
+              }
+            },
+            // {
             //     '$sort': {
             //         'publication_year': -1
             //     }
-            // }
+            // },
           ],
           {
             allowDiskUse: true
