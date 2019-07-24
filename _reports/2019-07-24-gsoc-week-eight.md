@@ -22,7 +22,7 @@ Second Evaluation marks the end of two-third of the program. I hope I have perfo
 
 ## Conclusion
 
-This week I had relocated to Kolkata as my University classes have begun. As we enter into Phase III of GSoC, I hope that I will be able to maintain my academic as well as Open Source commitments.  
+This week I had relocated to Kolkata as my University classes have begun. As we enter into Phase III of GSoC'19, I hope that I will be able to maintain my academic as well as Open Source commitments.  
 Once the data-generation pipeline is set up and working, our database will be updated with the latest biomedical articles. This is a significant step for the project.
 
 > That's one small step for man, one giant leap for mankind.  
