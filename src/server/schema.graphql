@@ -190,6 +190,8 @@ type Document {
     model_relation: String
     "PMC ID of the article"
     pmc_id: String
+    "PubMed ID of the jounal"
+    pmid : String
     reader_type: String
     reading_complete: String
     reading_started: String
@@ -200,6 +202,12 @@ type Document {
     publication_year: String
     "Journal Title of the article fetched from PubMed"
     journal_title: String
+    "Article Type fetched from PubMed"
+    article_type : String
+    "MeSH Headings in the article fetched from PubMed"
+    mesh_headings : [String]    
+    "Digital Object Identifier"
+    doi : String
 }
 "Contains the extracted information from the evidence text"
 type Extracted_information{

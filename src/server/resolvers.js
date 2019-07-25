@@ -27,6 +27,60 @@ const analytics = (context, query) => {
   );
 };
 
+const aggregatePubmedAddFields =  
+            {
+              $addFields: {
+                publication_year: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ["$pubmed.year", 0]
+                    },
+                    ""
+                  ]
+                },
+                journal_title: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ["$pubmed.journal_title", 0]
+                    },
+                    ""
+                  ]
+                },
+                pmid: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ["$pubmed.pmid", 0]
+                    },
+                    ""
+                  ]
+                },
+                doi: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ["$pubmed.doi", 0]
+                    },
+                    "1"
+                  ]
+                },
+                mesh_headings: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ["$pubmed.mesh_headings", 0]
+                    },
+                    ""
+                  ]
+                },                             
+                article_type: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ["$pubmed.article_type", 0]
+                    },
+                    ""
+                  ]
+                },                
+              }
+            }
+
 const resolvers = {
   //	It returns all Document(250 per page) present in the database
   allDocuments: (args, context) =>
@@ -83,17 +137,19 @@ const resolvers = {
             });
             break;
           case "identifier":
-            orArray = [];
-            orArray.push(
-              {
-                "extracted_information.participant_a.identifier": regx
-              },
-              {
-                "extracted_information.participant_b.identifier": regx
-              }
-            );
+            // orArray = [];
+            // orArray.push(
+            //   {
+            //     "extracted_information.participant_a.identifier": regx
+            //   },
+            //   {
+            //     "extracted_information.participant_b.identifier": regx
+            //   }
+            // );
             andArray.push({
-              $or: orArray
+              $text: {
+                $search : '\"' + args['identifier'] + '\"'
+              }
             });
             break;
           default:
@@ -142,26 +198,7 @@ const resolvers = {
                 as: "pubmed"
               }
             },
-            {
-              $addFields: {
-                publication_year: {
-                  $ifNull: [
-                    {
-                      $arrayElemAt: ["$pubmed.year", 0]
-                    },
-                    ""
-                  ]
-                },
-                journal_title: {
-                  $ifNull: [
-                    {
-                      $arrayElemAt: ["$pubmed.journal_title", 0]
-                    },
-                    ""
-                  ]
-                }
-              }
-            },
+            aggregatePubmedAddFields,
             // {
             //     '$sort': {
             //         'publication_year': -1
@@ -182,7 +219,6 @@ const resolvers = {
       analytics(context, "getPubMedDetails");
       let db = client.db(dbName);
       let query = args.pmcid.toUpperCase();
-      // let res = await db.collection("pubmed").find({"pmcid" : query}).limit(1)
       let res = await db
         .collection("pubmed")
         .findOne({ $or: [{ pmcid: query }, { pmcid: "PMC" + query }] });
@@ -195,7 +231,7 @@ const resolvers = {
       analytics(context, "documentsByIdentifier");
       let db = client.db(dbName);
       const id = args.identifier.trim();
-      const regx = id;
+      // const regx = id;
       let nameArr = [];
       return db
         .collection(collection)
@@ -205,10 +241,10 @@ const resolvers = {
               $match: {
                 $or: [
                   {
-                    "extracted_information.participant_a.identifier": regx
+                    "extracted_information.participant_a.identifier": id
                   },
                   {
-                    "extracted_information.participant_b.identifier": regx
+                    "extracted_information.participant_b.identifier": id
                   }
                 ]
               }
@@ -234,26 +270,7 @@ const resolvers = {
                 as: "pubmed"
               }
             },
-            {
-              $addFields: {
-                publication_year: {
-                  $ifNull: [
-                    {
-                      $arrayElemAt: ["$pubmed.year", 0]
-                    },
-                    ""
-                  ]
-                },
-                journal_title: {
-                  $ifNull: [
-                    {
-                      $arrayElemAt: ["$pubmed.journal_title", 0]
-                    },
-                    ""
-                  ]
-                }
-              }
-            },
+            aggregatePubmedAddFields,
             {
               $sort: {
                 publication_year: -1
