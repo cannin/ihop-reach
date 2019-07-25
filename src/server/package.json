@@ -4,7 +4,7 @@
   "description": "LGPL-3.0",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node --max_old_space_size=50000 -r @babel/register index.js",
+    "start": "NODE_ENV=production node --max_old_space_size=50000 --always-compact -r @babel/register index.js",
     "develop": "nodemon -r @babel/register  index.js",
     "test": "jest"
   },

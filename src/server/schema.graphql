@@ -97,7 +97,7 @@ type Query {
         hypothesis_information: Boolean 
         "Identifier of Context Species, REGEX supported"
         Species : String
-        "Exact match identifier of participant entity, REGEX supported"
+        "Exact match identifier of participant entity, case insensitive, example: P29972 or uniprot:P29972"
         identifier : String
         "Participant Entity Text, REGEX supported"
         entity_text: String

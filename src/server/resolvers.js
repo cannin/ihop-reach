@@ -59,7 +59,7 @@ const aggregatePubmedAddFields =
                     {
                       $arrayElemAt: ["$pubmed.doi", 0]
                     },
-                    "1"
+                    ""
                   ]
                 },
                 mesh_headings: {
@@ -67,7 +67,7 @@ const aggregatePubmedAddFields =
                     {
                       $arrayElemAt: ["$pubmed.mesh_headings", 0]
                     },
-                    ""
+                    []
                   ]
                 },                             
                 article_type: {
