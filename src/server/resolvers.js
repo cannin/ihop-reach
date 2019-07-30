@@ -13,7 +13,7 @@ const dbName = "iHOP";
 const analytics = (context, query) => {
   //Skip analytics in case of GatsbyJS Build process
   if (context.isGatsbyBuild == true) return;
-  const GA_ID = "UA-57486113-9";
+  const GA_ID = "UA-57486113-9"; // Google Analytics Tracking Tag
   const client_ip = context.ip;
   const uuid = context.uuid;
   const payload = `v=1&t=pageview&tid=${GA_ID}&ni=1&dt=${query}&ds=API&cid=${uuid}&dp=api/${query}&uip=${client_ip}`;
@@ -27,6 +27,7 @@ const analytics = (context, query) => {
   );
 };
 
+// Aggregate pipeline to join Pubmed Collection
 const aggregatePubmedAddFields =  
             {
               $addFields: {
@@ -98,7 +99,7 @@ const resolvers = {
         Species: "extracted_information.context.Species"
         // entity_text : "extracted_information.participant_a/b.entity_text",
         // entity_type : "extracted_information.participant_a/b.entity_type",
-        // identifier : "extracted_information.participant_a/b.identifier"
+        // identifier : "$text"
       };
       let andArray = [];
       let orArray = [];
@@ -146,6 +147,8 @@ const resolvers = {
             //     "extracted_information.participant_b.identifier": regx
             //   }
             // );
+
+            // Use Text index to search
             andArray.push({
               $text: {
                 $search : '\"' + args['identifier'] + '\"'
@@ -175,8 +178,8 @@ const resolvers = {
         .aggregate(
           [
             { $match: filter },
-            { $skip: args.page < 1 ? 0 : (args.page - 1) * 250 },
-            { $limit: 250 },
+            { $skip: args.page < 1 ? 0 : (args.page - 1) * 250 }, // Per query documents limit
+            { $limit: 250 }, // Per query documents limit
             {
               $lookup: {
                 from: "pubmed",
@@ -213,6 +216,7 @@ const resolvers = {
       client.close();
       return res;
     }),
+
   // It returns PubMed details by PMCID
   getPubMedDetails: (args, context) =>
     context.db().then(async client => {
@@ -225,6 +229,7 @@ const resolvers = {
       client.close();
       return res;
     }),
+
   // Returns all the document of the specified identifier
   documentsByIdentifier: (args, context) =>
     context.db().then(client => {
@@ -291,6 +296,7 @@ const resolvers = {
           };
         });
     }),
+
   //	It returns details of all Entities present in database by identifiers.
   allIdentifiers: (args, context) =>
     context.db().then(async client => {
@@ -313,6 +319,7 @@ const resolvers = {
         })
         .slice(0, limit);
     }),
+    
   //	It returns Entity details by identifier
   identifier: (args, context) =>
     context.db().then(async client => {

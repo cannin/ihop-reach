@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import GraphiQL from "graphiql";
 import GraphiQLExplorer from "graphiql-explorer";
-import { buildClientSchema, getIntrospectionQuery, parse } from "graphql";
+import { buildClientSchema, getIntrospectionQuery, parse, print } from "graphql";
 
 
 import "graphiql/graphiql.css";
@@ -127,6 +127,11 @@ class App extends Component<{}, State> {
   state = { schema: null, query: DEFAULT_QUERY, explorerIsOpen: true };
 
   componentDidMount() {
+    let params = (new URL(document.location)).searchParams;
+    let qry = params.get("query");
+    if (qry != null && qry.length > 5)
+      this.setState({ query : qry})
+
     fetcher({
       query: getIntrospectionQuery()
     }).then(result => {
@@ -198,7 +203,19 @@ class App extends Component<{}, State> {
     el && el.scrollIntoView();
   };
 
-  _handleEditQuery = (query: string): void => this.setState({ query });
+  _handleEditQuery = (query: string): void => {
+      this.setState({ query })
+      try {
+        const parsedQuery = print(parse(query || ""))
+        if (window.history.pushState) { 
+          const newURL = new URL(window.location.href)
+          newURL.search = `?query=${parsedQuery}` 
+          window.history.replaceState({ path: newURL.href }, '', newURL.href); 
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+    };
 
   _handleToggleExplorer = () => {
     this.setState({ explorerIsOpen: !this.state.explorerIsOpen });

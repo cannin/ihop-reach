@@ -10,13 +10,15 @@ import { resolvers, context } from "./resolvers";
 import graphQL_Schema from "./schema.graphql";
 
 const schema = buildSchema(graphQL_Schema);
+
 const app = express();
-app.use(compression());
-app.use(cors());
-app.use(useragent.express());
+app.use(compression());         // For GZIP compression
+app.use(cors());                // For Cross-origin resource sharing
+app.use(useragent.express());   // To get basic User information required for analytics
 
 const PORT = process.env.PORT || 8080;
 
+// Directory path to the GraphiQL React App build repository
 const react_build_dir = path.join(__dirname, "../graphiql/build");
 app.use("/favicon.ico", (req, res) =>
   res.sendFile(react_build_dir + req.originalUrl)
