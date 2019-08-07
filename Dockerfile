@@ -1,8 +1,10 @@
 FROM openjdk:8
 
-COPY ./pipeline.sh /src/setup.sh
 WORKDIR /src
 RUN mkdir -p reach/papers
+COPY ./src ./
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python get-pip.py
 RUN pip install pymongo
 
 CMD ["bash" , "setup.sh"]
