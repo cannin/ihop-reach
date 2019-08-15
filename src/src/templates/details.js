@@ -57,6 +57,7 @@ export const detailsQuery = graphql`
           publication_year
           pmc_id
           evidence
+          verbose_text
           trigger
           extracted_information {
             participant_a {

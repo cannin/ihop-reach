@@ -197,7 +197,18 @@ class SentenceView extends React.Component<Props> {
     var array = []
     let highlightedHTML
     documents.map(document => {
-      return document.evidence.map(sentence => {
+      //Fallback for verbose_text
+      let sentArray = [];
+      if ("verbose_text" in document){
+        if(document.verbose_text != null && document.verbose_text.length>2)
+          sentArray.push(document.verbose_text)
+        else
+          sentArray = document.evidence
+      }
+      else 
+        sentArray = document.evidence
+
+      return sentArray.map(sentence => {
         highlightedHTML = this.highlighter(sentence, document, identifier)
         if (highlightedHTML == null || sentence.length < 50) return
         let species
@@ -435,6 +446,7 @@ class SentenceView extends React.Component<Props> {
             })
           )}
         </tbody>
+        {/* PAGINATION HAS BEEN SKIPPED DUE TO LOW NUMBER OF SENTENCES */}
         <tfoot className="invisible">
           <tr>
             <td colSpan="2">
