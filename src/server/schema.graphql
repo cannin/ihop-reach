@@ -183,8 +183,10 @@ type IdentifierDetails {
 "Object type for article and allArticles queries. Returns all Biomedical details from the extracted article details."
 type Document {	
     _id: ID
-    "Relevant text from the article."        
+    "Relevant text from the article"        
     evidence: [String]
+    "Full sentence of extracted evidence"
+    verbose_text: String
     "Extracted information from the evidence"
     extracted_information: Extracted_information
     model_relation: String
