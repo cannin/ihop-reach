@@ -1,6 +1,6 @@
 An application for users to access biological data extracted from biomedical literature
 
-### GSoC19 Report
+### GSoC19 Reports
 <table>
   {% for post in site.reports reversed %}
     {% if post.tags contains "gsoc" %}
