@@ -1,13 +1,13 @@
-## REACH Web Application
+## Script to Generate CSV from PubMed
+Requirements:
+	
+	Python 3
+	indra
 
-####  An application for users to access biological data extracted from biomedical literature.
+Usage Instructions
 
-------
-
-The project has following components:
-  
-  1. [GraphQL API with MongoDB as database](https://github.com/RohitChattopadhyay/ihop-reach/tree/docker-api)
-  2. Web Application  
-     a. [GatsbyJS Static Site](https://github.com/RohitChattopadhyay/ihop-reach/tree/docker-frontend)  
-     b. [Web Server](https://github.com/RohitChattopadhyay/ihop-reach/tree/docker-webapp-server)
-  3. [Data Generation pipeline](https://github.com/RohitChattopadhyay/ihop-reach/tree/data-generation)
+ 1. Install dependencies using `pipenv install`
+ 2. Start Virtual Environment using `pipenv shell` and install dependencies using `pip install Pipfile`
+ 3. Enter directory *extraction* using `cd extraction`
+ 4. Run the *extractor.py* file using `python extractor.py <PATH To GZipped Files>`
+ 5. Output file will be created with name `output.csv`

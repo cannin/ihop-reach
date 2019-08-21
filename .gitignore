@@ -1,0 +1,14 @@
+
+src/
+
+*.csv
+
+\.vscode/
+
+*.zip
+
+*.xml
+
+extraction/source/
+
+*.gz

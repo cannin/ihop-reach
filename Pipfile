@@ -1,0 +1,13 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+indra = {git = "https://github.com/sorgerlab/indra"}
+pymongo = "*"
+
+[requires]
+python_version = "3.6"
