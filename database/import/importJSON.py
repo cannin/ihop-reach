@@ -34,7 +34,6 @@ def verifyJSON( jsonPath ):
                     del jsonData["extracted_information"]["participant_a"]
                     temp = [participant_a]
                 elif(partA_type is list):
-                    print("participant_a as Array encountered")
                     del jsonData["extracted_information"]["participant_a"]
                     temp.extend(participant_a)
             jsonData["extracted_information"]["participant_a"] = temp
