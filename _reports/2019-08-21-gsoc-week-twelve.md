@@ -1,10 +1,10 @@
-
 ---
 layout: post
 title:  "Week Twelve | Wrapping up GSoC19"
 tags: [gsoc, weekly report, coding period , third phase, final evaluation]
 author: Rohit R Chattopadhyay
 ---
+
 Hard to believe that I am now in the Final Evaluations of the program. Probably these three months went fastest in my life.  
 I have learnt a lot from the program and has even increased my respect and eagerness to contribute to the Open Source Community.
 
