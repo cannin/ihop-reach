@@ -24,22 +24,22 @@ The source code of the project is hosted on [GitHub](http://bit.ly/2Hafj5N) and 
 ---
 ### Table of Contents
 
-1. [Introduction](#1-Introduction)
-2. [Technology Stack](#2-Technology-Stack)
-3. [Application Programming Interface](#3-Application-Programming-Interface)  
-   &ensp; a. [GraphQL API](#a-GraphQL-API)  
-   &ensp; b. [MongoDB Database](#b-MongoDB-Database)  
-4. [Web Application Frontend](#4-Web-Application-Frontend)
-5. [Web Server](#5-Web-Server)
-6. [Database Generation Pipeline](#6-Database-Generation-Pipeline)  
-   &ensp; a. [MongoDB Import](#a-MongoDB-Import)  
-   &ensp; b. [Analyzing PubMed XML files](#b-Analyzing-PubMed-XML-files)  
-   &ensp; c. [The Pipeline](#c-The-Pipeline)  
-7. [Docker Images](#7-Docker-Images)
-8. [Pull Requests](#8-Pull-Requests)
-9. [Work Left](#9-Work-Left)
-10. [Important Links](#10-Important-Links)
-11. [Conclusion](#11-Conclusion)
+1. [Introduction](#1-introduction)
+2. [Technology Stack](#2-technology-stack)
+3. [Application Programming Interface](#3-application-programming-interface)  
+   &ensp; a. [GraphQL API](#a-graphql-qpi)  
+   &ensp; b. [MongoDB Database](#b-mongodb-database)  
+4. [Web Application Frontend](#4-web-application-frontend)
+5. [Web Server](#5-web-server)
+6. [Database Generation Pipeline](#6-database-generation-pipeline)  
+   &ensp; a. [MongoDB Import](#a-mongodb-import)  
+   &ensp; b. [Analyzing PubMed XML files](#b-analyzing-pubmed-xml-files)  
+   &ensp; c. [The Pipeline](#c-the-pipeline)  
+7. [Docker Images](#7-docker-images)
+8. [Pull Requests](#8-pull-requests)
+9. [Work Left](#9-work-left)
+10. [Important Links](#10-important-links)
+11. [Conclusion](#11-conclusion)
 
 ---
 ### 1. Introduction
@@ -183,8 +183,11 @@ I hope that we do not encounter fatal error and eventually we can process all th
 ### 11. Conclusion
 
 In these last three months, I got to know BioInformatics can help to improve life. The project aims to make it easy for researchers to find molecular interactions. I hope the tool becomes the favourite tool of the researchers in BioInformatics and related fields.  
+
 I never expected to learn so much in such a short time, the project has helped me to understand how things work at the production level and the level of code and documentation it demands. The program taught me the power of Open Source and why it is important to the community. Thanks to the program and my mentor for making me confident enough to contributed in repositories where I would never think of forking.  
+
 I would like to thank my parents and brother for their support. I would also like to thank my friend, [Priti](https://github.com/pritishaw) for constantly supporting me, especially during the application and community bonding period. I am grateful to [William Markuske](https://github.com/wmarkuske) for providing the computational requirements for the project.  
+
 Any flight cannot fly in the right direction without its Captain, my mentor, [Augustin Luna](https://github.com/cannin) did the same for the project. He was calm, patient and helped me whenever I was stuck. He has taken some major decisions and now I understand the importance of those, one of them being scrapping the REST API in favour of GraphQL API. He is the perfect mentor a student can get.
 
 > The free sharing and teaching of open source is incompatible with the notion of the solitary genius.  
