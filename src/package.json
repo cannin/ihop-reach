@@ -1,0 +1,58 @@
+{
+  "name": "ihop-reach",
+  "description": "An application for users to access biological data extracted from biomedical literature.",
+  "version": "0.1.0",
+  "license": "LGPL-3.0",
+  "scripts": {
+    "build": "node --max_old_space_size=50000 ./node_modules/.bin/gatsby build",
+    "devbuild": "GATSBY_GRAPHQL_API_HOST=http://localhost:8080 npm run build",
+    "develop": "GATSBY_GRAPHQL_API_HOST=http://localhost:8080 gatsby develop",
+    "format": "prettier --write src/**/*.{js,jsx}",
+    "start": "npm run clean && npm run build",
+    "serve": "gatsby serve -p 8080",
+    "clean": "rm -r public || true && rm -r .cache || true",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "bootswatch": "^4.3.1",
+    "flow-bin": "^0.102.0",
+    "font-awesome": "^4.7.0",
+    "gatsby": "^2.13.11",
+    "gatsby-plugin-flow": "^1.1.0",
+    "gatsby-plugin-google-analytics": "^2.1.1",
+    "gatsby-plugin-lunr": "^1.5.1",
+    "gatsby-plugin-offline": "^2.2.1",
+    "gatsby-plugin-react-helmet": "^3.1.0",
+    "gatsby-plugin-sass": "^2.1.0",
+    "gatsby-source-graphql": "^2.1.0",
+    "gatsby-source-mongodb": "^2.1.1",
+    "node-sass": "^4.12.0",
+    "react": "^16.8.6",
+    "react-cookie": "^4.0.1",
+    "react-dom": "^16.8.6",
+    "react-helmet": "^5.2.1",
+    "slug": "^1.1.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.2",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-gatsby": "^0.2.1",
+    "eslint": "^6.0.1",
+    "eslint-plugin-flowtype": "^3.11.1",
+    "flow-bin": "^0.102.0",
+    "jaeger-client": "^3.15.0",
+    "prettier": "^1.18.2",
+    "zipkin": "^0.18.4",
+    "zipkin-javascript-opentracing": "^2.0.0",
+    "zipkin-transport-http": "^0.18.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cannin/ihop-reach"
+  },
+  "bugs": {
+    "url": "https://github.com/cannin/ihop-reach/issues"
+  }
+}

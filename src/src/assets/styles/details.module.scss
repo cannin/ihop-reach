@@ -1,0 +1,29 @@
+.details-links {
+    list-style-type: none;
+    padding-left: 1em;
+    
+    span {
+        a {
+            text-decoration: none;
+        }
+    }
+
+}
+.sentence-container {
+    table {
+        margin-left: 0.5em;
+        div {
+            margin-bottom: 0.5em;
+        }
+    }
+}
+.info-table{
+    tbody {
+        tr {
+            td:nth-child(1) {
+                width: 1em;
+                white-space: nowrap;
+            }
+        }
+    }
+}

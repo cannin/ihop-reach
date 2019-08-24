@@ -1,0 +1,15 @@
+[ignore]
+.*/node_modules/.*
+.*/public/.*
+.*/*.scss
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+module.file_ext=.css
+module.file_ext=.scss
+
+[strict]
