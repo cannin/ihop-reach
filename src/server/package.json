@@ -1,0 +1,40 @@
+{
+  "name": "reach-graph-api",
+  "version": "1.0.0",
+  "description": "LGPL-3.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node --max_old_space_size=50000 --always-compact -r @babel/register index.js",
+    "develop": "nodemon -r @babel/register  index.js",
+    "test": "jest"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-graphql": "^0.7.1",
+    "express-useragent": "^1.0.12",
+    "graphiql-explorer": "^0.4.3",
+    "graphql": "^14.4.2",
+    "graphql-tag": "^2.10.1",
+    "mongodb": "^3.2.7",
+    "request": "^2.88.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.5.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/register": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-import-graphql": "^2.7.0",
+    "jest": "^23.6.0",
+    "nodemon": "^1.19.1",
+    "regenerator-runtime": "^0.13.2"
+  }
+}

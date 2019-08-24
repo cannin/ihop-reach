@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test POST allDocuments Query 1`] = `
+Object {
+  "data": Object {
+    "allDocuments": Array [
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10008",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+        },
+        "pmc_id": "3077501",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+        },
+        "pmc_id": "3725501",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+        },
+        "pmc_id": "3705330",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:3658",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+        },
+        "pmc_id": "3685533",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:22984",
+            },
+          ],
+        },
+        "pmc_id": "3558159",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:26078",
+            },
+          ],
+        },
+        "pmc_id": "3558159",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "interpro:IPR003625",
+            },
+          ],
+        },
+        "pmc_id": "3427190",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "uazid:UAZ147281",
+            },
+          ],
+        },
+        "pmc_id": "2850091",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "uniprot:Q07973",
+            },
+          ],
+        },
+        "pmc_id": "2850091",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "chebi:CHEBI:24706",
+            },
+          ],
+        },
+        "pmc_id": "3376220",
+      },
+      Object {
+        "extracted_information": Object {
+          "participant_a": Array [
+            Object {
+              "identifier": "chebi:CHEBI:10007",
+            },
+          ],
+          "participant_b": Array [
+            Object {
+              "identifier": "interpro:IPR000324",
+            },
+          ],
+        },
+        "pmc_id": "3725501",
+      },
+    ],
+  },
+}
+`;
