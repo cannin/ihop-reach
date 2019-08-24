@@ -18,8 +18,8 @@ Broadly the project can be divided into the following components:
 
 The source code of the project is hosted on [GitHub](http://bit.ly/2Hafj5N) and it has been deployed at servers provided by [University of California San Diego](https://ucsd.edu/) and can be accessed using the following links:  
 
-* GraphQL API: http://reach-api.nrnb-docker.ucsd.edu
-* Web Application: http://reach.nrnb-docker.ucsd.edu
+* **GraphQL API**: [https://reach-api.nrnb-docker.ucsd.edu](https://reach-api.nrnb-docker.ucsd.edu)
+* **Web Application**: [https://reach.nrnb-docker.ucsd.edu](https://reach.nrnb-docker.ucsd.edu)
 
 ---
 ### Table of Contents
@@ -61,7 +61,7 @@ The web application and the GraphQL API are built using JavaScript and for the d
 Other than these, *Shell scripting* has been used in Docker images.
 
 ### 3. Application Programming Interface
-[Source Code](https://github.com/RohitChattopadhyay/ihop-reach/tree/docker-api),  [Pull Request](https://github.com/RohitChattopadhyay/ihop-reach/commits/docker-api?author=RohitChattopadhyay), [Docker Image](https://hub.docker.com/r/rchattopadhyay/reach-api)
+[Source Code](https://github.com/cannin/ihop-reach/tree/docker/api),  [Pull Request](https://github.com/cannin/ihop-reach/pull/66), [Docker Image](https://hub.docker.com/r/rchattopadhyay/reach-api)
 
 Our objective was to allow our users to interact and use the extracted information present in our MongoDB based database. We have used GraphQL for this, as it allows the users to cherry-pick whatever information they need. This also reduces the load on our servers thus improving efficiency.  
 
@@ -98,7 +98,7 @@ Our Database is named `iHOP` and consists following collections:
     * *year* : `year : -1`
 
 ### 4. Web Application Frontend
-[Source Code](https://github.com/RohitChattopadhyay/ihop-reach/tree/docker-api),  [Pull Request](https://github.com/RohitChattopadhyay/ihop-reach/commits/docker-api?author=RohitChattopadhyay), [Docker Image](https://hub.docker.com/r/rchattopadhyay/reach-webapp)
+[Source Code](https://github.com/cannin/ihop-reach/tree/docker/webapp/frontend),  [Pull Request](https://github.com/cannin/ihop-reach/pull/68), [Docker Image](https://hub.docker.com/r/rchattopadhyay/reach-webapp)
 
 The purpose of the web application is to present the information in a user-friendly way. Each `identifier` having its page consisting of all the `evidence` (sentence) extracted from medical papers present in PubMed Central.  
 
@@ -106,42 +106,43 @@ The application is developed using a [ReactJS](https://reactjs.org) based static
 
 There are three major components as follows:
 *   **Programmatically create pages**  
-    Static pages are generated using the MongoDB database using the GraphQL API as the interface. The list of unique `identifier`, using which the pages are created using a [template](https://github.com/RohitChattopadhyay/ihop-reach/blob/docker-frontend/src/src/templates/details.js) using `createPages` method [here](https://github.com/RohitChattopadhyay/ihop-reach/blob/docker-frontend/src/gatsby-node.js#L7).  
+    Static pages are generated using the MongoDB database using the GraphQL API as the interface. The list of unique `identifier`, using which the pages are created using a [template](https://github.com/cannin/ihop-reach/blob/docker/webapp/frontend/src/src/templates/details.js) using `createPages` method [here](https://github.com/cannin/ihop-reach/blob/41af180a92fd93d17e10f10af69f0e8e68309ea6/src/gatsby-node.js#L7).  
 
 *   **Sentence Highlighting**  
-    This component highlights the keywords present in the sentences. Code is available [here](https://github.com/RohitChattopadhyay/ihop-reach/blob/docker-frontend/src/src/components/sentenceView.js#L27)  
+    This component highlights the keywords present in the sentences. Code is available [here](https://github.com/cannin/ihop-reach/blob/41af180a92fd93d17e10f10af69f0e8e68309ea6/src/src/components/sentenceView.js#L27)  
     Please Note that `UAZID` identifiers are ignored as they do not have proper mapping.
     
 *   **Search and Typeahead**  
-    For search functionality we have used [Lunr](https://lunrjs.com/). We are indexing the `Matches` for `entity_name` [here](https://github.com/RohitChattopadhyay/ihop-reach/blob/2a88bc60234216a93909bca884f12f7fa3a04f81/src/gatsby-config.js#L39).  The search feature has been implemented [here](https://github.com/RohitChattopadhyay/ihop-reach/blob/2a88bc60234216a93909bca884f12f7fa3a04f81/src/src/components/header.js#L114).  
-    The typeahead feature has been implemented by adding wildcard and it can resist one typographical error in the searched term. Implementation of the same can be found [here](https://github.com/RohitChattopadhyay/ihop-reach/blob/2a88bc60234216a93909bca884f12f7fa3a04f81/src/src/components/header.js#L44).
+    For search functionality we have used [Lunr](https://lunrjs.com/). We are indexing the `Matches` for `entity_name` [here](https://github.com/cannin/ihop-reach/blob/41af180a92fd93d17e10f10af69f0e8e68309ea6/src/gatsby-config.js#L39).  The search feature has been implemented [here](https://github.com/cannin/ihop-reach/blob/41af180a92fd93d17e10f10af69f0e8e68309ea6/src/src/components/header.js#L114).  
+    The typeahead feature has been implemented by adding wildcard and it can resist one typographical error in the searched term. Implementation of the same can be found [here](https://github.com/cannin/ihop-reach/blob/41af180a92fd93d17e10f10af69f0e8e68309ea6/src/src/components/header.js#L44).
     
 ### 5. Web Server
-[Source Code](https://github.com/RohitChattopadhyay/ihop-reach/tree/docker-webapp-server),  [Pull Request](https://github.com/RohitChattopadhyay/ihop-reach/commits/docker-api?author=RohitChattopadhyay), [Docker Image](https://hub.docker.com/r/rchattopadhyay/reach-webapp-server)
+[Source Code](https://github.com/cannin/ihop-reach/tree/docker/webapp/server),  [Pull Request](https://github.com/cannin/ihop-reach/pull/67), [Docker Image](https://hub.docker.com/r/rchattopadhyay/reach-webapp-server)
 
-To serve the static files generated by GatsbyJS, we are using ExpressJS based on NodeJS. The responses are gzipped using [`compression`](https://www.npmjs.com/package/compression) package.
+To serve the static files generated by GatsbyJS, we are using ExpressJS based on NodeJS. The responses are gzipped using [`compression`](https://www.npmjs.com/package/compression) package.  
+We have implemented [Let's Encrypt](https://letsencrypt.org/) SSL certification using [ngnix-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion).
 
 ### 6. Database Generation Pipeline
-[Source Code](https://github.com/RohitChattopadhyay/ihop-reach/tree/docker-api),  [Pull Request](https://github.com/RohitChattopadhyay/ihop-reach/commits/docker-api?author=RohitChattopadhyay)
 
 #### a. MongoDB Import  
-[Source Code](https://github.com/RohitChattopadhyay/ihop-reach/tree/database-import/database/import),  [Pull Request](https://github.com/RohitChattopadhyay/ihop-reach/commits/docker-api?author=RohitChattopadhyay)
+[Source Code](https://github.com/cannin/ihop-reach/tree/database-import),  [Pull Request](https://github.com/cannin/ihop-reach/pull/69)
 
 Scripts are written in Python3 to imports all the JSON files into the MongoDB in `iHOP.articles` collection and create a mapping in `iHOP.identifier_mapping` collection.  
-    [`importJSON.py`](https://github.com/RohitChattopadhyay/ihop-reach/blob/database-import/database/import/importJSON.py), for importing JSON to `iHOP.articles`  
-    [`mapping.py`](https://github.com/RohitChattopadhyay/ihop-reach/blob/database-import/database/import/mapping.py), for creating mapping `iHOP.identifier_mapping`
+    [`importJSON.py`](https://github.com/cannin/ihop-reach/blob/database-import/database/import/importJSON.py), for importing JSON to `iHOP.articles`  
+    [`mapping.py`](https://github.com/cannin/ihop-reach/blob/database-import/database/import/mapping.py), for creating mapping `iHOP.identifier_mapping`
     
 #### b. Analyzing PubMed XML files  
-[Source Code](https://github.com/RohitChattopadhyay/ihop-reach/tree/pubmed/data-extraction),  [Pull Request](https://github.com/RohitChattopadhyay/ihop-reach/commits/docker-api?author=RohitChattopadhyay)
+[Source Code](https://github.com/cannin/ihop-reach/tree/pubmed/data-extraction),  [Pull Request](https://github.com/cannin/ihop-reach/pull/64)
 
 Analysis of PubMed XML files is broken down into two steps:  
-    &ensp; 1. **[`extractor.py`](https://github.com/RohitChattopadhyay/ihop-reach/blob/pubmed/data-extraction/extraction/extractor.py)** is used to traverse the `XML` files downloaded from PubMed FTP and generate a `CSV` having our required data.  
-    &ensp; 2. **[`mongoPubmedImport.py`](https://github.com/RohitChattopadhyay/ihop-reach/blob/pubmed/data-extraction/import/mongoPubmedImport.py)** traverses the generated `CSV` files, creates objects and imports in MongoDB in `iHOP.pubmed` collection.
+    &ensp; 1. **[`extractor.py`](https://github.com/cannin/ihop-reach/blob/pubmed/data-extraction/extraction/extractor.py)** is used to traverse the `XML` files downloaded from PubMed FTP and generate a `CSV` having our required data.  
+    &ensp; 2. **[`mongoPubmedImport.py`](https://github.com/cannin/ihop-reach/blob/pubmed/data-extraction/import/mongoPubmedImport.py)** traverses the generated `CSV` files, creates objects and imports in MongoDB in `iHOP.pubmed` collection.
     
 #### c. The Pipeline  
-[Source Code](https://github.com/RohitChattopadhyay/ihop-reach/tree/pubmed/data-extraction),  [Pull Request](https://github.com/RohitChattopadhyay/ihop-reach/commits/docker-api?author=RohitChattopadhyay), [Docker Image](https://hub.docker.com/r/rchattopadhyay/pubmed-ftp-processor)
+[Source Code](https://github.com/cannin/ihop-reach/tree/docker/pipeline/ftp-processor),  [Pull Request](https://github.com/cannin/ihop-reach/pull/65), [Docker Image](https://hub.docker.com/r/rchattopadhyay/pubmed-ftp-processor)
 
-The PubMed central maintains several archives, each archive is to be extracted and processed using [CLULAB/REACH](https://github.com/clulab/reach) to get the JSON files as output. These JSON files are to be imported to our database using the [import scripts](#a-MongoDB-Import). The following image shows a basic outline of the process.
+The PubMed central maintains several archives, each archive is to be extracted and processed using [CLULAB/REACH](https://github.com/clulab/reach) to get the JSON files as output. These JSON files are to be imported to our database using the [import scripts](#a-MongoDB-Import). The following image shows a basic outline of the process.  
+
 ![Pipeline Flowchart](https://i.imgur.com/DHEzE9U.png)
 
 At present we are processing our first archive file.
@@ -171,7 +172,7 @@ Following are the Pull Requests containing work done during Google Summer of Cod
 ### 9. Work Left
 
 Work on the pipeline remains. The prototype is ready and we are testing it. Each archive file takes more than two weeks to complete and we have eight such files thus the process is time taking.  
-I hope that we do not encounter fatal error and eventually we can process all the archives.
+I hope that we do not encounter a fatal error and eventually we can process all the archives.
 
 ### 10. Important Links
 * [GraphQL API](http://bit.ly/2YZi199)
@@ -184,11 +185,11 @@ I hope that we do not encounter fatal error and eventually we can process all th
 
 In these last three months, I got to know BioInformatics can help to improve life. The project aims to make it easy for researchers to find molecular interactions. I hope the tool becomes the favourite tool of the researchers in BioInformatics and related fields.  
 
-I never expected to learn so much in such a short time, the project has helped me to understand how things work at the production level and the level of code and documentation it demands. The program taught me the power of Open Source and why it is important to the community. Thanks to the program and my mentor for making me confident enough to contributed in repositories where I would never think of forking.  
+I never expected to learn so much in such a short time, the project has helped me to understand how things work at the production level and the level of code and documentation it demands. The program taught me the power of Open Source and why it is important to the community. Thanks to the program and my mentor for making me confident enough to contribute to repositories where I would never think of forking.  
 
-I would like to thank my parents and brother for their support. I would also like to thank my friend, [Priti](https://github.com/pritishaw) for constantly supporting me, especially during the application and community bonding period. I am grateful to [William Markuske](https://github.com/wmarkuske) for providing the computational requirements for the project.  
+I would like to thank my parents and brother for their constant support. I would also like to thank my friend, [Priti Shaw](https://github.com/pritishaw) for constantly supporting me, especially during the application and community bonding period. I am grateful to [William Markuske](https://github.com/wmarkuske) for providing the computational requirements for the project.  
 
-Any flight cannot fly in the right direction without its Captain, my mentor, [Augustin Luna](https://github.com/cannin) did the same for the project. He was calm, patient and helped me whenever I was stuck. He has taken some major decisions and now I understand the importance of those, one of them being scrapping the REST API in favour of GraphQL API. He is the perfect mentor a student can get.
+Any flight cannot fly in the right direction without its Captain, my mentor, [Augustin Luna](https://github.com/cannin) did the same for the project. He was calm, patient and helped me whenever I was stuck. He has taken some major decisions and now I understand their importance, one of them being scrapping the REST API in favour of GraphQL API. He is the perfect mentor a student can get.
 
 > The free sharing and teaching of open source is incompatible with the notion of the solitary genius.  
 > ~*Golan Levin*
