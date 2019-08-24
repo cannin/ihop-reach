@@ -105,10 +105,10 @@ else:
                     fromPath = os.path.join(r, file)
                     data = verifyJSON(fromPath)                 #function call for checking validity of the json file
                     if data != None:
-                        directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),"processed",fromPath.split("/")[-2])
-                        if not os.path.exists(directory):
-                            os.makedirs(directory)
-                        os.rename(fromPath,os.path.join(directory,file))
+                        #directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),"processed",fromPath.split("/")[-2])
+                        #if not os.path.exists(directory):
+                        #    os.makedirs(directory)
+                        os.remove(fromPath)                     # delete processed file
                         fileData.append(data)                   #append proper JSON data to array
                         if(fileCount%chunkSize==0):
                             #Call for insertion in database
