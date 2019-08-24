@@ -149,7 +149,7 @@ At present we are processing our first archive file.
 
 ### 7. Docker Images
 
-The application extensively uses [Docker](https://www.docker.com/) to run the containers in the server. Following Docker images hosted in [Docker Hub](https://hub.docker.cpm) are used to run the application:  
+The application extensively uses [Docker](https://www.docker.com/) to run the containers in the server. Following Docker images hosted in [Docker Hub](https://hub.docker.com) are used to run the application:  
 &ensp; a. **[`rchattopadhyay/reach-api`](https://hub.docker.com/r/rchattopadhyay/reach-api)**, for GraphQL API and MongoDB  
 &ensp; b. **[`rchattopadhyay/reach-webapp`](https://hub.docker.com/r/rchattopadhyay/reach-webapp)**, for building GatsbyJS static site  
 &ensp; c. **[`rchattopadhyay/reach-webapp-server`](https://hub.docker.com/r/rchattopadhyay/reach-webapp-server)**, for serving the GatsbyJS generated static files  
