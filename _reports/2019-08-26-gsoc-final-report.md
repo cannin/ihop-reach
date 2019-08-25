@@ -171,8 +171,8 @@ Following are the Pull Requests containing work done during Google Summer of Cod
 
 ### 9. Work Left
 
-Work on the pipeline remains. The prototype is ready and we are testing it. Each archive file takes more than two weeks to complete and we have eight such files thus the process is time taking.  
-I hope that we do not encounter a fatal error and eventually we can process all the archives.
+Work on the *data-generation pipeline* remains. The prototype is ready, and we have successfully tested it on the first archive file. Due to the large size of these files, each one of them takes at least two weeks to process. We have eight such files, so the process is time taking.  
+Once the pipeline is streamlined, our database will be regularly updated with the latest articles, thus keeping our application up to date. I hope that we can process all the files by the year-end.  
 
 ### 10. Important Links
 * [GraphQL API](http://bit.ly/2YZi199)
